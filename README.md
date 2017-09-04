@@ -20,6 +20,10 @@ Then run `npm install` in the root, this creates the basic bootstrap needed to r
 
 You should now have a server running at [http://localhost](http://localhost). You can access the API via [http://localhost/api](http://localhost/api).
 
+The default user is `admin` and password is `password`.  Do not expect this to be a fully secure environment.
+
+> *Disclaimer: If you build an app with this you wish you deploy, you are responsible for your own security.*
+
 ## Architecture
 
 You will find 5 folders and some files:
@@ -45,7 +49,16 @@ Inside the docker folder and several docker files which create the environments.
 
 The default environments are listed below with the main environments from their docker files.  Full components will be listed soon.
 
-|name|packages|version|description|
-|----|-------|-------|-----------|
-|api |node   |8.4.0  |Hapi-powered API that comes pre-build with a user and authentication plugin, uses nodemon for changes.|
-|app |node   |8.4.0  |Webpack/React app that is hot-reloaded on changes
+|name   |packages  |version|description|
+|----   |-------   |-------|-----------|
+|api    |node      |8.4.0  |Hapi-powered API that comes pre-build with a user and authentication plugin, uses nodemon for changes.|
+|app    |node      |8.4.0  |Webpack/React app that is hot-reloaded on changes|
+|db     |postgres  |9.5    |Postgres database|
+|server |ngnix     |1.13.3 |Ngnix Proxy|
+
+Run via docker compose, you can begin to add plugins to the Hapi server. You have JWT auth out of the box for endpoints with `admin` and `user` scopes available.
+
+
+## References
+
+This document environment was based on the tutorial [Dockerize your app and keep hot-reloading !](https://blog.bam.tech/developper-news/dockerize-your-app-and-keep-hot-reloading) but adding more utilities and making it easier to work as a starter kit.

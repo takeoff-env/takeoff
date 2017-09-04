@@ -1,0 +1,16 @@
+FROM node:8.4.0
+
+RUN useradd --user-group --create-home --shell /bin/false edca
+ENV HOME=/home/edca
+
+COPY package.json $HOME/app/
+RUN chown -R edca:edca $HOME/*
+
+USER edca
+
+WORKDIR $HOME/app
+
+RUN npm install
+
+EXPOSE 3000
+CMD ["npm", "start"]

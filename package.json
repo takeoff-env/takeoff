@@ -1,0 +1,45 @@
+{
+  "name": "takeoff",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Tane Piper <piper.tane@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "better-npm-run": "^0.1.0"
+  },
+  "scripts": {
+    "build:dev": "better-npm-run build:dev",
+    "down:dev": "better-npm-run down:dev",
+    "dev:uninstall": "docker-compose -f docker/docker-compose.dev.yml down --rmi all",
+    "dev:connect:api": "docker exec -it target_api_1 /bin/sh",
+    "dev:connect:db": "psql -h localhost -p 5431 -U myappuser -d myappdb",
+    "up:dev": "better-npm-run up:dev",
+    "db:reset": "better-npm-run db:reset"
+  },
+  "betterScripts": {
+    "up:dev": {
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "command": "docker-compose -f docker/docker-compose.dev.yml up"
+    },
+    "down:dev": {
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "command": "docker-compose -f docker/docker-compose.dev.yml down"
+    },
+    "build:dev": {
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "command": "./scripts/run.sh"
+    },
+    "db:reset": {
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "command": "docker exec docker_api_1 node_modules/.bin/sequelize db:migrate:undo:all && docker exec docker_api_1 node_modules/.bin/sequelize db:migrate && docker exec docker_api_1 node_modules/.bin/sequelize db:seed:all"
+    }
+  }
+}
