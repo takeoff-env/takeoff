@@ -1,5 +1,7 @@
 # Takeoff
 
+<img src="docs/assets/logo.png" width="200px" />
+
 Takeoff is a rapid prototyping server that uses docker to minimise the hassle out of a rapid prototype environment.
 
 It helps with getting your server, database and frontend up and running in seconds and has a hot-reloading frontend and backend which allows you to make changes without the need to usually restart the server.
@@ -89,6 +91,8 @@ The main app is bootstrapped in `index.js` and then handles the `<Router>` and `
 ## References
 
 This document environment was based on the tutorial [Dockerize your app and keep hot-reloading !](https://blog.bam.tech/developper-news/dockerize-your-app-and-keep-hot-reloading) but adding more utilities and making it easier to work as a starter kit.
+
+Logo made with [LogoMakr](http://logomakr.com)
 
 ## Future Ideas
 
