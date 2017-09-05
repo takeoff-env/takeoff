@@ -1,10 +1,10 @@
-# Takeoff
-
 <img src="docs/assets/logo.png" width="200px" />
 
-Takeoff is a rapid prototyping server that uses docker to minimise the hassle out of a rapid prototype environment.
+# Takeoff: Rapid Prototyping Environment
 
-It helps with getting your server, database and frontend up and running in seconds and has a hot-reloading frontend and backend which allows you to make changes without the need to usually restart the server.
+Takeoff is a rapid prototyping environment that uses docker to minimise the hassle out of setting up frontend, backend and database servers.
+
+Within seconds you'll have a hot-reloading frontend and backend which allows you to make changes without the need to usually restart the server.
 
 ## How to run
 
