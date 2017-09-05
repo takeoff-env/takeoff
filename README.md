@@ -2,22 +2,36 @@
 
 <img src="docs/assets/logo.png" width="200px" align="left" style="margin-right:20px" />
 
-Takeoff is a rapid prototyping environment that uses docker to minimise the hassle out of setting up frontend, backend and database servers.
+Takeoff is a toolbox for rapid prototyping applications.
 
-Within seconds you'll have a hot-reloading frontend and backend which allows you to make changes without the need to usually restart the server.
+It is not a framework, and is agnostic to any solutions provided to it - but it ships with an opinionated default.
 
-## How to run
+Under the hoot is uses docker to minimise the hassle out of setting up frontend, backend and database servers. Within seconds you'll have a hot-reloading frontend and backend which allows you to make changes without the need to usually restart the server.
+
+The default configuration ships, with a API server powered by Hapi, a React frontend, a Postgres database and a Ngnix server proxying all requests on port 80.
+
+With the API you also get out of the box user management and authentication, and on the frontend a default login page and API middlware to use a JSON Web Token to provide authenticated access. Using the documentation to can then extend these with your own functionality.
+
+There are a set of available commands and tool available to help make the toolbox cross-platform.  These are in the process of being integrated and documented.
+
+Currently only Linux is tested and supported out the box, but support for other OS is coming.
+
+## Documentation
+
+* [API](api/README.md)
+* [Frontend App](app/README.md)
+
+## How to get started
 
 Clone or fork this this repository:
 
     git clone https://github.com/tanepiper/takeoff.git
 
-Then run `npm install` in the root, this creates the basic bootstrap needed to run things. Next:
+Then enter the directory and run:
 
+    > npm install
     > npm run build:dev
     > npm run up:dev
-
-> *in the future there will be support for custom names here*
 
 You should now have a server running at [http://localhost](http://localhost). You can access the API via [http://localhost/api](http://localhost/api).
 
@@ -66,16 +80,6 @@ Out of the box you get an nodemon-hot-reloading, Hapi-powered API that is alread
 The app has basic login page and when authenticated you get access to the user screen where you can view users, you can also log out.
 
 The basic app shows how you can build your own features.  You get a Postgres database out of the box using Sequelize.  This can easily be replaced with any database or adapter (and I plan to ship more options).
-
-## Documentation
-
-* [API](api/README.md)
-
-### React App
-
-The React App uses React Hot Reloder, React Router v4 and Redux along with a custom API middleware to easily create your components and stores.
-
-The main app is bootstrapped in `index.js` and then handles the `<Router>` and `<Provider>` wrappers to the app for Router and Redux.
 
 ## References
 

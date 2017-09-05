@@ -2,7 +2,7 @@ const Boom = require('boom');
 const moment = require('moment');
 
 /**
- * Validator method for checking a valid web token
+ * Validator method for checking a valid web token, by default we check for a valid ID and that is has not expired
  * @param _request
  * @param decoded
  * @param cb

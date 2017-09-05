@@ -13,10 +13,10 @@ let store = createStoreWithMiddleware(reducers, window.__REDUX_DEVTOOLS_EXTENSIO
 
 import View from './view';
 
-export default () => (
+export default ({props}) => (
     <Router>
         <Provider store={store}>
-            <View />
+            <View {...props}/>
         </Provider>
     </Router>
 );

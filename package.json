@@ -5,7 +5,14 @@
   "author": "Tane Piper <piper.tane@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "better-npm-run": "^0.1.0"
+    "@expo/spawn-async": "^1.3.0",
+    "better-npm-run": "^0.1.0",
+    "minimist": "^1.2.0"
+  },
+  "bin": {
+    "takeoff-up": "./utilities/up.js",
+    "takeoff-build": "./utilities/build.js",
+    "takeoff-stop": "./utilities/stop.js"
   },
   "scripts": {
     "build:dev": "better-npm-run build:dev",
@@ -14,7 +21,8 @@
     "dev:connect:api": "docker exec -it target_api_1 /bin/sh",
     "dev:connect:db": "psql -h localhost -p 5431 -U myappuser -d myappdb",
     "up:dev": "better-npm-run up:dev",
-    "db:reset": "better-npm-run db:reset"
+    "db:reset": "better-npm-run db:reset",
+    "newup:dev": "./utilities/up.js"
   },
   "betterScripts": {
     "up:dev": {

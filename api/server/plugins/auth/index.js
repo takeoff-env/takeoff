@@ -1,7 +1,6 @@
 const Joi = require('joi');
 const validateToken = require('./lib/validate-token');
 
-
 /**
  * This plugin handles all auth requests for any user type
  * @param server
