@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { HashRouter as Router, Route, Link, Switch, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, Switch, Redirect } from 'react-router-dom';
 
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';

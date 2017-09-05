@@ -19,7 +19,7 @@ module.exports = {
     }
   },
   connections: [{
-    port: process.env.PORT || 8080,
+    port: process.env.PORT || 10000,
     labels: ['api'],
     router: {
       stripTrailingSlash: true
