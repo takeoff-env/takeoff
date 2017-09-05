@@ -1,5 +1,7 @@
 # Takeoff: Working with the database
 
+[Home](../../README.md)
+
 ## Sequelize
 
 Internally, the Api uses [Sequelize](http://docs.sequelizejs.com/) as it's database layer.  By default Takeoff ships with Postgres as it's database, but in reality any database type can be used and the adapter changed.

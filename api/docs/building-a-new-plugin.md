@@ -1,5 +1,7 @@
 # Building a new Takeoff API Plugin
 
+[Home](../../README.md)
+
 Takeoff uses Hapi as it's framework to build server-side services. Functionality is added via plugins which are defined in the `api/server/plugins`
 folder, and whitelisted via a config file.
 
@@ -7,8 +9,9 @@ folder, and whitelisted via a config file.
 
 Plugins provide a way to create logical units of code. First, create your folder.  Here we'll create a simple `hello-world` plugin.
 
->$ `cd api/server/plugins`
->$ `mkdir hello-world && touch hello-world/index.js`
+> $ `cd api/server/plugins`
+>
+> $ `mkdir hello-world && touch hello-world/index.js`
 
 In our index file, we create the following plugin registration file:
 

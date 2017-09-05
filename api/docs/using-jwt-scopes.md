@@ -1,5 +1,7 @@
 # Using JWT Scopes
 
+[Home](../../README.md)
+
 Extending on [Building a new plugin](building-a-new-plugin.md), we can provide some basic authorisation support in the app.
 
 There are two types of user in the system, `admin` and `user`.  They do not have any special privilages, but a rather properties by which
