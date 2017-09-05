@@ -37,7 +37,7 @@ module.exports = {
             },
             description: {
                 type: Sequelize.STRING,
-                field: 'password',
+                field: 'description',
                 allowNull: true
             },
             createdAt: {
@@ -84,7 +84,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     description: {
         type: DataTypes.STRING,
-        field: 'password',
+        field: 'description',
         allowNull: true
     },
   });
