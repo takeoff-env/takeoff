@@ -21,13 +21,16 @@ apiServer.route({
 In this case, anyone logged in with `admin` or `user` will have access to this endpoint, if you want to restrict the view you can remove one or more user types.  You could even customise the output based on the scope:
 
 ```js
-handler: (req, reply) {
-    let greeting;
-    if (req.auth.credentials.scope === 'admin') {
-        greeting = "Hail overlord";
-    } else {
-        greeting = "Hello, World"
+{
+    ...
+    handler: (req, reply) => {
+        let greeting;
+        if (req.auth.credentials.scope === 'admin') {
+            greeting = "Hail overlord";
+        } else {
+            greeting = "Hello, World"
+        }
+        return reply({ greeting });
     }
-    return reply({ greeting });
 }
 ```
