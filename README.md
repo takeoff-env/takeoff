@@ -1,10 +1,8 @@
 # Takeoff
 
-Takeoff is a rapid prototyping server that uses docker to minimise getting your server, database and frontend up and running.
+Takeoff is a rapid prototyping server that uses docker to minimise the hassle out of a rapid prototype environment.
 
-Under this it uses frontend and backend hot reloading to allow you to make changes without the need to usually* restart the server.
-
-* *(Obvious uncontrolled crashes aside)*
+It helps with getting your server, database and frontend up and running in seconds and has a hot-reloading frontend and backend which allows you to make changes without the need to usually restart the server.
 
 ## How to run
 
@@ -16,6 +14,7 @@ Then run `npm install` in the root, this creates the basic bootstrap needed to r
 
     > npm run build:dev
     > npm run up:dev
+
 > *in the future there will be support for custom names here*
 
 You should now have a server running at [http://localhost](http://localhost). You can access the API via [http://localhost/api](http://localhost/api).

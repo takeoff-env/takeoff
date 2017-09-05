@@ -1,17 +1,6 @@
 const baseConfig = require('./_base');
 
 baseConfig.registrations.push(
-    // TODO: Swagger doesn't work correctly under a proxy, look at alternative
-    // {
-    //     plugin: {
-    //         register: 'hapi-swagger',
-    //         options: {
-    //             debug: true,
-    //             basePath: '/api',
-    //             swaggerUIPath: '/api/swaggerui/'
-    //         }
-    //     }
-    // },
     {
         plugin: './ping'
     },
@@ -19,7 +8,7 @@ baseConfig.registrations.push(
         plugin: {
             register: './auth',
             options: {
-                privateKey: process.env.PRIVATE_KEY || 'change-me',
+                privateKey: process.env.AUTH_PRIVATE_KEY || 'change-me',
                 tokenExpiry: 3600,
                 maxAge: '1h',
                 cookieName: 'auth-cookie',
