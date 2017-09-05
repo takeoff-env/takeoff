@@ -26,39 +26,25 @@ services:
       context: ../.
       dockerfile: docker/app/Dockerfile.dev
     image: frontend-app
-    environment:
-      - NODE_ENV=development  # Production for Compiled React and Service Workers
+    env_file: 
+      - ./../api/.env
     volumes: # For webpack dev server to use our local files
       - ./../app:/home/envuser/apphome
     ports:
-      - '3000:3000' # For docker to now where to redirect HMR queries
+      - '10001:10001' # For docker to now where to redirect HMR queries
   api:
-    deploy:
-      resources: # Set these values when you know what you do!
-        limits:
-          cpus: '0.001'
-          memory: 50M
-        reservations:
-          cpus: '0.0001'
-          memory: 20M
     build:
       context: ../.
       dockerfile: docker/api/Dockerfile.dev
     image: api
-    environment:
-      - DB_NAME=myappdb
-      - DB_USER=myappuser
-      - DB_PASSWORD=myapppassword
-      - DB_HOST="db"
-      - DB_PORT=5432
-      - NODE_ENV=development
-      - API_PREFIX=/api/
+    env_file: 
+      - ./../api/.env
     links:
       - db:db
     volumes:
       - ./../api:/home/envuser/apphome
     ports:
-      - '8080'
+      - '10000:10000'
     depends_on:
       - "db"
   db:

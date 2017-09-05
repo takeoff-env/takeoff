@@ -12,5 +12,5 @@ WORKDIR $HOME/apphome
 
 RUN npm install
 
-EXPOSE 3000
+EXPOSE 10001
 CMD ["npm", "start"]
