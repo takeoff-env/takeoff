@@ -1,6 +1,7 @@
-# API App
+# Takeoff API
 
-To build a new feature for the API App, you can add a new database mode (with migration and seed) and a plugin.
+The Takeoff API is built on Hapi, with a simple composed configuration that create the server.  It's run via nodemon, so this listens for changes
+in the code tree
 
 ## New Model
 
