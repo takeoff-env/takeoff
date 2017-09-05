@@ -6,7 +6,7 @@ Takeoff is a toolbox for rapid prototyping applications.
 
 It is not a framework, and is agnostic to any solutions provided to it - but it ships with an opinionated default.
 
-Under the hoot is uses docker to minimise the hassle out of setting up frontend, backend and database servers. Within seconds you'll have a hot-reloading frontend and backend which allows you to make changes without the need to usually restart the server.
+Under the hood is uses docker to minimise the hassle out of setting up frontend, backend and database servers. Within seconds you'll have a hot-reloading frontend and backend which allows you to make changes without the need to usually restart the server.
 
 The default configuration ships, with a API server powered by Hapi, a React frontend, a Postgres database and a Ngnix server proxying all requests on port 80.
 
