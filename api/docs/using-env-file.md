@@ -5,6 +5,8 @@
 You can create a `.env` file at the root of `api` to set certain environment variables.  This allows you to overide
 certain configuration options as your server starts up, or provide options to your plugin.
 
+You access these values via nodes standard `process.env`
+
 Current available variables are:
 
 |Variable           |default        |Description|
