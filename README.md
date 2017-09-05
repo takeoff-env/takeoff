@@ -66,15 +66,18 @@ The app has basic login page and when authenticated you get access to the user s
 
 The basic app shows how you can build your own features.  You get a Postgres database out of the box using Sequelize.  This can easily be replaced with any database or adapter (and I plan to ship more options).
 
-### API Documentation
+## Documentation
 
-You can see how you can create plugins [here]('./api/README.md)
+### API
 
-### Creating Models & Migrations
+* [Building a new plugin](api/docs/building-a-new-plugin.md)
+* [Working with the database](api/docs/working-with-the-database.md)
 
-You can use the [Sequelize CLI](https://github.com/sequelize/cli) in the `api` folder to generate models, or you can copy and paste and existing one to get a reference file.  Same with migrations and seeds.
+### App
 
-Models are auto loaded and available on the `server.app.db` object in all plugins.  For example if you add a `Foobar` model, you would get methods such as `server.app.db.Foobar.create()`
+### Ngnix
+
+### Docker
 
 ### React App
 

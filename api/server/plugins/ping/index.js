@@ -1,5 +1,8 @@
 const registerPlugin = (server, options, next) => {
-    server.route({
+
+    const apiServer = server.select('api');
+
+    apiServer.route({
         method: 'GET',
         path: '/ping',
         config: {
@@ -7,7 +10,7 @@ const registerPlugin = (server, options, next) => {
         },
         handler: async function (req, reply) {
             try {
-                const dbError = await server.app.db.sequelize.authenticate();
+                const dbError = await apiServer.app.db.sequelize.authenticate();
                 if (!dbError) {
                     return reply(true);
                 }

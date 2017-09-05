@@ -66,9 +66,17 @@ The app has basic login page and when authenticated you get access to the user s
 
 The basic app shows how you can build your own features.  You get a Postgres database out of the box using Sequelize.  This can easily be replaced with any database or adapter (and I plan to ship more options).
 
-### API Documentation
+## Documentation
 
-You can see how you can create plugins [here]('./api/README.md)
+### API
+
+* [Building a new plugin]('./api/docs/building-a-new-plugin])
+
+### App
+
+### Ngnix
+
+### Docker
 
 ### Creating Models & Migrations
 
