@@ -1,8 +1,5 @@
 const Path = require('path');
 
-const API_PREFIX = process.env.API_PREFIX || '/';
-//const PUBLIC_PREFIX_PATH = '/public';
-
 module.exports = {
   server: {
     debug: {
@@ -11,7 +8,7 @@ module.exports = {
     },
     app: {
       root: Path.resolve(__dirname, '..'),
-      apiPrefix: API_PREFIX,
+      apiPrefix: process.env.API_PREFIX || '/',
       cookieSettings: {
         ttl: null,
         isSecure: false,

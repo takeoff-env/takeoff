@@ -1,6 +1,6 @@
 # Building a new Takeoff API Plugin
 
-[Home](../../README.md)
+[Home](../../README.md) | [API](../README.md)
 
 Takeoff uses Hapi as it's framework to build server-side services. Functionality is added via plugins which are defined in the `api/server/plugins`
 folder, and whitelisted via a config file.

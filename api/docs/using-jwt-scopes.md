@@ -1,6 +1,6 @@
 # Using JWT Scopes
 
-[Home](../../README.md)
+[Home](../../README.md) | [API](../README.md)
 
 Extending on [Building a new plugin](building-a-new-plugin.md), we can provide some basic authorisation support in the app.
 

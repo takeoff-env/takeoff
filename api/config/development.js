@@ -1,6 +1,8 @@
 const baseConfig = require('./_base');
 
-baseConfig.registrations.push(
+const newConfig = Object.assign({}, baseConfig);
+
+newConfig.registrations.push(
     {
         plugin: './ping'
     },
@@ -26,5 +28,4 @@ baseConfig.registrations.push(
     },
 );
 
-// Passthrough for now
-module.exports = baseConfig;
+module.exports = newConfig;

@@ -1,6 +1,6 @@
 # Takeoff: Working with the database
 
-[Home](../../README.md)
+[Home](../../README.md) | [API](../README.md)
 
 ## Sequelize
 

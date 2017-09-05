@@ -1,9 +1,9 @@
 # Using an environment file
 
-[Home](../../README.md)
+[Home](../../README.md) | [API](../README.md)
 
 You can create a `.env` file at the root of `api` to set certain environment variables.  This allows you to overide
-certain configuration options
+certain configuration options as your server starts up, or provide options to your plugin.
 
 Current available variables are:
 

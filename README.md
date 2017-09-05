@@ -69,18 +69,7 @@ The basic app shows how you can build your own features.  You get a Postgres dat
 
 ## Documentation
 
-### API
-
-* [Configuring with environment variables](api/docs/using-env-file.md)
-* [Building a new plugin](api/docs/building-a-new-plugin.md)
-* [Working with the database](api/docs/working-with-the-database.md)
-* [Using JWT Scopes](api/docs/using-jwt-scopes.md)
-
-### App
-
-### Ngnix
-
-### Docker
+* [API](api/README.md)
 
 ### React App
 
