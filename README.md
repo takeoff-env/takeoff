@@ -78,8 +78,13 @@ The React App uses React Hot Reloder, React Router v4 and Redux along with a cus
 
 The main app is bootstrapped in `index.js` and then handles the `<Router>` and `<Provider>` wrappers to the app for Router and Redux.
 
-
-
 ## References
 
 This document environment was based on the tutorial [Dockerize your app and keep hot-reloading !](https://blog.bam.tech/developper-news/dockerize-your-app-and-keep-hot-reloading) but adding more utilities and making it easier to work as a starter kit.
+
+## Future Ideas
+
+* Provide other hot loading frontend frameworks (Angular, Vue)
+* Improve dashboard of main app
+* Improve documentation
+* Provide more built in plugins and apps
