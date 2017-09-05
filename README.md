@@ -58,6 +58,27 @@ The default environments are listed below with the main environments from their 
 
 Run via docker compose, you can begin to add plugins to the Hapi server. You have JWT auth out of the box for endpoints with `admin` and `user` scopes available.
 
+## What you get
+
+Out of the box you get an nodemon-hot-reloading, Hapi-powered API that is already set up to accept plugins.  On the frontend you get a single page hot-reloading React app.  Connecting the two of them is a basic authentication that gives a [JSON Web Token (JWT)](https://jwt.io).
+
+The app has basic login page and when authenticated you get access to the user screen where you can view users, you can also log out.
+
+The basic app shows how you can build your own features.  You get a Postgres database out of the box using Sequelize.  This can easily be replaced with any database or adapter (and I plan to ship more options).
+
+### Creating Models & Migrations
+
+You can use the [Sequelize CLI](https://github.com/sequelize/cli) in the `api` folder to generate models, or you can copy and paste and existing one to get a reference file.  Same with migrations and seeds.
+
+Models are auto loaded and available on the `server.app.db` object in all plugins.  For example if you add a `Foobar` model, you would get methods such as `server.app.db.Foobar.create()`
+
+### React App
+
+The React App uses React Hot Reloder, React Router v4 and Redux along with a custom API middleware to easily create your components and stores.
+
+The main app is bootstrapped in `index.js` and then handles the `<Router>` and `<Provider>` wrappers to the app for Router and Redux.
+
+
 
 ## References
 
