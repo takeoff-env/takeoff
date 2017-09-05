@@ -29,7 +29,7 @@ services:
     environment:
       - NODE_ENV=development  # Production for Compiled React and Service Workers
     volumes: # For webpack dev server to use our local files
-      - ./../app:/home/edca/app
+      - ./../app:/home/envuser/apphome
     ports:
       - '3000:3000' # For docker to now where to redirect HMR queries
   api:
@@ -56,7 +56,7 @@ services:
     links:
       - db:db
     volumes:
-      - ./../api:/home/edca/api
+      - ./../api:/home/envuser/apphome
     ports:
       - '8080'
     depends_on:
