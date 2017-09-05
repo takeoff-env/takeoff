@@ -1,6 +1,6 @@
-<img src="docs/assets/logo.png" width="200px" />
-
 # Takeoff: Rapid Prototyping Environment
+
+<img src="docs/assets/logo.png" width="200px" align="left" style="margin-right:20px" />
 
 Takeoff is a rapid prototyping environment that uses docker to minimise the hassle out of setting up frontend, backend and database servers.
 
@@ -79,9 +79,9 @@ The main app is bootstrapped in `index.js` and then handles the `<Router>` and `
 
 ## References
 
-This document environment was based on the tutorial [Dockerize your app and keep hot-reloading !](https://blog.bam.tech/developper-news/dockerize-your-app-and-keep-hot-reloading) but adding more utilities and making it easier to work as a starter kit.
-
-Logo made with [LogoMakr](http://logomakr.com)
+* This document environment was based on the tutorial [Dockerize your app and keep hot-reloading !](https://blog.bam.tech/developper-news/dockerize-your-app-and-keep-hot-reloading) but adding more utilities and making it easier to work as a starter kit.
+* [Blog post announcing Takeoff](https://medium.com/@tanepiper/takeoff-a-rapid-development-environment-designed-for-hack-days-9a45ae891366)
+* Logo made with [LogoMakr](http://logomakr.com)
 
 ## Future Ideas
 
