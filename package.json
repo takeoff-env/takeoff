@@ -6,8 +6,6 @@
   "license": "MIT",
   "dependencies": {
     "better-npm-run": "^0.1.0",
-    "ed-api": "file:api",
-    "ed-frontend-app": "file:app",
     "minimist": "^1.2.0"
   },
   "bin": {
@@ -15,9 +13,11 @@
     "takeoff-build": "./utilities/docker-compose/build.js",
     "takeoff-stop": "./utilities/docker-compose/stop.js",
     "takeoff-down": "./utilities/docker-compose/down.js",
-    "takeoff-docker-build": "./utilities/takeoff/002-docker-build.js"
+    "takeoff-docker-build": "./utilities/takeoff/docker-compose-build.js"
   },
   "scripts": {
+    "preinstall": "cd ./app && npm i && cd ../api && npm i",
+    "postinstall": "better-npm-run build:dev",
     "build:dev": "better-npm-run build:dev",
     "down:dev": "better-npm-run down:dev",
     "dev:uninstall": "docker-compose -f docker/docker-compose.dev.yml down --rmi all",
@@ -32,19 +32,19 @@
       "env": {
         "NODE_ENV": "development"
       },
-      "command": "docker-compose -f docker/docker-compose.dev.yml up"
+      "command": "takeoff-up"
     },
     "down:dev": {
       "env": {
         "NODE_ENV": "development"
       },
-      "command": "docker-compose -f docker/docker-compose.dev.yml down"
+      "command": "takeoff-down"
     },
     "build:dev": {
       "env": {
         "NODE_ENV": "development"
       },
-      "command": "./scripts/run.sh"
+      "command": "takeoff-docker-build"
     },
     "db:reset": {
       "env": {
