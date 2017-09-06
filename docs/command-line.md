@@ -4,7 +4,7 @@ Takeoff ships with some command line scripts that provide convinient actions to 
 
 The commands are all invoked by using `npm run` (e.g `npm run takeoff:build`) and invoke scripts that live in the `utilities` folder.
 
-These scripts are opinionated and don't output a lot of junk to the console.  If your build fails for any reason you can run it like this:
+These scripts are opinionated and don't output a lot of junk to the console.  If your build fails for any reason you can run it like this to get verbose logs:
 
 ```bash
 npm run takeoff:build -- -v
