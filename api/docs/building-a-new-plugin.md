@@ -62,7 +62,7 @@ If you want to provide your plugin options, you can instead pass this to the abo
 {
     register: './hello-world',
     options: {
-        "greeting": "hello"
+        greeting: 'hello'
     }
 }
 ...
