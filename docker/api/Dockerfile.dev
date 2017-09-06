@@ -3,7 +3,7 @@ FROM node:8.4.0
 RUN useradd --user-group --create-home --shell /bin/false envuser
 ENV HOME=/home/envuser
 
-COPY package.json $HOME/apphome/
+COPY api/package.json $HOME/apphome/
 RUN chown -R envuser:envuser $HOME/*
 
 USER envuser
