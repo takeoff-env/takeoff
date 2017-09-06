@@ -23,15 +23,24 @@ Currently only Linux is tested and supported out the box, but support for other 
 
 ## How to get started
 
+### Installing Docker
+
+This software has currently only been tested on Linux using [Docker Community Edition](https://www.docker.com/community-edition). Once installed you will have the `docker` and `docker-compose` commands.
+
+### Install Takeoff
+
 Clone or fork this this repository:
 
     git clone https://github.com/tanepiper/takeoff.git
 
 Then enter the directory and run:
 
+```bash
     > npm install
-    > npm run build:dev
-    > npm run up:dev
+    > npm link # This installs the new scripts as global commands
+    > npm run build:dev # Deprecated
+    > npm run up:dev # Deprecated
+```
 
 You should now have a server running at [http://localhost](http://localhost). You can access the API via [http://localhost/api](http://localhost/api).
 
@@ -41,24 +50,28 @@ The default user is `admin` and password is `password`.  Do not expect this to b
 
 ## Architecture
 
-You will find 5 folders and some files:
+You will find several folders and files:
 
+```bash
     -|
-     |- api
-     |- app
-     |- config
-     |- docker
-     |- scripts
-     |- README.md
-     |- package.json
+     |- api # This is the Hapi API Server
+     |- app # This is the frontend app
+     |- docker # This is where all the docker configurations are kept
+     |- docs # Docs folder, for Github Pages
+     |- nginx # Nginx configuration
+     |- scripts # Scripts, will be deprecated due to only supporting linux
+     |- utilities # Will replace scripts
+     |- README.md # The file you are looking at!
+```
 
 There are some convenience NPM scripts that get the environment going:
 
-> `npm run build:dev`
-> : this command runs the docker compose file which creates the initial environment
+|Command|Description|
+|-------|-----------|
+|`npm run build:dev`|this command runs the docker compose file which creates the initial environment|
+|`npm run up:dev`|this command runs the development enviromnent on localhost|
 
-> `npm run up:dev`
-> : this command runs the development enviromnent on localhost
+These commands will be deprecated in favour of a new cli tool for creating and running environments
 
 Inside the docker folder and several docker files which create the environments.
 
@@ -71,11 +84,11 @@ The default environments are listed below with the main environments from their 
 |db     |postgres  |9.5    |Postgres database|
 |server |ngnix     |1.13.3 |Ngnix Proxy|
 
-Run via docker compose, you can begin to add plugins to the Hapi server. You have JWT auth out of the box for endpoints with `admin` and `user` scopes available.
+Run via docker compose, you can begin to add plugins to the Hapi server.
 
 ## What you get
 
-Out of the box you get an nodemon-hot-reloading, Hapi-powered API that is already set up to accept plugins.  On the frontend you get a single page hot-reloading React app.  Connecting the two of them is a basic authentication that gives a [JSON Web Token (JWT)](https://jwt.io).
+Out of the box you get an nodemon-hot-reloading, Hapi-powered API that is already set up to accept plugins.  On the frontend you get a single page hot-reloading React app.  Connecting the two of them is a basic authentication that gives a [JSON Web Token (JWT)](https://jwt.io) for your endpoints with `admin` and `user` scopes available.
 
 The app has basic login page and when authenticated you get access to the user screen where you can view users, you can also log out.
 
