@@ -20,6 +20,7 @@ Currently only Linux is tested and supported out the box, but support for other 
 
 * [API](api/README.md)
 * [Frontend App](app/README.md)
+* [Windows Setup](docs/windows-setup.md);
 
 ## How to get started
 

@@ -3,10 +3,13 @@
 const argv = require('minimist')(process.argv.slice(2));
 const shellUtils = require('./../lib/shell-utils');
 
+let sleep = 'sleep 5';
+if (process.platform === 'win32') sleep = 'sleep -s 5';
+
 const commands = [
     `docker-compose -f docker/docker-compose.dev.yml build --no-cache`,
     `docker-compose -f docker/docker-compose.dev.yml up -d db`,
-    'sleep 5',
+    `${sleep}`,
     `docker-compose -f docker/docker-compose.dev.yml stop db`
 ];
 
