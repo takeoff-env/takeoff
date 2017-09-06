@@ -14,13 +14,12 @@ With the API you also get out of the box user management and authentication, and
 
 There are a set of available commands and tool available to help make the toolbox cross-platform.  These are in the process of being integrated and documented.
 
-Currently only Linux is tested and supported out the box, but support for other OS is coming.
+Currently only Linux is tested and supported out the box, but support for other OS is coming.  [Windows Users](docs/windows-setup.md) who would like to help get this working are welcome to provide pull requests.
 
 ## Documentation
 
 * [API](api/README.md)
 * [Frontend App](app/README.md)
-* [Windows Setup](docs/windows-setup.md);
 
 ## How to get started
 
@@ -30,18 +29,14 @@ This software has currently only been tested on Linux using [Docker Community Ed
 
 ### Install Takeoff
 
-Clone or fork this this repository:
-
-    git clone https://github.com/tanepiper/takeoff.git
-
-Then enter the directory and run:
-
 ```bash
-    > npm install
-    > npm link # This installs the new scripts as global commands
-    > npm run build:dev # Deprecated
-    > npm run up:dev # Deprecated
+> git clone https://github.com/tanepiper/takeoff.git
+> cd takeoff
+> npm install
+> npm start
 ```
+
+The above commands will install all the dependencies and have you up and running in minutes.
 
 You should now have a server running at [http://localhost](http://localhost). You can access the API via [http://localhost/api](http://localhost/api).
 
