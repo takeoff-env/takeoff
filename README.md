@@ -1,6 +1,6 @@
 # Takeoff: Rapid Prototyping Environment
 
-<img src="docs/assets/logo.png" width="200px" align="left" style="margin-right:20px" />
+<img src="docs/assets/logo.png" width="200px" align="left" style="margin-right:20px; margin-bottom:20px;" />
 
 Takeoff is a toolbox for rapid prototyping applications.
 
