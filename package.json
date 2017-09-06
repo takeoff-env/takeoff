@@ -23,6 +23,7 @@
     "to:compose:stop": "node utilities/docker-compose/stop.js",
     "to:compose:down": "node utilities/docker-compose/down.js",
     "to:compose:rm": "node utilities/docker-compose/uninstall.js",
+    "to:clean": "node utilities/takeoff/clean-env.js",
     "to:build": "node utilities/takeoff/docker-compose-build.js",
     "start": "npm run to:compose:up",
     "dev:connect:api": "docker exec -it target_api_1 /bin/sh",
