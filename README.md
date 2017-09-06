@@ -18,6 +18,7 @@ Currently only Linux is tested and supported out the box, but support for other 
 
 ## Documentation
 
+* [Command Line Tools](docs/command-line.md)
 * [API](api/README.md)
 * [Frontend App](app/README.md)
 
