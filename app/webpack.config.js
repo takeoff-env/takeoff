@@ -12,7 +12,7 @@ const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
 const HotModuleReplacementPluginConfig = new webpack.HotModuleReplacementPlugin();
 
 module.exports = {
-  name: 'edca-app',
+  name: 'app',
   target: 'web',
   devtool: 'source-map',
   entry: [

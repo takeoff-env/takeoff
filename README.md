@@ -4,17 +4,22 @@
 
 Takeoff is a toolbox for rapid prototyping applications.
 
-It is not a framework, and is agnostic to any solutions provided to it - but it ships with an opinionated default.
+It is not a framework and is in fact agnostic to any solutions provided to it. However to provide the ability to rapidly develop applications it ships with some opinionated defaults.
 
-Under the hood is uses docker to minimise the hassle out of setting up frontend, backend and database servers. Within seconds you'll have a hot-reloading frontend and backend which allows you to make changes without the need to usually restart the server.
+Under the hood is uses `docker` and `docker-compose` to minimise the hassle out of setting up frontend, backend and database servers. Within seconds you'll have a hot-reloading frontend and backend which allows you to make changes without the need to usually restart the server.
 
-The default configuration ships, with a API server powered by Hapi, a React frontend, a Postgres database and a Ngnix server proxying all requests on port 80.
+The default configuration ships with:
 
-With the API you also get out of the box user management and authentication, and on the frontend a default login page and API middlware to use a JSON Web Token to provide authenticated access. Using the documentation to can then extend these with your own functionality.
+* A plugin-based API server powered by Hapi
+* A hot-reloading React frontend including React Router v4 and Redux
+* A Postgres database and a Sequelize adapter available in the API to interact with it
+* A Ngnix server proxying all requests via port 80.
 
-There are a set of available commands and tool available to help make the toolbox cross-platform.  These are in the process of being integrated and documented.
+With the API you also get out of the box user management and authentication, and on the frontend a default login page and API middlware to use a [JSON Web Token (JWT)](https://jwt.io) to provide authenticated access for your endpoints with `admin` and `user` scopes available . Using the documentation to can then extend these with your own functionality.
 
-Currently only Linux is tested and supported out the box, but support for other OS is coming.  [Windows Users](docs/windows-setup.md) who would like to help get this working are welcome to provide pull requests.
+There are a set of [available commands](docs/command-line.md) to help make the toolbox cross-platform.  These are in the process of being integrated and documented.
+
+Currently only Linux is fully tested and supported out the box, but support for other OS is coming (testers and contributors welcome!). There is a page for [Windows Users](docs/windows-setup.md) to provide extra information in the quest to get it working.
 
 ## Documentation
 
@@ -29,6 +34,8 @@ Currently only Linux is tested and supported out the box, but support for other 
 This software has currently only been tested on Linux using [Docker Community Edition](https://www.docker.com/community-edition). Once installed you will have the `docker` and `docker-compose` commands.
 
 ### Install Takeoff
+
+Installing takeoff is done in 4 easy steps.  Remember you can also clone the repository first to make it easier to manage your own copy.
 
 ```bash
 > git clone https://github.com/tanepiper/takeoff.git
@@ -61,15 +68,6 @@ You will find several folders and files:
      |- README.md # The file you are looking at!
 ```
 
-There are some convenience NPM scripts that get the environment going:
-
-|Command|Description|
-|-------|-----------|
-|`npm run build:dev`|this command runs the docker compose file which creates the initial environment|
-|`npm run up:dev`|this command runs the development enviromnent on localhost|
-
-These commands will be deprecated in favour of a new cli tool for creating and running environments
-
 Inside the docker folder and several docker files which create the environments.
 
 The default environments are listed below with the main environments from their docker files.  Full components will be listed soon.
@@ -81,15 +79,7 @@ The default environments are listed below with the main environments from their 
 |db     |postgres  |9.5    |Postgres database|
 |server |ngnix     |1.13.3 |Ngnix Proxy|
 
-Run via docker compose, you can begin to add plugins to the Hapi server.
-
-## What you get
-
-Out of the box you get an nodemon-hot-reloading, Hapi-powered API that is already set up to accept plugins.  On the frontend you get a single page hot-reloading React app.  Connecting the two of them is a basic authentication that gives a [JSON Web Token (JWT)](https://jwt.io) for your endpoints with `admin` and `user` scopes available.
-
-The app has basic login page and when authenticated you get access to the user screen where you can view users, you can also log out.
-
-The basic app shows how you can build your own features.  You get a Postgres database out of the box using Sequelize.  This can easily be replaced with any database or adapter (and I plan to ship more options).
+Run via docker compose, you can begin to add plugins to the Hapi server.  You can easily add your own docker images for other services such as redis, memcache, mysql, etc.
 
 ## References
 
@@ -101,5 +91,4 @@ The basic app shows how you can build your own features.  You get a Postgres dat
 
 * Provide other hot loading frontend frameworks (Angular, Vue)
 * Improve dashboard of main app
-* Improve documentation
 * Provide more built in plugins and apps
