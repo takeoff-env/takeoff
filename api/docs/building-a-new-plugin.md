@@ -49,7 +49,7 @@ Next, open `api/config/development.js`, and find the line that says `baseConfig.
 baseConfig.registrations.push(
 ...
 , {
-    plugin: '/hello-world'
+    plugin: './hello-world'
 });
 ```
 
@@ -58,12 +58,14 @@ Now you can visit [http://localhost/api/hello-world](http://localhost/api/hello-
 If you want to provide your plugin options, you can instead pass this to the above `.push` method:
 
 ```js
+...
 {
     register: './hello-world',
     options: {
         "greeting": "hello"
     }
 }
+...
 ```
 
 Then you would access them like this:
