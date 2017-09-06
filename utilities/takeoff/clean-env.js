@@ -8,7 +8,7 @@ const env = argv.env || 'dev';
 const commands = [
     `rm -rf api/node_modules`,
     `rm -rf app/node_modules`,
-    `npm run to:compose:rm`
+    `npm run compose:rm`
 ];
 
 console.log(`Takeoff Clean Environment`);
