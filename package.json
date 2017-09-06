@@ -17,35 +17,18 @@
   },
   "scripts": {
     "preinstall": "cd ./app && npm i && cd ../api && npm i",
-    "postinstall": "better-npm-run build:dev",
-    "build:dev": "better-npm-run build:dev",
-    "down:dev": "better-npm-run down:dev",
-    "dev:uninstall": "docker-compose -f docker/docker-compose.dev.yml down --rmi all",
+    "postinstall": "npm run to:build",
+    "to:compose:build": "./utilities/docker-compose/build.js",
+    "to:compose:up": "./utilities/docker-compose/up.js",
+    "to:compose:stop": "./utilities/docker-compose/stop.js",
+    "to:compose:down": "./utilities/docker-compose/down.js",
+    "to:compose:rm": "./utilities/docker-compose/uninstall.js",
+    "to:build": "./utilities/takeoff/docker-compose-build.js",
     "dev:connect:api": "docker exec -it target_api_1 /bin/sh",
     "dev:connect:db": "psql -h localhost -p 5431 -U myappuser -d myappdb",
-    "up:dev": "better-npm-run up:dev",
-    "db:reset": "better-npm-run db:reset",
-    "newup:dev": "./utilities/up.js"
+    "db:reset": "better-npm-run db:reset"
   },
   "betterScripts": {
-    "up:dev": {
-      "env": {
-        "NODE_ENV": "development"
-      },
-      "command": "takeoff-up"
-    },
-    "down:dev": {
-      "env": {
-        "NODE_ENV": "development"
-      },
-      "command": "takeoff-down"
-    },
-    "build:dev": {
-      "env": {
-        "NODE_ENV": "development"
-      },
-      "command": "takeoff-docker-build"
-    },
     "db:reset": {
       "env": {
         "NODE_ENV": "development"
