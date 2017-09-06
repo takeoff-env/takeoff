@@ -1,6 +1,6 @@
 {
   "name": "takeoff",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "author": "Tane Piper <piper.tane@gmail.com>",
   "license": "MIT",
