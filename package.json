@@ -6,7 +6,8 @@
   "license": "MIT",
   "dependencies": {
     "better-npm-run": "^0.1.0",
-    "minimist": "^1.2.0"
+    "minimist": "^1.2.0",
+    "lerna": "^2.1.2"
   },
   "bin": {
     "takeoff-up": "./utilities/docker-compose/up.js",
@@ -16,8 +17,7 @@
     "takeoff-docker-build": "./utilities/takeoff/docker-compose-build.js"
   },
   "scripts": {
-    "preinstall": "cd ./app && npm i && cd ../api && npm i",
-    "postinstall": "npm run takeoff:build",
+    "postinstall": "lerna bootstrap && npm run takeoff:build",
     "compose:build": "node utilities/docker-compose/build.js",
     "compose:up": "node utilities/docker-compose/up.js",
     "compose:stop": "node utilities/docker-compose/stop.js",
