@@ -1,27 +1,27 @@
 {
-  "name": "takeoff",
-  "version": "1.0.3",
-  "main": "index.js",
-  "author": "Tane Piper <piper.tane@gmail.com>",
-  "license": "MIT",
-  "dependencies": {
-    "minimist": "^1.2.0",
-    "lerna": "^2.1.2"
-  },
-  "scripts": {
-    "postinstall": "lerna bootstrap && npm run takeoff:build",
-    "compose:build": "node utilities/docker-compose/build.js",
-    "compose:up": "node utilities/docker-compose/up.js",
-    "compose:stop": "node utilities/docker-compose/stop.js",
-    "compose:down": "node utilities/docker-compose/down.js",
-    "compose:rm": "node utilities/docker-compose/uninstall.js",
-    "takeoff:clean": "node utilities/takeoff/clean-env.js",
-    "takeoff:build": "node utilities/takeoff/docker-compose-build.js",
-    "takeoff:start": "npm run compose:up",
-    "api:connect": "docker exec -it docker_api_1 /bin/bash",
-    "start": "npm run compose:up",
-    "stop": "npm run compose:stop",
-    "db:connect": "psql -h localhost -p 5431 -U myappuser -d myappdb",
-    "db:reset": "node utilities/takeoff/database-clean.js"
-  }
+    "name": "takeoff",
+    "version": "1.0.3",
+    "main": "index.js",
+    "author": "Tane Piper <piper.tane@gmail.com>",
+    "license": "MIT",
+    "dependencies": {
+        "minimist": "^1.2.0",
+        "lerna": "^2.1.2"
+    },
+    "scripts": {
+        "postinstall": "lerna bootstrap && npm run takeoff:build",
+        "compose:build": "node utilities/docker-compose/build.js",
+        "compose:up": "node utilities/docker-compose/up.js",
+        "compose:stop": "node utilities/docker-compose/stop.js",
+        "compose:down": "node utilities/docker-compose/down.js",
+        "compose:rm": "node utilities/docker-compose/uninstall.js",
+        "takeoff:clean": "node utilities/takeoff/clean-env.js",
+        "takeoff:build": "node utilities/takeoff/docker-compose-build.js",
+        "takeoff:start": "npm run compose:up",
+        "api:connect": "docker exec -it docker_api_1 /bin/bash",
+        "start": "npm run compose:up",
+        "stop": "npm run compose:stop",
+        "db:connect": "psql -h localhost -p 5431 -U myappuser -d myappdb",
+        "db:reset": "node utilities/takeoff/database-clean.js"
+    }
 }

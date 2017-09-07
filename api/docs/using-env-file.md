@@ -16,7 +16,7 @@ Current available variables are:
 |NODE_ENV           |development    |The node development environment, used for general global settings
 |PORT               |10000          |The port the app will run on, note if you change this outside your docker configuration you will need to update the docker-compose.yml
 |AUTH_PRIVATE_KEY   |change-me      |The private key for authentication and JWT
-|API_PREFIX         |/              |The API prefix
+|API_PREFIX         |/api/          |The API prefix from the proxy server
 
 ## Postgres Database
 
