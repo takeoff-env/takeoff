@@ -5,7 +5,7 @@ import users, { initialUserState } from '../components/Users/reducers';
 
 import { combineForms, createForms } from 'react-redux-form';
 
-const {user, forms} = createForms({user: initialUserState});
+const { user, forms } = createForms({ user: initialUserState });
 export default combineReducers({
     auth,
     users,

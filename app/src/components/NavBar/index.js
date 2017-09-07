@@ -14,20 +14,25 @@ class NavBar extends Component {
         super(...props);
 
         this.state = {
-            isAuthenticated: props.isAuthenticated || false,
             showingAdminMenu: false
         };
     }
 
     onAdminClick(event) {
-        console.log(this.state.showingAdminMenu)
         this.setState({ showingAdminMenu: !this.state.showingAdminMenu });
     }
 
     render() {
-        const { dispatch } = this.props;
-        const { isAuthenticated, showingAdminMenu } = this.state;
-        return <View dispatch={dispatch} isAuthenticated={isAuthenticated} showingAdminMenu={showingAdminMenu} onAdminClick={this.onAdminClick.bind(this)} />;
+        const { isAuthenticated, dispatch } = this.props;
+        const { showingAdminMenu } = this.state;
+        return (
+            <View
+                dispatch={dispatch}
+                isAuthenticated={isAuthenticated}
+                showingAdminMenu={showingAdminMenu}
+                onAdminClick={this.onAdminClick.bind(this)}
+            />
+        );
     }
 }
 

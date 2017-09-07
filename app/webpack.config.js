@@ -54,6 +54,10 @@ module.exports = {
   plugins: [
     HtmlWebpackPluginConfig,
     HotModuleReplacementPluginConfig,
+    new webpack.DefinePlugin({
+      REDUX_DEV_TOOLS: process.env.REDUX_DEV_TOOLS === 'true' || false,
+      NODE_ENV: process.env.NODE_ENV || 'development'
+    })
   ],
   devServer: {
     hot: true,
