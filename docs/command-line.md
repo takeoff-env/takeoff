@@ -14,25 +14,52 @@ npm run takeoff:build -- -v
 
 The only exception is the `docker-compose up` command which will output the live logs of the apps running in docker.  To hide this, you can pass `-h`
 
-## Takeoff Commands
+## Running Commands
 
-Some of these commands take the `--env [name]` command, the default value is `dev`.
+### NPM Commands
 
 |Command|Description|
 |-------|-----------|
 |`npm start`|Starts `docker-compose` using the environment file with any built environment|
-|`npm run takeoff:build`|Triggers a multi-step `docker-compose build`|
-|`npm run takeoff:clean`|Cleans the `node_modules` directories of `app` and `api` and cleans out the previous build images|
+|`npm stop`|Stops `docker-compose` using the environment file with any built environment|
 
-## Docker Compose Commands
+All commands are run using `npm run` (with the exception of `npm start` and `npm stop`).
 
-All these commands take the `--env [name]` command, the default value is `dev`.
+### Takeoff Commands
+
+All commands are run using `npm run`. Some of these commands take the `--env [name]` command, the default value is `dev`.
 
 |Command|Description|
 |-------|-----------|
-|`npm run compose:build`|Builds the docker images. Pass `-c` to build from the cache.|
-|`npm run compose:up`|Starts the docker images `docker-compose up`. Pass `-h` to hide the docker output. Pass `-d [name]` to only trigger on a specific service|
-|`npm run compose:stop`|Stops the docker images `-d [name]` to only trigger on a specific service|
-|`npm run compose:down`|Removes the current docker images `-d [name]` to only trigger on a specific service|
-|`npm run compose:rm`|Destroys all build docker images.|
+|`takeoff:build`|Triggers a multi-step `docker-compose build`|
+|`takeoff:clean`|Cleans the `node_modules` directories of `app` and `api` and cleans out the previous build images|
+|`takeoff:start`|Starts `docker-compose` using the environment file with any built environment|
+
+### Docker Compose Commands
+
+All commands are run using `npm run`. All these commands take the `--env [name]` command, the default value is `dev`.
+
+|Command|Description|
+|-------|-----------|
+|`compose:build`|Builds the docker images. Pass `-c` to build from the cache.|
+|`compose:up`|Starts the docker images `docker-compose up`. Pass `-h` to hide the docker output. Pass `-d [name]` to only trigger on a specific service|
+|`compose:stop`|Stops the docker images `-d [name]` to only trigger on a specific service|
+|`compose:down`|Removes the current docker images `-d [name]` to only trigger on a specific service|
+|`compose:rm`|Destroys all build docker images.|
+
+### API Commands
+
+All commands are run using `npm run`.
+
+|Command|Description|
+|-------|-----------|
+|`api:connect`|Connect to the `api` server with bash|
+
+### Database Commands
+
+|Command|Description|
+|-------|-----------|
+|`db:connect`|Connects to the database using `psql` which is required to be available in your $PATH|
+|`db:reset`|Resets the database back to it's original state|
+
 

@@ -24,7 +24,7 @@ services:
       dockerfile: docker/app/Dockerfile.dev
     image: frontend-app
     env_file: 
-      - ./../api/.env
+      - ./../app/.env
     volumes: # For webpack dev server to use our local files
       - ./../app:/home/envuser/apphome
     ports:

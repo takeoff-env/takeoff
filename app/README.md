@@ -13,3 +13,7 @@ The main App then creates the Redux store and React Router, and triggers the Vie
 Inside the view is then a NavBar and main Switch for the router, here you can define routes to components.  Inside the NavBar you have the opertunity to add Link tags that will generate router calls.
 
 Currently the app uses the HashRouter until an issue with the proxy can be resolved.
+
+## API Documentation
+
+* [Configuring using environment variables](docs/using-env-file.md)

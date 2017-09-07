@@ -1,3 +1,4 @@
+/* global REDUX_DEV_TOOLS */
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Link, Switch, Redirect } from 'react-router-dom';
 
@@ -9,14 +10,23 @@ import reducers from './reducers';
 import api from '../services/api';
 
 let createStoreWithMiddleware = applyMiddleware(thunkMiddleware, api)(createStore);
-let store = createStoreWithMiddleware(reducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
+
+let store;
+if (REDUX_DEV_TOOLS) {
+    store = createStoreWithMiddleware(
+        reducers,
+        window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+    );
+} else {
+    createStoreWithMiddleware(reducers);
+}
 
 import View from './view';
 
-export default ({props}) => (
+export default ({ props }) => (
     <Router>
         <Provider store={store}>
-            <View {...props}/>
+            <View {...props} />
         </Provider>
     </Router>
 );

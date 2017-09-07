@@ -17,12 +17,21 @@ class App extends Component {
         const { dispatch, isAuthenticated, error } = this.props;
         return (
             <main>
-                <NavBar {...this.props} />
+                <NavBar isAuthenticated={isAuthenticated} dispatch={dispatch} {...this.props} />
                 <div className="boxed">
                     <div id="content-container">
                         <Switch>
                             <Route path="/" exact component={Home} />
-                            <Route path="/login" render={props => <Login {...props} error={error} onLogin={credentials => dispatch(loginUser(credentials))} />} />
+                            <Route
+                                path="/login"
+                                render={props => (
+                                    <Login
+                                        {...props}
+                                        error={error}
+                                        onLogin={credentials => dispatch(loginUser(credentials))}
+                                    />
+                                )}
+                            />
                             <Route path="/users" component={Users} />
                             <Route component={NoMatch} />
                         </Switch>
