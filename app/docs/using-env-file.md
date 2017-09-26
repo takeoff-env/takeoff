@@ -14,5 +14,5 @@ Current available variables are:
 |Variable           |default        |Description|
 |--------           |-------        |-----------|
 |NODE_ENV           |development    |The node development environment, used for general global settings
-|PORT               |10000          |The port the app will run on, note you will need to update the docker configuration
+|PORT               |10001          |The port the app will run on, note you will need to update the docker configuration
 |REDUX_DEV_TOOLS    |true           |Enables or disables the support for the [Redux Devtools Extension](https://github.com/zalmoxisus/redux-devtools-extension)
