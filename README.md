@@ -42,7 +42,7 @@ This software has currently only been tested on Linux using [Docker Community Ed
 Installing takeoff is done in 4 easy steps.  Remember you can also clone the repository first to make it easier to manage your own copy.
 
 ```bash
-> git clone https://github.com/tanepiper/takeoff.git
+> git clone https://github.com/takeoff-env/takeoff.git
 > cd takeoff
 > npm install
 > npm start
