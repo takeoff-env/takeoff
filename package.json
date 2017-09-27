@@ -9,7 +9,7 @@
         "minimist": "^1.2.0"
     },
     "scripts": {
-        "postinstall": "lerna bootstrap && npm run takeoff:build",
+        "postinstall": "npm run takeoff:build",
         "compose:build": "node utilities/docker-compose/build.js",
         "compose:up": "node utilities/docker-compose/up.js",
         "compose:stop": "node utilities/docker-compose/stop.js",

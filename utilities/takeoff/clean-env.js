@@ -7,8 +7,7 @@ const env = argv.env || 'dev';
 
 const commands = [
     { cmd: `npm run compose:rm`, message: 'Removing docker amis' },
-    { cmd: `rm -rf envs/takeoff`, message: 'Removing default environment' },
-    { cmd: `git clone https://github.com/takeoff-env/takeoff-blueprint-basic.git envs/takeoff`, message: 'Cloning default environment'},
+    { cmd: `rm -rf envs/takeoff`, message: 'Removing default environment' }
 ];
 
 shellUtils.series(
