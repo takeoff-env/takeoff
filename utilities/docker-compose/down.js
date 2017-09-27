@@ -16,11 +16,11 @@
 const argv = require('minimist')(process.argv.slice(2));
 const { spawn } = require('child_process');
 
-let env = argv.env || 'dev';
+let env = argv.env || 'takeoff';
 
 const command = 'docker-compose';
 
-const args = ['-f', `envs/takeoff/docker/docker-compose.${env}.yml`, 'down'];
+const args = ['-f', `envs/${env}/docker-compose.yml`, 'down'];
 
 if (argv.d && typeof argv.d === 'string') {
     args.push(argv.d);
@@ -33,12 +33,12 @@ let result = spawn(command, args);
 
 if (argv.v) {
     result.stdout.on('data', message => {
-        console.log(`[Docker Down]: ${message}`.trim());
+        console.log(`${message}`.trim());
     });
 }
 
 result.stderr.on('data', message => {
-    console.error(`[Docker Down]: ${message}`.trim());
+    console.error(`${message}`.trim());
 });
 
 result.on('exit', () => {
