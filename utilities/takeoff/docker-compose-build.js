@@ -7,6 +7,8 @@ let sleep = 'sleep 5';
 if (process.platform === 'win32') sleep = 'sleep -s 5';
 
 const commands = [
+    { cmd: `mkdir -p envs/takeoff`, message: 'Creating environment'},
+    { cmd: `git clone https://github.com/takeoff-env/takeoff-blueprint-basic.git envs/takeoff`, message: 'Cloning default environment'},
     { cmd: `docker-compose -f envs/takeoff/docker/docker-compose.dev.yml build --no-cache`, message: 'Running Docker Compose Build' },
     { cmd: `docker-compose -f envs/takeoff/docker/docker-compose.dev.yml up -d db`, message: 'Triggering database creation' },
     { cmd: `${sleep}`, message: 'Waiting for database' },
