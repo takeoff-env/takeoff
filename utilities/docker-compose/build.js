@@ -20,7 +20,7 @@ let env = argv.env || 'dev';
 
 const command = 'docker-compose';
 
-const args = ['-f', `docker/docker-compose.${env}.yml`, 'build'];
+const args = ['-f', `envs/takeoff/docker/docker-compose.${env}.yml`, 'build'];
 if (!argv.c || !argv.cache) args.push('--no-cache');
 
 console.log('Running Docker Build Script');
