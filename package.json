@@ -5,8 +5,8 @@
     "author": "Tane Piper <piper.tane@gmail.com>",
     "license": "MIT",
     "dependencies": {
-        "minimist": "^1.2.0",
-        "lerna": "^2.1.2"
+        "lerna": "^2.2.0",
+        "minimist": "^1.2.0"
     },
     "scripts": {
         "postinstall": "lerna bootstrap && npm run takeoff:build",

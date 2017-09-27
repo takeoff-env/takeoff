@@ -19,7 +19,7 @@ let env = argv.env || 'dev';
 
 const command = 'docker-compose';
 
-const args = ['-f', `docker/docker-compose.${env}.yml`, 'down', '--rmi', 'all'];
+const args = ['-f', `envs/takeoff/docker/docker-compose.${env}.yml`, 'down', '--rmi', 'all'];
 
 console.log('Running Docker Uninstall Script');
 console.log('---------------------------');

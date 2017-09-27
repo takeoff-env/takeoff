@@ -10,8 +10,8 @@ Under the hood is uses `docker` and `docker-compose` to minimise the hassle out 
 
 The default configuration ships with:
 
-* A plugin-based API server powered by Hapi
-* A hot-reloading React frontend including React Router v4 and Redux
+* A plugin-based API server powered by Hapi, with nodemon for hot reloading
+* A webpack hot reloading React frontend including React Router v4 and Redux
 * A Postgres database and a Sequelize adapter available in the API to interact with it
 * A Ngnix server proxying all requests via port 80.
 
@@ -58,13 +58,14 @@ You will find several folders and files:
 
 ```bash
     -|
-     |- api # This is the Hapi API Server
-     |- app # This is the frontend app
-     |- docker # This is where all the docker configurations are kept
+     |- blueprints/takeoff # A blueprint folder, in a future version you will be able to specify this in the environment variables
+        |- api # This is the Hapi API Server
+        |- app # This is the frontend app
+        |- nginx # Nginx configuration
+        |- db # Postgres DB config
+     |- docker/takeoff # This is where all the docker configurations are kept
      |- docs # Docs folder, for Github Pages
-     |- nginx # Nginx configuration
-     |- scripts # Scripts, will be deprecated due to only supporting linux
-     |- utilities # Will replace scripts
+     |- utilities # Scripts that perform tasks for takeoff via npm commands
      |- README.md # The file you are looking at!
 ```
 

@@ -20,7 +20,7 @@ let env = argv.env || 'dev';
 
 const command = 'docker-compose';
 
-const args = ['-f', `docker/docker-compose.${env}.yml`, 'stop'];
+const args = ['-f', `envs/takeoff/docker/docker-compose.${env}.yml`, 'stop'];
 
 if (argv.d && typeof argv.d === 'string') {
     args.push(argv.d);
