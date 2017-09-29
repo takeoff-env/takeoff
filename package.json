@@ -1,15 +1,16 @@
 {
-    "name": "takeoff",
-    "version": "1.0.4",
+    "name": "takeoff-env",
+    "version": "1.1.0",
+    "description": "A easy to use docker environment powered by node and npm",
     "main": "index.js",
     "author": "Tane Piper <piper.tane@gmail.com>",
     "license": "MIT",
     "dependencies": {
-        "minimist": "^1.2.0",
-        "lerna": "^2.1.2"
+        "lerna": "^2.2.0",
+        "minimist": "^1.2.0"
     },
     "scripts": {
-        "postinstall": "lerna bootstrap && npm run takeoff:build",
+        "postinstall": "npm run takeoff:build",
         "compose:build": "node utilities/docker-compose/build.js",
         "compose:up": "node utilities/docker-compose/up.js",
         "compose:stop": "node utilities/docker-compose/stop.js",
@@ -17,6 +18,7 @@
         "compose:rm": "node utilities/docker-compose/uninstall.js",
         "takeoff:clean": "node utilities/takeoff/clean-env.js",
         "takeoff:build": "node utilities/takeoff/docker-compose-build.js",
+        "takeoff:new": "node utilities/takeoff/new-environment.js",
         "takeoff:start": "npm run compose:up",
         "api:connect": "docker exec -it docker_api_1 /bin/bash",
         "start": "npm run compose:up",

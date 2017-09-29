@@ -5,12 +5,12 @@
 // version: 0.1.0 (2013/02/01)
 
 // execute a single shell command where "cmd" is a string
-exports.exec = function({ message, cmd }, done, onData, onError) {
+exports.exec = function({ message, cmd, cwd }, done, onData, onError) {
     console.log(`Task: ${message}`);
     // this would be way easier on a shell/bash script :P
     const child_process = require('child_process');
     const parts = cmd.split(/\s+/g);
-    const p = child_process.spawn(parts[0], parts.slice(1));
+    const p = child_process.spawn(parts[0], parts.slice(1), {cwd});
 
     p.stdout.on('data', onData);
     p.stderr.on('data', onError);

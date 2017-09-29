@@ -6,9 +6,8 @@ const shellUtils = require('./../lib/shell-utils');
 const env = argv.env || 'dev';
 
 const commands = [
-    { cmd: `rm -rf api/node_modules`, message: 'Removing api node_modules' },
-    { cmd: `rm -rf app/node_modules`, message: 'Removing app node_modules' },
-    { cmd: `npm run compose:rm`, message: 'Removing docker amis' }
+    { cmd: `npm run compose:rm`, message: 'Removing docker amis' },
+    { cmd: `rm -rf envs/takeoff`, message: 'Removing default environment' }
 ];
 
 shellUtils.series(

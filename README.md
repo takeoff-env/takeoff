@@ -10,12 +10,16 @@ Under the hood is uses `docker` and `docker-compose` to minimise the hassle out 
 
 The default configuration ships with:
 
-* A plugin-based API server powered by Hapi
-* A hot-reloading React frontend including React Router v4 and Redux
+* A plugin-based API server powered by Hapi, with nodemon for hot reloading
+* A webpack hot reloading React frontend including React Router v4 and Redux
 * A Postgres database and a Sequelize adapter available in the API to interact with it
 * A Ngnix server proxying all requests via port 80.
 
 With the API you also get out of the box user management and authentication, and on the frontend a default login page and API middlware to use a [JSON Web Token (JWT)](https://jwt.io) to provide authenticated access for your endpoints with `admin` and `user` scopes available . Using the documentation to can then extend these with your own functionality.
+
+The basic configuration ships as a "Blueprint", the [default is available from here](https://github.com/takeoff-env/takeoff-blueprint-basic).  In the future you will be able to specify which environments you would like you install, either via name or git repository.
+
+Documentation on Blueprints is comming soon, but the basic idea is to provide the configuration and applications as a single package that will be easily installable as a new environment.
 
 There are a set of [available commands](docs/command-line.md) to help make the toolbox cross-platform.  These are in the process of being integrated and documented.
 
@@ -38,7 +42,7 @@ This software has currently only been tested on Linux using [Docker Community Ed
 Installing takeoff is done in 4 easy steps.  Remember you can also clone the repository first to make it easier to manage your own copy.
 
 ```bash
-> git clone https://github.com/tanepiper/takeoff.git
+> git clone https://github.com/takeoff-env/takeoff.git
 > cd takeoff
 > npm install
 > npm start
@@ -51,35 +55,6 @@ You should now have a server running at [http://localhost](http://localhost). Yo
 The default user is `admin` and password is `password`.  Do not expect this to be a fully secure environment.
 
 > *Disclaimer: If you build an app with this you wish you deploy, you are responsible for your own security.*
-
-## Architecture
-
-You will find several folders and files:
-
-```bash
-    -|
-     |- api # This is the Hapi API Server
-     |- app # This is the frontend app
-     |- docker # This is where all the docker configurations are kept
-     |- docs # Docs folder, for Github Pages
-     |- nginx # Nginx configuration
-     |- scripts # Scripts, will be deprecated due to only supporting linux
-     |- utilities # Will replace scripts
-     |- README.md # The file you are looking at!
-```
-
-Inside the docker folder and several docker files which create the environments.
-
-The default environments are listed below with the main environments from their docker files.  Full components will be listed soon.
-
-|name   |packages  |version|description|
-|----   |-------   |-------|-----------|
-|api    |node      |8.4.0  |Hapi-powered API that comes pre-build with a user and authentication plugin, uses nodemon for changes.|
-|app    |node      |8.4.0  |Webpack/React app that is hot-reloaded on changes|
-|db     |postgres  |9.5    |Postgres database|
-|server |ngnix     |1.13.3 |Ngnix Proxy|
-
-Run via docker compose, you can begin to add plugins to the Hapi server.  You can easily add your own docker images for other services such as redis, memcache, mysql, etc.
 
 ## References
 
