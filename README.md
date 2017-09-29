@@ -23,6 +23,10 @@ The default configuration ships with:
 
 With the API you also get out of the box user management and authentication, and on the frontend a default login page and API middlware to use a [JSON Web Token (JWT)](https://jwt.io) to provide authenticated access for your endpoints with `admin` and `user` scopes available . Using the documentation to can then extend these with your own functionality.
 
+The basic configuration ships as a "Blueprint", the [default is available from here](https://github.com/takeoff-env/takeoff-blueprint-basic).  In the future you will be able to specify which environments you would like you install, either via name or git repository.
+
+Documentation on Blueprints is comming soon, but the basic idea is to provide the configuration and applications as a single package that will be easily installable as a new environment.
+
 There are a set of [available commands](docs/command-line.md) to help make the toolbox cross-platform.  These are in the process of being integrated and documented.
 
 Currently only Linux is fully tested and supported out the box, but support for other OS is coming (testers and contributors welcome!). There is a page for [Windows Users](docs/windows-setup.md) to provide extra information in the quest to get it working.
@@ -60,7 +64,7 @@ The default user is `admin` and password is `password`.  Do not expect this to b
 
 ## Architecture
 
-You will find several folders and files:
+After installing, you will find several folders and files:
 
 ```bash
     -|
@@ -80,7 +84,6 @@ You will find several folders and files:
      |- utilities # Scripts that perform tasks for takeoff via npm commands
      |- README.md # The file you are looking at!
 ```
-
 ## References
 
 * This document environment was based on the tutorial [Dockerize your app and keep hot-reloading !](https://blog.bam.tech/developper-news/dockerize-your-app-and-keep-hot-reloading) but adding more utilities and making it easier to work as a starter kit.
