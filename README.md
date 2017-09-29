@@ -6,7 +6,13 @@ Takeoff is a toolbox for rapid prototyping applications.
 
 It is not a framework and is in fact agnostic to any solutions provided to it. However to provide the ability to rapidly develop applications it ships with some opinionated defaults.
 
-Under the hood is uses `docker` and `docker-compose` to minimise the hassle out of setting up frontend, backend and database servers. Within seconds you'll have a hot-reloading frontend and backend which allows you to make changes without the need to usually restart the server.
+The core takeoff package is a set of scripts that set up the default takeoff environment. The environments are provided by [Blueprints](docs/blueprints.md), repositories with configurations that Takeoff can use to create your environments.
+
+Under the hood is uses `docker` and `docker-compose` to minimise the hassle out of setting up frontend, backend and database servers.
+
+The default blueprint ([takeoff-blueprint-basic](https://github.com/takeoff-env/takeoff-blueprint-basic) is installed as the default `takeoff` environment in the `env` folder.)
+
+The default provides a configuration that after building, Within seconds you'll have a hot-reloading frontend and backend which allows you to make changes without the need to usually restart the server.
 
 The default configuration ships with:
 
@@ -28,8 +34,8 @@ Currently only Linux is fully tested and supported out the box, but support for 
 ## Documentation
 
 * [Command Line Tools](docs/command-line.md)
-* [API](api/README.md)
-* [Frontend App](app/README.md)
+* [Default Blueprint API](https://github.com/takeoff-env/takeoff-blueprint-basic/blob/master/env/api/README.md)
+* [Default Blueprint Frontend App](https://github.com/takeoff-env/takeoff-blueprint-basic/blob/master/env/app/README.md)
 
 ## How to get started
 
@@ -56,6 +62,28 @@ The default user is `admin` and password is `password`.  Do not expect this to b
 
 > *Disclaimer: If you build an app with this you wish you deploy, you are responsible for your own security.*
 
+## Architecture
+
+After installing, you will find several folders and files:
+
+```bash
+    -|
+     |- envs/takeoff # The default environment installed
+        |- env # Folders with the source code you can change
+            |- api # This is the Hapi API Server
+            |- app # This is the frontend app
+            |- nginx # Nginx configuration
+            |- db # Postgres DB config
+        |- docker # This is where all the docker configurations are kept
+            |- docker-compose.yml # The glue file for your services
+            |- api # This is the Hapi API Server
+            |- app # This is the frontend app
+            |- nginx # Nginx configuration
+            |- db # Postgres DB config
+     |- docs # Docs folder, for Github Pages
+     |- utilities # Scripts that perform tasks for takeoff via npm commands
+     |- README.md # The file you are looking at!
+```
 ## References
 
 * This document environment was based on the tutorial [Dockerize your app and keep hot-reloading !](https://blog.bam.tech/developper-news/dockerize-your-app-and-keep-hot-reloading) but adding more utilities and making it easier to work as a starter kit.
