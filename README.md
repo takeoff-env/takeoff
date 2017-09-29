@@ -6,7 +6,7 @@ Takeoff is a toolbox for rapid prototyping applications.
 
 It is not a framework and is in fact agnostic to any solutions provided to it. However to provide the ability to rapidly develop applications it ships with some opinionated defaults.
 
-The core takeoff package is a set of scripts that set up the default takeoff environment. The environments are provided by Blueprints, repositories with configurations that Takeoff can use to create your environments.
+The core takeoff package is a set of scripts that set up the default takeoff environment. The environments are provided by [Blueprints](docs/blueprints.md), repositories with configurations that Takeoff can use to create your environments.
 
 Under the hood is uses `docker` and `docker-compose` to minimise the hassle out of setting up frontend, backend and database servers.
 
@@ -31,7 +31,7 @@ Currently only Linux is fully tested and supported out the box, but support for 
 
 * [Command Line Tools](docs/command-line.md)
 * [Default Blueprint API](https://github.com/takeoff-env/takeoff-blueprint-basic/blob/master/env/api/README.md)
-* [Frontend App](https://github.com/takeoff-env/takeoff-blueprint-basic/blob/master/env/app/README.md)
+* [Default Blueprint Frontend App](https://github.com/takeoff-env/takeoff-blueprint-basic/blob/master/env/app/README.md)
 
 ## How to get started
 
@@ -64,29 +64,22 @@ You will find several folders and files:
 
 ```bash
     -|
-     |- blueprints/takeoff # A blueprint folder, in a future version you will be able to specify this in the environment variables
-        |- api # This is the Hapi API Server
-        |- app # This is the frontend app
-        |- nginx # Nginx configuration
-        |- db # Postgres DB config
-     |- docker/takeoff # This is where all the docker configurations are kept
+     |- envs/takeoff # The default environment installed
+        |- env # Folders with the source code you can change
+            |- api # This is the Hapi API Server
+            |- app # This is the frontend app
+            |- nginx # Nginx configuration
+            |- db # Postgres DB config
+        |- docker # This is where all the docker configurations are kept
+            |- docker-compose.yml # The glue file for your services
+            |- api # This is the Hapi API Server
+            |- app # This is the frontend app
+            |- nginx # Nginx configuration
+            |- db # Postgres DB config
      |- docs # Docs folder, for Github Pages
      |- utilities # Scripts that perform tasks for takeoff via npm commands
      |- README.md # The file you are looking at!
 ```
-
-Inside the docker folder and several docker files which create the environments.
-
-The default environments are listed below with the main environments from their docker files.  Full components will be listed soon.
-
-|name   |packages  |version|description|
-|----   |-------   |-------|-----------|
-|api    |node      |8.4.0  |Hapi-powered API that comes pre-build with a user and authentication plugin, uses nodemon for changes.|
-|app    |node      |8.4.0  |Webpack/React app that is hot-reloaded on changes|
-|db     |postgres  |9.5    |Postgres database|
-|server |ngnix     |1.13.3 |Ngnix Proxy|
-
-Run via docker compose, you can begin to add plugins to the Hapi server.  You can easily add your own docker images for other services such as redis, memcache, mysql, etc.
 
 ## References
 
