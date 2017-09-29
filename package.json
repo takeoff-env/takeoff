@@ -1,6 +1,6 @@
 {
     "name": "takeoff-env",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "description": "A easy to use docker environment powered by node and npm",
     "main": "index.js",
     "author": "Tane Piper <piper.tane@gmail.com>",
@@ -18,6 +18,7 @@
         "compose:rm": "node utilities/docker-compose/uninstall.js",
         "takeoff:clean": "node utilities/takeoff/clean-env.js",
         "takeoff:build": "node utilities/takeoff/docker-compose-build.js",
+        "takeoff:new": "node utilities/takeoff/new-environment.js",
         "takeoff:start": "npm run compose:up",
         "api:connect": "docker exec -it docker_api_1 /bin/bash",
         "start": "npm run compose:up",

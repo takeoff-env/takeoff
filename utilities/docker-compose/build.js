@@ -16,11 +16,11 @@
 const argv = require('minimist')(process.argv.slice(2));
 const { spawn } = require('child_process');
 
-let env = argv.env || 'dev';
+let env = argv.env || 'takeoff';
 
 const command = 'docker-compose';
 
-const args = ['-f', `envs/takeoff/docker/docker-compose.${env}.yml`, 'build'];
+const args = ['-f', `envs/${env}/docker/docker-compose.yml`, 'build'];
 if (!argv.c || !argv.cache) args.push('--no-cache');
 
 console.log('Running Docker Build Script');
@@ -30,12 +30,12 @@ let result = spawn(command, args);
 
 if (argv.v) {
     result.stdout.on('data', message => {
-        console.log(`[Docker Build]: ${message}`.trim());
+        console.log(`${message}`.trim());
     });
 }
 
 result.stderr.on('data', message => {
-    console.error(`[Docker Build]: ${message}`.trim());
+    console.error(`${message}`.trim());
 });
 
 result.on('exit', () => {
