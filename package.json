@@ -19,10 +19,10 @@
         "takeoff:clean": "node utilities/takeoff/clean-env.js",
         "takeoff:build": "node utilities/takeoff/docker-compose-build.js",
         "takeoff:new": "node utilities/takeoff/new-environment.js",
-        "takeoff:start": "npm run compose:up",
+        "takeoff:start": "node utilities/docker-compose/up.js",
         "api:connect": "docker exec -it docker_api_1 /bin/bash",
-        "start": "npm run compose:up",
-        "stop": "npm run compose:stop",
+        "start": "node utilities/docker-compose/up.js",
+        "stop": "node utilities/docker-compose/stop.js",
         "db:connect": "psql -h localhost -p 5431 -U myappuser -d myappdb",
         "db:reset": "node utilities/takeoff/database-clean.js"
     }

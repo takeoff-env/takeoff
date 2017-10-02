@@ -6,19 +6,20 @@ const shellUtils = require('./../lib/shell-utils');
 let sleep = 'sleep 5';
 if (process.platform === 'win32') sleep = 'sleep -s 5';
 
-let cloneRepo = 'https://github.com/takeoff-env/takeoff-blueprint-basic.git';
+
+let blueprint = 'https://github.com/takeoff-env/takeoff-blueprint-basic.git';
 let envName = 'takeoff';
 
-if (argv.env) {
-    cloneRepo = argv.env;
+if (argv.blueprint) {
+    blueprint = argv.blueprint;
 }
 
-if (argv.name) {
-    envName = argv.name;
+if (argv.env) {
+    envName = argv.env;
 }
 
 const commands = [
-    { cmd: `mkdir -p envs/takeoff`, message: 'Creating environment' },
+    { cmd: `mkdir -p envs/${envName}`, message: 'Creating environment' },
     { cmd: `git clone ${cloneRepo} envs/${envName}`, message: 'Cloning default environment' },
     { cmd: `lerna bootstrap`, message: 'Bootstrapping environments', cwd: `envs/${envName}` },
     {

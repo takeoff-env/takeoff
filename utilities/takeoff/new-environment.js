@@ -18,7 +18,7 @@ if (argv.env) {
 }
 
 const commands = [
-    { cmd: `mkdir -p envs/takeoff`, message: 'Creating environment' },
+    { cmd: `mkdir -p envs/${envName}`, message: 'Creating environment' },
     { cmd: `git clone ${blueprint} envs/${envName}`, message: 'Cloning default environment' },
     { cmd: `lerna bootstrap`, message: 'Bootstrapping environments', cwd: `envs/${envName}` },
     {
