@@ -16,11 +16,16 @@
 const argv = require('minimist')(process.argv.slice(2));
 const { spawn } = require('child_process');
 
-let env = argv.env || 'takeoff';
+let environment = 'takeoff';
+
+if (argv.env) {
+    environment = argv.env;
+}
 
 const command = 'docker-compose';
 
-const args = ['-f', `envs/${env}/docker/docker-compose.yml`, 'build'];
+const args = ['-f', `envs/${environment}/docker/docker-compose.yml`, 'build'];
+
 if (!argv.c || !argv.cache) args.push('--no-cache');
 
 console.log('Running Docker Build Script');

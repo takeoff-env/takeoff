@@ -6,38 +6,37 @@ const shellUtils = require('./../lib/shell-utils');
 let sleep = 'sleep 5';
 if (process.platform === 'win32') sleep = 'sleep -s 5';
 
-let cloneRepo = 'https://github.com/takeoff-env/takeoff-blueprint-basic.git';
-let envName = 'takeoff';
+let defaultRepo = 'https://github.com/takeoff-env/takeoff-blueprint-basic.git';
+let environment = 'takeoff';
 
 if (argv.env) {
-    cloneRepo = argv.env;
+    defaultRepo = argv.env;
 }
 
 if (argv.name) {
-    envName = argv.name;
+    environment = argv.name;
 }
-
 const commands = [
-    { cmd: `mkdir -p envs/takeoff`, message: 'Creating environment' },
-    { cmd: `git clone ${cloneRepo} envs/${envName}`, message: 'Cloning default environment' },
-    { cmd: `lerna bootstrap`, message: 'Bootstrapping environments', cwd: `envs/${envName}` },
+    { cmd: `mkdir -p envs/${environment}`, message: 'Creating environment' },
+    { cmd: `git clone ${defaultRepo} envs/${environment}`, message: 'Cloning default environment' },
+    argv.lerna ? { cmd: `lerna bootstrap`, message: 'Bootstrapping environments', cwd: `envs/${environment}` } : undefined,
     {
         cmd: `docker-compose -f docker/docker-compose.yml build --no-cache`,
         message: 'Running Docker Compose Build',
-        cwd: `envs/${envName}`
+        cwd: `envs/${environment}`
     },
     {
         cmd: `docker-compose -f docker/docker-compose.yml up -d db`,
         message: 'Triggering database creation',
-        cwd: `envs/${envName}`
+        cwd: `envs/${environment}`
     },
     { cmd: `${sleep}`, message: 'Waiting for database' },
     {
         cmd: `docker-compose -f docker/docker-compose.yml stop db`,
         message: 'Shutting down database',
-        cwd: `envs/${envName}`
+        cwd: `envs/${environment}`
     }
-];
+].filter(f => f);
 
 shellUtils.series(
     commands,

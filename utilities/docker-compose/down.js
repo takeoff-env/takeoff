@@ -16,11 +16,15 @@
 const argv = require('minimist')(process.argv.slice(2));
 const { spawn } = require('child_process');
 
-let env = argv.env || 'takeoff';
+let environment = 'takeoff';
+
+if (argv.env) {
+    environment = argv.env;
+}
 
 const command = 'docker-compose';
 
-const args = ['-f', `envs/${env}/docker-compose.yml`, 'down'];
+const args = ['-f', `envs/${environment}/docker-compose.yml`, 'down'];
 
 if (argv.d && typeof argv.d === 'string') {
     args.push(argv.d);

@@ -27,17 +27,18 @@ All commands are run using `npm run` (with the exception of `npm start` and `npm
 
 ### Takeoff Commands
 
-All commands are run using `npm run`. Some of these commands take the `--env [name]` command, the default value is `dev`.
+All commands are run using `npm run`. Some of these commands take the `--env=<name>` command, the default value is `takeoff`.
 
 |Command|Description|
 |-------|-----------|
+|`takeoff:new`  |Creates a new environment.  Pass the `--env=<env>` parameter to specify the name and `--blueprint=<blueprint>` to pass a different blueprint to use 
 |`takeoff:build`|Triggers a multi-step `docker-compose build`|
 |`takeoff:clean`|Cleans the `node_modules` directories of `app` and `api` and cleans out the previous build images|
 |`takeoff:start`|Starts `docker-compose` using the environment file with any built environment|
 
 ### Docker Compose Commands
 
-All commands are run using `npm run`. All these commands take the `--env [name]` command, the default value is `dev`.
+All commands are run using `npm run`. All these commands take the `--env=<name>` command, the default value is `takeoff`.
 
 |Command|Description|
 |-------|-----------|
@@ -47,19 +48,10 @@ All commands are run using `npm run`. All these commands take the `--env [name]`
 |`compose:down`|Removes the current docker images `-d [name]` to only trigger on a specific service|
 |`compose:rm`|Destroys all build docker images.|
 
-### API Commands
-
-All commands are run using `npm run`.
-
-|Command|Description|
-|-------|-----------|
-|`api:connect`|Connect to the `api` server with bash|
-
 ### Database Commands
 
 |Command|Description|
 |-------|-----------|
-|`db:connect`|Connects to the database using `psql` which is required to be available in your $PATH|
-|`db:reset`|Resets the database back to it's original state|
+|`db:reset`|Resets the database back to it's original state.  This is currently only for the default `takeoff` environment|
 
 

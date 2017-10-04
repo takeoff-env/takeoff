@@ -3,11 +3,15 @@
 const argv = require('minimist')(process.argv.slice(2));
 const shellUtils = require('./../lib/shell-utils');
 
-const env = argv.env || 'dev';
+let envName = 'takeoff';
+
+if (argv.env) {
+    envName = argv.env;
+}
 
 const commands = [
-    { cmd: `npm run compose:rm`, message: 'Removing docker amis' },
-    { cmd: `rm -rf envs/takeoff`, message: 'Removing default environment' }
+    { cmd: `npm run compose:rm --env=${envName}`, message: 'Removing docker amis' },
+    { cmd: `rm -rf envs/${envName}`, message: 'Removing default environment' }
 ];
 
 shellUtils.series(
