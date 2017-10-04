@@ -6,7 +6,11 @@ const shellUtils = require('./../lib/shell-utils');
 let sleep = 'sleep 5';
 if (process.platform === 'win32') sleep = 'sleep -s 5';
 
-let blueprint = 'https://github.com/takeoff-env/takeoff-blueprint-basic.git';
+let blueprintName = 'basic';
+if (argv.blueprintName) {
+    blueprintName = argv.blueprintName
+}
+let blueprint = `https://github.com/takeoff-env/takeoff-blueprint-${blueprintName}.git`;
 let environment = 'takeoff';
 
 if (argv.blueprint) {

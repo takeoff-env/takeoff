@@ -6,19 +6,26 @@ const shellUtils = require('./../lib/shell-utils');
 let sleep = 'sleep 5';
 if (process.platform === 'win32') sleep = 'sleep -s 5';
 
-let defaultRepo = 'https://github.com/takeoff-env/takeoff-blueprint-basic.git';
+let blueprintName = 'basic';
+if (argv.blueprintName) {
+    blueprintName = argv.blueprintName
+}
+let blueprint = `https://github.com/takeoff-env/takeoff-blueprint-${blueprintName}.git`;
 let environment = 'takeoff';
 
-if (argv.env) {
-    defaultRepo = argv.env;
+if (argv.blueprint) {
+    blueprint = argv.blueprint;
 }
 
-if (argv.name) {
-    environment = argv.name;
+if (argv.env) {
+    environment = argv.env;
 }
+
 const commands = [
     { cmd: `mkdir -p envs/${environment}`, message: 'Creating environment' },
     { cmd: `git clone ${defaultRepo} envs/${environment}`, message: 'Cloning default environment' },
+    argv.submodule ? { cmd: `git submodule init`, message: `Initialising submodules`, cwd: `envs/${environment}`} : undefined,
+    argv.submodule ? { cmd: `git submodule update`, message: `Cloning submodules`, cwd: `envs/${environment}`} : undefined,
     argv.lerna ? { cmd: `lerna bootstrap`, message: 'Bootstrapping environments', cwd: `envs/${environment}` } : undefined,
     {
         cmd: `docker-compose -f docker/docker-compose.yml build --no-cache`,
