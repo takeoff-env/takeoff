@@ -20,7 +20,7 @@ if (argv.env) {
 const commands = [
     { cmd: `mkdir -p envs/takeoff`, message: 'Creating environment' },
     { cmd: `git clone ${blueprint} envs/${envName}`, message: 'Cloning default environment' },
-    { cmd: `lerna bootstrap`, message: 'Bootstrapping environments', cwd: `envs/${envName}` },
+    argv.lerna ? { cmd: `lerna bootstrap`, message: 'Bootstrapping environments', cwd: `envs/${envName}` } : undefined,
     {
         cmd: `docker-compose -f docker/docker-compose.yml build --no-cache`,
         message: 'Running Docker Compose Build',
@@ -37,7 +37,7 @@ const commands = [
         message: 'Shutting down database',
         cwd: `envs/${envName}`
     }
-];
+].filter(f => f);
 
 shellUtils.series(
     commands,
