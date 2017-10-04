@@ -2,9 +2,13 @@
 
 <img src="docs/assets/logo.png" width="200px" align="left" style="margin-right:20px; margin-bottom:20px;" />
 
-Takeoff is a toolbox for rapid prototyping applications.
+Takeoff is a toolbox for rapid prototyping applications that uses scripts to make deployment of enironments easy
 
-It is not a framework and is agnostic to any solutions provided to it. Under the hood is uses `docker` and `docker-compose` to minimise the hassle out of setting up frontend, backend and database servers.
+It is not a framework and is agnostic to any solutions provided to it, but does have some configuration options and conventions it likes.
+
+Under the hood is uses `docker` and `docker-compose` to minimise the hassle out of setting up frontend, backend and database servers.
+
+<hr />
 
 ## Takeoff Core Package
 
@@ -12,7 +16,24 @@ The core takeoff package is a set of scripts that set up the default takeoff env
 
 The core package scripts are currently powered by NPM and there are a set of [available commands](docs/command-line.md) for running the default environment, as well as creating new environments.
 
-The default blueprint ([takeoff-blueprint-basic](https://github.com/takeoff-env/takeoff-blueprint-basic) is installed as the default `takeoff` environment in the `env` folder.)
+
+
+## Creating new environments
+
+Currently there are two blueprints:
+
+* The default blueprint ([takeoff-blueprint-basic](https://github.com/takeoff-env/takeoff-blueprint-basic) is installed as the default `takeoff` environment in the `env` folder.)
+
+When you want to create a new environment you can type:
+
+```bash
+    npm run takeoff:new -- --env=<name of env>
+    npm start -- --env=<name of env>
+```
+
+This will start up your new environment.
+
+THere is also a [Wordpress Blueprint](https://github.com/takeoff-env/takeoff-blueprint-wordpress), you can find out more about installing it via it's documentation
 
 ## Platform Support
 
@@ -71,6 +92,7 @@ After installing, you will find several folders and files:
      |- utilities # Scripts that perform tasks for takeoff via npm commands
      |- README.md # The file you are looking at!
 ```
+
 ## References
 
 * This document environment was based on the tutorial [Dockerize your app and keep hot-reloading !](https://blog.bam.tech/developper-news/dockerize-your-app-and-keep-hot-reloading) but adding more utilities and making it easier to work as a starter kit.

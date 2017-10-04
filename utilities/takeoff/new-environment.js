@@ -6,38 +6,45 @@ const shellUtils = require('./../lib/shell-utils');
 let sleep = 'sleep 5';
 if (process.platform === 'win32') sleep = 'sleep -s 5';
 
-let blueprint = 'https://github.com/takeoff-env/takeoff-blueprint-basic.git';
-let envName = 'takeoff';
+let blueprintName = 'basic';
+if (argv.blueprintName) {
+    blueprintName = argv.blueprintName
+}
+let blueprint = `https://github.com/takeoff-env/takeoff-blueprint-${blueprintName}.git`;
+let environment = 'takeoff';
 
 if (argv.blueprint) {
     blueprint = argv.blueprint;
 }
 
 if (argv.env) {
-    envName = argv.env;
+    environment = argv.env;
 }
 
+
 const commands = [
-    { cmd: `mkdir -p envs/${envName}`, message: 'Creating environment' },
-    { cmd: `git clone ${blueprint} envs/${envName}`, message: 'Cloning default environment' },
-    { cmd: `lerna bootstrap`, message: 'Bootstrapping environments', cwd: `envs/${envName}` },
+    { cmd: `mkdir -p envs/${environment}`, message: 'Creating environment' },
+    { cmd: `git clone ${blueprint} envs/${environment}`, message: 'Cloning default environment' },
+    argv.submodule ? { cmd: `git submodule init`, message: `Initialising submodules`, cwd: `envs/${environment}`} : undefined,
+    argv.submodule ? { cmd: `git submodule update`, message: `Cloning submodules`, cwd: `envs/${environment}`} : undefined,
+    argv.lerna ? { cmd: `lerna bootstrap`, message: 'Bootstrapping environments', cwd: `envs/${environment}` } : undefined,
     {
         cmd: `docker-compose -f docker/docker-compose.yml build --no-cache`,
         message: 'Running Docker Compose Build',
-        cwd: `envs/${envName}`
+        cwd: `envs/${environment}`
     },
     {
         cmd: `docker-compose -f docker/docker-compose.yml up -d db`,
         message: 'Triggering database creation',
-        cwd: `envs/${envName}`
+        cwd: `envs/${environment}`
     },
     { cmd: `${sleep}`, message: 'Waiting for database' },
     {
         cmd: `docker-compose -f docker/docker-compose.yml stop db`,
         message: 'Shutting down database',
-        cwd: `envs/${envName}`
+        cwd: `envs/${environment}`
     }
-];
+].filter(f => f);
 
 shellUtils.series(
     commands,

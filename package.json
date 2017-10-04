@@ -10,7 +10,7 @@
         "minimist": "^1.2.0"
     },
     "scripts": {
-        "postinstall": "npm run takeoff:build",
+        "postinstall": "node utilities/takeoff/docker-compose-build.js --lerna",
         "compose:build": "node utilities/docker-compose/build.js",
         "compose:up": "node utilities/docker-compose/up.js",
         "compose:stop": "node utilities/docker-compose/stop.js",
@@ -21,7 +21,6 @@
         "takeoff:new": "node utilities/takeoff/new-environment.js",
         "takeoff:start": "node utilities/docker-compose/up.js",
         "start": "node utilities/docker-compose/up.js",
-        "stop": "node utilities/docker-compose/stop.js",
-        "db:reset": "node utilities/takeoff/database-clean.js"
+        "stop": "node utilities/docker-compose/stop.js"
     }
 }
