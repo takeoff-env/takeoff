@@ -8,15 +8,11 @@ It is not a framework and is agnostic to any solutions provided to it, but does 
 
 Under the hood is uses `docker` and `docker-compose` to minimise the hassle out of setting up frontend, backend and database servers.
 
-<hr />
-<div />
-## Takeoff Core Package
-
 The core takeoff package is a set of scripts that set up the default takeoff environment. The environments are provided by [Blueprints](docs/blueprints.md), repositories with configurations that Takeoff can use to create your environments.
 
 The core package scripts are currently powered by NPM and there are a set of [available commands](docs/command-line.md) for running the default environment, as well as creating new environments.
 
-
+Takeoff is designed to cut out those first few crutial hours where you are setting up your project environment, either at a hack day or for a work prototype. The default provided is opinionated but gives you basic authentication and hot reloading apps.  The Wordpress blueprint gives you a PHP and Wordpress environment reading files from your system.
 
 ## Creating new environments
 
@@ -33,7 +29,7 @@ When you want to create a new environment you can type:
 
 This will start up your new environment.
 
-There is also a [Wordpress Blueprint](https://github.com/takeoff-env/takeoff-blueprint-wordpress), you can find out more about installing it via it's documentation
+THere is also a [Wordpress Blueprint](https://github.com/takeoff-env/takeoff-blueprint-wordpress), you can find out more about installing it via it's documentation
 
 ## Platform Support
 
@@ -44,6 +40,7 @@ Currently only Linux is fully tested and supported out the box, but support for 
 * [Command Line Tools](docs/command-line.md)
 * [Default Blueprint API](https://github.com/takeoff-env/takeoff-blueprint-basic/blob/master/env/api/README.md)
 * [Default Blueprint Frontend App](https://github.com/takeoff-env/takeoff-blueprint-basic/blob/master/env/app/README.md)
+* [Wordpress Docs](https://github.com/takeoff-env/takeoff-blueprint-wordpress/blob/master/README.md)
 
 ## How to get started
 
