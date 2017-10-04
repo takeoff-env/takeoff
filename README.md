@@ -54,7 +54,7 @@ When you want to create a new environment you can type:
 
 This will start up your new environment.
 
-THere is also a [Wordpress Blueprint](https://github.com/takeoff-env/takeoff-blueprint-wordpress), you can find out more about installing it via it's documentation
+There is also a [Wordpress Blueprint](https://github.com/takeoff-env/takeoff-blueprint-wordpress), you can find out more about installing it via it's documentation
 
 ## Platform Support
 
