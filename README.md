@@ -8,15 +8,36 @@ It is not a framework and is agnostic to any solutions provided to it, but does 
 
 Under the hood is uses `docker` and `docker-compose` to minimise the hassle out of setting up frontend, backend and database servers.
 
-<hr />
-
-## Takeoff Core Package
-
 The core takeoff package is a set of scripts that set up the default takeoff environment. The environments are provided by [Blueprints](docs/blueprints.md), repositories with configurations that Takeoff can use to create your environments.
 
 The core package scripts are currently powered by NPM and there are a set of [available commands](docs/command-line.md) for running the default environment, as well as creating new environments.
 
+Takeoff is designed to cut out those first few crutial hours where you are setting up your project environment, either at a hack day or for a work prototype. The default provided is opinionated but gives you basic authentication and hot reloading apps.  The Wordpress blueprint gives you a PHP and Wordpress environment reading files from your system.
 
+## How to get started
+
+### Installing Docker
+
+This software has currently only been tested on Linux using [Docker Community Edition](https://www.docker.com/community-edition). Once installed you will have the `docker` and `docker-compose` commands.
+
+### Install Takeoff
+
+Installing takeoff is done in 4 easy steps.  Remember you can also clone the repository first to make it easier to manage your own copy.
+
+```bash
+> git clone https://github.com/takeoff-env/takeoff.git
+> cd takeoff
+> npm install
+> npm start
+```
+
+The above commands will install all the dependencies and have you up and running in minutes.
+
+You should now have a server running at [http://localhost](http://localhost). You can access the API via [http://localhost/api](http://localhost/api).
+
+The default user is `admin` and password is `password`.  Do not expect this to be a fully secure environment.
+
+> *Disclaimer: If you build an app with this you wish you deploy, you are responsible for your own security.*
 
 ## Creating new environments
 
@@ -44,31 +65,7 @@ Currently only Linux is fully tested and supported out the box, but support for 
 * [Command Line Tools](docs/command-line.md)
 * [Default Blueprint API](https://github.com/takeoff-env/takeoff-blueprint-basic/blob/master/env/api/README.md)
 * [Default Blueprint Frontend App](https://github.com/takeoff-env/takeoff-blueprint-basic/blob/master/env/app/README.md)
-
-## How to get started
-
-### Installing Docker
-
-This software has currently only been tested on Linux using [Docker Community Edition](https://www.docker.com/community-edition). Once installed you will have the `docker` and `docker-compose` commands.
-
-### Install Takeoff
-
-Installing takeoff is done in 4 easy steps.  Remember you can also clone the repository first to make it easier to manage your own copy.
-
-```bash
-> git clone https://github.com/takeoff-env/takeoff.git
-> cd takeoff
-> npm install
-> npm start
-```
-
-The above commands will install all the dependencies and have you up and running in minutes.
-
-You should now have a server running at [http://localhost](http://localhost). You can access the API via [http://localhost/api](http://localhost/api).
-
-The default user is `admin` and password is `password`.  Do not expect this to be a fully secure environment.
-
-> *Disclaimer: If you build an app with this you wish you deploy, you are responsible for your own security.*
+* [Wordpress Docs](https://github.com/takeoff-env/takeoff-blueprint-wordpress/blob/master/README.md)
 
 ## Architecture
 
