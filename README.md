@@ -14,21 +14,6 @@ The core package scripts are currently powered by NPM and there are a set of [av
 
 The default blueprint ([takeoff-blueprint-basic](https://github.com/takeoff-env/takeoff-blueprint-basic) is installed as the default `takeoff` environment in the `env` folder.)
 
-## Takeoff Default Environment
-
-Out of the box Takeoff provides the ability to rapidly develop applications as it ships with some opinionated defaults.
-
-The default provides a configuration that after building, Within seconds you'll have a hot-reloading frontend and backend which allows you to make changes without the need to usually restart the server.
-
-The default configuration ships with:
-
-* A plugin-based API server powered by Hapi, with nodemon for hot reloading
-* A webpack hot reloading React frontend including React Router v4 and Redux
-* A Postgres database and a Sequelize adapter available in the API to interact with it
-* A Ngnix server proxying all requests via port 80.
-
-With the API you also get out of the box user management and authentication, and on the frontend a default login page and API middlware to use a [JSON Web Token (JWT)](https://jwt.io) to provide authenticated access for your endpoints with `admin` and `user` scopes available . Using the documentation to can then extend these with your own functionality.
-
 ## Platform Support
 
 Currently only Linux is fully tested and supported out the box, but support for other OS is coming (testers and contributors welcome!). There is a page for [Windows Users](docs/windows-setup.md) to provide extra information in the quest to get it working.
