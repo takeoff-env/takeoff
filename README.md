@@ -9,7 +9,7 @@ It is not a framework and is agnostic to any solutions provided to it, but does 
 Under the hood is uses `docker` and `docker-compose` to minimise the hassle out of setting up frontend, backend and database servers.
 
 <hr />
-
+<div />
 ## Takeoff Core Package
 
 The core takeoff package is a set of scripts that set up the default takeoff environment. The environments are provided by [Blueprints](docs/blueprints.md), repositories with configurations that Takeoff can use to create your environments.
@@ -33,7 +33,7 @@ When you want to create a new environment you can type:
 
 This will start up your new environment.
 
-THere is also a [Wordpress Blueprint](https://github.com/takeoff-env/takeoff-blueprint-wordpress), you can find out more about installing it via it's documentation
+There is also a [Wordpress Blueprint](https://github.com/takeoff-env/takeoff-blueprint-wordpress), you can find out more about installing it via it's documentation
 
 ## Platform Support
 
