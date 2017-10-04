@@ -2,9 +2,13 @@
 
 <img src="docs/assets/logo.png" width="200px" align="left" style="margin-right:20px; margin-bottom:20px;" />
 
-Takeoff is a toolbox for rapid prototyping applications.
+Takeoff is a toolbox for rapid prototyping applications that uses scripts to make deployment of enironments easy
 
-It is not a framework and is agnostic to any solutions provided to it. Under the hood is uses `docker` and `docker-compose` to minimise the hassle out of setting up frontend, backend and database servers.
+It is not a framework and is agnostic to any solutions provided to it, but does have some configuration options and conventions it likes.
+
+Under the hood is uses `docker` and `docker-compose` to minimise the hassle out of setting up frontend, backend and database servers.
+
+<hr />
 
 ## Takeoff Core Package
 
@@ -12,22 +16,24 @@ The core takeoff package is a set of scripts that set up the default takeoff env
 
 The core package scripts are currently powered by NPM and there are a set of [available commands](docs/command-line.md) for running the default environment, as well as creating new environments.
 
-The default blueprint ([takeoff-blueprint-basic](https://github.com/takeoff-env/takeoff-blueprint-basic) is installed as the default `takeoff` environment in the `env` folder.)
 
-## Takeoff Default Environment
 
-Out of the box Takeoff provides the ability to rapidly develop applications as it ships with some opinionated defaults.
+## Creating new environments
 
-The default provides a configuration that after building, Within seconds you'll have a hot-reloading frontend and backend which allows you to make changes without the need to usually restart the server.
+Currently there are two blueprints:
 
-The default configuration ships with:
+* The default blueprint ([takeoff-blueprint-basic](https://github.com/takeoff-env/takeoff-blueprint-basic) is installed as the default `takeoff` environment in the `env` folder.)
 
-* A plugin-based API server powered by Hapi, with nodemon for hot reloading
-* A webpack hot reloading React frontend including React Router v4 and Redux
-* A Postgres database and a Sequelize adapter available in the API to interact with it
-* A Ngnix server proxying all requests via port 80.
+When you want to create a new environment you can type:
 
-With the API you also get out of the box user management and authentication, and on the frontend a default login page and API middlware to use a [JSON Web Token (JWT)](https://jwt.io) to provide authenticated access for your endpoints with `admin` and `user` scopes available . Using the documentation to can then extend these with your own functionality.
+```bash
+    npm run takeoff:new -- --env=<name of env>
+    npm start -- --env=<name of env>
+```
+
+This will start up your new environment.
+
+THere is also a [Wordpress Blueprint](https://github.com/takeoff-env/takeoff-blueprint-wordpress), you can find out more about installing it via it's documentation
 
 ## Platform Support
 

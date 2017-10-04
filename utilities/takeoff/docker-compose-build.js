@@ -23,7 +23,7 @@ if (argv.env) {
 
 const commands = [
     { cmd: `mkdir -p envs/${environment}`, message: 'Creating environment' },
-    { cmd: `git clone ${defaultRepo} envs/${environment}`, message: 'Cloning default environment' },
+    { cmd: `git clone ${blueprint} envs/${environment}`, message: 'Cloning default environment' },
     argv.submodule ? { cmd: `git submodule init`, message: `Initialising submodules`, cwd: `envs/${environment}`} : undefined,
     argv.submodule ? { cmd: `git submodule update`, message: `Cloning submodules`, cwd: `envs/${environment}`} : undefined,
     argv.lerna ? { cmd: `lerna bootstrap`, message: 'Bootstrapping environments', cwd: `envs/${environment}` } : undefined,
