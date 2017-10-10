@@ -16,6 +16,8 @@ The only exception is the `docker-compose up` command which will output the live
 
 ## Running Commands
 
+All commands accept the `--env=<env>` parameter to specify the name of the environment you want to use.
+
 ### NPM Commands
 
 |Command|Description|
@@ -23,7 +25,7 @@ The only exception is the `docker-compose up` command which will output the live
 |`npm start`|Starts `docker-compose` using the environment file with any built environment|
 |`npm stop`|Stops `docker-compose` using the environment file with any built environment|
 
-All commands are run using `npm run` (with the exception of `npm start` and `npm stop`).
+All further commands are run using `npm run` (with the exception of `npm start` and `npm stop`).
 
 ### Takeoff Commands
 
@@ -31,7 +33,7 @@ All commands are run using `npm run`. Some of these commands take the `--env=<na
 
 |Command|Description|
 |-------|-----------|
-|`takeoff:new`  |Creates a new environment.  Pass the `--env=<env>` parameter to specify the name and `--blueprint=<blueprint>` to pass a different blueprint to use 
+|`takeoff:new`  |Creates a new environment.  Accepts `--blueprintName=<blueprintName>`, `--blueprint=<blueprintUrl>`, `--lerna`, `--submodule` and `--dbinit` to pass a different blueprint to use 
 |`takeoff:build`|Triggers a multi-step `docker-compose build`|
 |`takeoff:clean`|Cleans the `node_modules` directories of `app` and `api` and cleans out the previous build images|
 |`takeoff:start`|Starts `docker-compose` using the environment file with any built environment|
@@ -47,6 +49,7 @@ All commands are run using `npm run`. All these commands take the `--env=<name>`
 |`compose:stop`|Stops the docker images `-d [name]` to only trigger on a specific service|
 |`compose:down`|Removes the current docker images `-d [name]` to only trigger on a specific service|
 |`compose:rm`|Destroys all build docker images.|
+|`compose:pull`|Pull the latest version of built docker images|
 
 ### Database Commands
 
