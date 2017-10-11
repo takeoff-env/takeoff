@@ -1,4 +1,4 @@
-node_modules
-.vscode
-envs
 _site
+.vscode
+node_modules
+envs
