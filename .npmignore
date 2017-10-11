@@ -1,3 +1,9 @@
 _config.yml
-envs
+_layouts/
+_site
 .vscode
+CNAME
+envs
+Gemfile
+Gemfile.lock
+assets

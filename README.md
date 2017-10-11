@@ -1,6 +1,4 @@
-# Takeoff: Rapid Prototyping Environment
-
-<img src="docs/assets/logo.png" width="200px" align="left" style="margin-right:20px; margin-bottom:20px;" />
+# Get ready to Takeoff
 
 Takeoff is a toolbox for rapid prototyping applications that uses scripts to make deployment of enironments easy
 

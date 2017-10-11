@@ -41,18 +41,22 @@ const commands = [
     message: 'Running Docker Compose Build',
     cwd: `envs/${environment}`,
   },
-  {
-    cmd: `docker-compose -f docker/docker-compose.yml up -d db`,
-    message: 'Triggering database creation',
-    cwd: `envs/${environment}`,
-  },
-  { cmd: `${sleep}`, message: 'Waiting for database' },
-  {
-    cmd: `docker-compose -f docker/docker-compose.yml stop db`,
-    message: 'Shutting down database',
-    cwd: `envs/${environment}`,
-  },
-].filter(f => f);
+  argv.dbinit
+    ? {
+        cmd: `docker-compose -f docker/docker-compose.yml up -d db`,
+        message: 'Triggering database creation',
+        cwd: `envs/${environment}`,
+      }
+    : undefined,
+  argv.dbinit ? { cmd: `${sleep}`, message: 'Waiting for database' } : undefined,
+  argv.dbinit
+    ? {
+        cmd: `docker-compose -f docker/docker-compose.yml stop db`,
+        message: 'Shutting down database',
+        cwd: `envs/${environment}`,
+      }
+    : undefined,
+].filter(f => !!f);
 
 shellUtils.series(
   commands,
