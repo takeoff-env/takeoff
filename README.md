@@ -1,4 +1,4 @@
-# Takeoff: Rapid Prototyping Environment
+# Get ready to Takeoff
 
 <img src="docs/assets/logo.png" width="200px" align="left" style="margin-right:20px; margin-bottom:20px;" />
 
