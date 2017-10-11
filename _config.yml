@@ -1,1 +1,2 @@
 theme: jekyll-theme-minimal
+exclude: [PULL_REQUEST_TEMPLATE.md, ISSUE_TEMPLATE.md]
