@@ -4,3 +4,5 @@ CNAME
 envs
 .vscode
 Gemfile
+Gemfile.lock
+assets

@@ -1,7 +1,5 @@
 # Get ready to Takeoff
 
-<img src="docs/assets/logo.png" width="200px" align="left" style="margin-right:20px; margin-bottom:20px;" />
-
 Takeoff is a toolbox for rapid prototyping applications that uses scripts to make deployment of enironments easy
 
 It is not a framework and is agnostic to any solutions provided to it, but does have some configuration options and conventions it likes.
