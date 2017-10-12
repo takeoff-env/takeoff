@@ -1,2 +1,9 @@
+name: Takeoff Environment
+description: A rapid development environment using docker for convenience
+author: Tane Piper
+url: https://takeoff.sh/
 theme: jekyll-theme-minimal
-exclude: [PULL_REQUEST_TEMPLATE.md, ISSUE_TEMPLATE.md]
+exclude: [
+  package.json, package-lock.json, PULL_REQUEST_TEMPLATE.md, ISSUE_TEMPLATE.md,
+  Gemfile.lock, Gemfile, CNAME, .npmignore, .gitignore, .editorconfig, node_modules
+]

@@ -18,14 +18,6 @@
         <a href="http://takeoff.sh"><h1><img src="/assets/images/logo.png" width="200px" title="Takeoff logo, looks like a paper plane"/></h1></a>
         <p>{{ site.description | default: site.github.project_tagline }}</p>
 
-        {% if site.github.is_project_page %}
-          <p class="view"></p>
-        {% endif %}
-
-        {% if site.github.is_user_page %}
-          <p class="view"><a href="{{ site.github.owner_url }}">View My GitHub Profile</a></p>
-        {% endif %}
-
         <ul>
           <li><a href="{{ site.github.repository_url }}"><strong>View on GitHub</strong></a></li>
           <li><a href="https://gitter.im/takeoff-env/Lobby"><strong>Join Our Gitter</strong></a></li>
