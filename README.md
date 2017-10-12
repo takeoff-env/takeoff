@@ -14,9 +14,11 @@ Takeoff is designed to cut out those first few crutial hours where you are setti
 
 ## How to get started
 
-### Installing Docker
+### Installing Dependencies
 
-This software has currently only been tested on Linux using [Docker Community Edition](https://www.docker.com/community-edition). Once installed you will have the `docker` and `docker-compose` commands.
+This software has some dependencies only been fully tested on Linux using [Docker Community Edition](https://www.docker.com/community-edition).
+
+First install this, Once installed you will have the `docker` and `docker-compose` commands. You also need `git` and `node >= 8.4.0`
 
 ### Install Takeoff
 
