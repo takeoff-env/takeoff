@@ -4,6 +4,6 @@ author: Tane Piper
 url: https://takeoff.sh/
 theme: jekyll-theme-minimal
 exclude: [
-  package.json, package-lock.json, PULL_REQUEST_TEMPLATE.md, ISSUE_TEMPLATE.md,
-  Gemfile.lock, Gemfile, CNAME, .npmignore, .gitignore, .editorconfig, node_modules
+  package.json, package-lock.json, PULL_REQUEST_TEMPLATE.md, ISSUE_TEMPLATE.md, CODE_OF_CONDUCT.md,
+  Gemfile.lock, Gemfile, CNAME, .npmignore, .gitignore, .editorconfig, node_modules, envs
 ]
