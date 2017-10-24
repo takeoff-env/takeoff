@@ -9,7 +9,7 @@ module.exports = {
             description: "Do a dry run and don't actually destroy environment"
         }
     ],
-    args: '[env]',
+    args: '<name>',
     group: 'takeoff',
     handler: async ({ results, shell }) => {
         if (shell.exec(`npm run compose:rm -- --env=${results[0]}`).code !== 0) {
