@@ -12,24 +12,24 @@ const takeoff = {
         if (!this.plugins[name]) this.plugins[name] = {};
         this.currentGroup = name;
     },
-    task: async (name, fn) => {
-        if (!takeoff.currentGroup) {
+    task: async function (name, fn) {
+        if (!this.currentGroup) {
             throw new Error('You need to set a group for your tasks');
         }
-        if (takeoff.plugins[takeoff.currentGroup][name]) {
-            throw new Error(`Plugin ${name} already registered in group ${takeoff.currentGroup}`);
+        if (this.plugins[this.currentGroup][name]) {
+            throw new Error(`Plugin ${name} already registered in group ${this.currentGroup}`);
         }
-        takeoff.plugins[takeoff.currentGroup][name] = { name, fn };    
+        this.plugins[this.currentGroup][name] = { name, fn };    
     },
-    end: async () => {
-        takeoff.currentGroup = null;
+    endGroup: function () {
+        this.currentGroup = null;
     },
-    run: (args) => {
-        takeoff.args = args;
+    run: function (args) {
+        this.args = args;
         const [cmd, env, subtask] = args._;
 
         if (!subtask) {
-            const plugin = takeoff.plugins.root[cmd];
+            const plugin = this.plugins.root[cmd];
             if (!plugin) {
                 return console.error(`Command ${plugin} not found`)
             }
