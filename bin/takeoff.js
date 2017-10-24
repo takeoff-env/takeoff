@@ -4,7 +4,6 @@ const argv = require('minimist')(process.argv.slice(2));
 const pkg = require('../package.json');
 
 const takeoff = {
-    args: {},
     pkg,
     plugins: {},
     currentGroup: null,
@@ -25,16 +24,22 @@ const takeoff = {
         this.currentGroup = null;
     },
     run: function (args) {
-        this.args = args;
-        const [cmd, env, subtask] = args._;
+        const [cmd, env, subtask] = this.argv;
+        let plugin;
 
         if (!subtask) {
-            const plugin = this.plugins.root[cmd];
+            plugin = this.plugins.root[cmd];
             if (!plugin) {
                 return console.error(`Command ${plugin} not found`)
             }
-            plugin.fn(env);
         }
+
+        const [group, task] = subtask.split(':');
+
+        if (!this.plugins[group])
+
+
+        plugin.fn(env, args);
     }
 };
 
