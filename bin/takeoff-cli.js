@@ -16,22 +16,19 @@ const init = async () => {
 
     //console.log(pluginPaths);
 
-    pluginPaths.forEach(pluginName => {
-        const plugin = require(`${__dirname}/../plugins/${pluginName}`);
+    pluginPaths.forEach(pluginPath => {
+        const plugin = require(`${__dirname}/../plugins/${pluginPath}`);
         const { command, args, group, handler, options, description } = plugin;
 
-        takeoff
-            .command(`${command}` + (args ? ` ${args}` : ''))
-            .description(description)
-
-        options.forEach(option => {
-            takeoff.option(option.option, option.description)
+        takeoff.command(`${command}` + (args ? ` ${args}` : '')).description(description).action((command, ...args) => {
+            const [...results] = args.splice(0, args.length - 1);
+            handler({ command, results, shell });
         });
 
-        takeoff.action((command, arg) => handler({command, arg}, shell));
+        options.forEach(option => {
+            takeoff.option(option.option, option.description);
+        });
     });
-
-    
 
     takeoff.parse(process.argv);
 

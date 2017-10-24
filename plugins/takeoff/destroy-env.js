@@ -11,17 +11,18 @@ module.exports = {
     ],
     args: '[env]',
     group: 'takeoff',
-    handler: async ({ arg }, shell) => {
-        console.log(arg);
-        if (shell.exec(`npm run compose:rm -- --env=${arg}`).code !== 0) {
+    handler: async ({ results, shell }) => {
+        if (shell.exec(`npm run compose:rm -- --env=${results[0]}`).code !== 0) {
             shell.echo('Error with removing environments');
             shell.exit(1);
         }
 
-        if (shell.exec(`rm -rf envs/${arg}`).code !== 0) {
+        if (shell.exec(`rm -rf envs/${results[0]}`).code !== 0) {
             shell.echo('Error with removing environments');
             shell.exit(1);
         }
+        shell.echo(`Successfully removed ${results[0]}`);
+        shell.exit(0);
     }
 };
 
