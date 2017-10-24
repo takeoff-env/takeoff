@@ -3,9 +3,6 @@
 const argv = require('minimist')(process.argv.slice(2));
 const shellUtils = require('./../lib/shell-utils');
 
-let sleep = 'sleep 5';
-if (process.platform === 'win32') sleep = 'sleep -s 5';
-
 let blueprintName = 'basic';
 if (argv.blueprintName) {
   blueprintName = argv.blueprintName;
@@ -21,8 +18,14 @@ if (argv.env) {
   environment = argv.env;
 }
 
+const sleep = process.platform === 'win32' ? 'sleep -s 5' : 'sleep 5';
+const mkdir =
+  process.platform === 'win32'
+    ? `cmd /c mkdir envs\\${environment}`
+    : `mkdir -p envs/${environment}`;
+
 const commands = [
-  { cmd: `mkdir -p envs/${environment}`, message: 'Creating environment' },
+  { cmd: mkdir, message: 'Creating environment' },
   { cmd: `git clone ${blueprint} envs/${environment}`, message: 'Cloning default environment' },
   argv.submodule
     ? { cmd: `git submodule init`, message: `Initialising submodules`, cwd: `envs/${environment}` }
@@ -53,7 +56,7 @@ const commands = [
         cwd: `envs/${environment}`,
       }
     : undefined,
-].filter(f => f);
+].filter(f => !!f);
 
 shellUtils.series(
   commands,
