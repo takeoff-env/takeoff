@@ -59,7 +59,6 @@ module.exports = {
     envFile.forEach(command => {
       shell.echo(`[Takeoff]: ${command.message}`);
       const dir = `${workingDir}/${folderName}/envs/${environment}`;
-      console.log(dir);
       const runCmd = shell.exec(command.cmd, { cwd: dir, silent: false });
       if (runCmd.code !== 0) {
         shell.echo(`Error running ${command.cmd}`);
