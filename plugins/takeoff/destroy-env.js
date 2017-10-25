@@ -11,7 +11,7 @@ module.exports = {
     ],
     args: '<name>',
     group: 'takeoff',
-    handler: async ({ results, shell }) => {
+    handler: async ({ command, shell, args, workingDir }) => {
         if (shell.exec(`npm run compose:rm -- --env=${results[0]}`).code !== 0) {
             shell.echo('Error with removing environments');
             shell.exit(1);

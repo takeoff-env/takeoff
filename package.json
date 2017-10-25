@@ -6,13 +6,15 @@
     "author": "Tane Piper <piper.tane@gmail.com>",
     "license": "MIT",
     "dependencies": {
+        "ascii-progress": "^1.0.5",
         "cli-table": "^0.3.1",
         "commander": "^2.11.0",
         "glob": "^7.1.2",
         "glob-promise": "^3.2.0",
         "lerna": "^2.4.0",
         "minimist": "^1.2.0",
-        "shelljs": "^0.7.8"
+        "shelljs": "^0.7.8",
+        "tty-table": "^2.5.5"
     },
     "bin": {
         "takeoff": "./bin/takeoff-cli.js"

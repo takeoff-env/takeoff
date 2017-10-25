@@ -9,7 +9,7 @@ module.exports = {
     ],
     args: '<name> [blueprint-name]',
     group: 'takeoff',
-    handler: async ({ results, shell }) => {
+    handler: async ({ command, shell, args, workingDir }) => {
         let blueprintName = results[1] || 'basic';
         //let blueprint = `https://github.com/takeoff-env/takeoff-blueprint-${blueprintName}.git`;
         let blueprint = '../takeoff-blueprint-basic';
