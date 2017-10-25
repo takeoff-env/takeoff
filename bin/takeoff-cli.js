@@ -1,47 +1,76 @@
 #!/usr/bin/env node
 
-const takeoff = require('commander');
+const argv = require('minimist')(process.argv.slice(2));
 const glob = require('glob-promise');
 const Path = require('path');
 const shell = require('shelljs');
+var Table = require('cli-table');
 
-const init = async () => {
+// instantiate
+var commandsTable = new Table({
+    head: ['Command', 'Arguments', 'Description'],
+    colWidths: [30, 40, 50]
+});
+
+const pkg = require('../package.json');
+const lib = require('./lib');
+
+const workingDir = process.cwd();
+
+const plugins = [];
+
+const getPluginsForDir = async (baseDir = `${__dirname}/../plugins`) => {
     // Do all the pre-plugin loading
+    const basePluginPath = Path.normalize(baseDir);
     let pluginPaths = [];
     try {
-        pluginPaths = await glob('**/*.js', { cwd: `${__dirname}/../plugins` });
+        pluginPaths = await glob('**/*.js', { cwd: basePluginPath });
     } catch (e) {
         throw e;
     }
+    return pluginPaths.map(plugin => `${basePluginPath}/${plugin}`);
+};
 
+const init = async () => {
+    const pluginPaths = await getPluginsForDir();
     //console.log(pluginPaths);
 
     pluginPaths.forEach(pluginPath => {
-        const plugin = require(`${__dirname}/../plugins/${pluginPath}`);
-        const { command, args, group, handler, options, description } = plugin;
+        const plugin = require(pluginPath);
+        plugins.push(plugin);
 
-        takeoff.command(`${command}` + (args ? ` ${args}` : '')).description(description).action((command, ...args) => {
-            const [...results] = args.splice(0, args.length - 1);
-            handler({ command, results, shell });
-        });
+        // takeoff
+        //     .command(`${command}` + (args ? ` ${args}` : ''))
+        //     .description(description)
+        //     .action((command, ...pluginArgs) => {
+        //         const [...results] = pluginArgs.splice(0, pluginArgs.length - 1);
+        //         handler({ takeoff, command, results, shell, workingDir });
+        //     });
 
-        options.forEach(option => {
-            takeoff.option(option.option, option.description);
-        });
+        // options.forEach(option => {
+        //     takeoff.option(option.option, option.description);
+        // });
     });
 
-    takeoff.parse(process.argv);
+    shell.echo(`Takeoff ${pkg.version}`);
 
-    // takeoff
-    //     .arguments('<file>')
-    //     .option('-u, --username <username>', 'The user to authenticate as')
-    //     .option('-p, --password <password>', "The user's password")
-    //     .action(function(file) {
-    //         console.log('user: %s pass: %s file: %s', takeoff.username, takeoff.password, file);
-    //     })
-    //     .parse(process.argv);
+    const [command, ...args] = argv._;
 
-    return takeoff;
+    if (!command || command === 'help') {
+        plugins.forEach(({ command, args, group, handler, options, description }) => {
+            commandsTable.push([command, args, description]);
+        });
+        shell.echo(commandsTable.toString());
+        shell.exit(0);
+    }
+
+    const plugin = plugins.find(plugin => plugin.command === argv._[0]);
+    if (!plugin) {
+        shell.echo(`Error: Plugin not found`);
+        shell.exit(1);
+    }
+
+    plugin.handler({ command, args, shell, workingDir });
 };
 
 init();
