@@ -13,7 +13,7 @@ module.exports = {
         let runCmd = shell.exec(`docker-compose -f envs/${environment}/docker/docker-compose.yml pull`)
 
         if (runCmd.code !== 0) {
-            shell.echo(`Error pulling in ${environment$}.  Use -v to see verbose logs`);
+            shell.echo(`Error pulling in ${environment}.  Use -v to see verbose logs`);
             shell.exit(1);
         }
         shell.echo(`Pulled pre-built images on ${environment}`);

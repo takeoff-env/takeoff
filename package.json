@@ -15,5 +15,8 @@
     },
     "bin": {
         "takeoff": "./bin/takeoff-cli.js"
+    },
+    "devDependencies": {
+        "eslint": "^4.9.0"
     }
 }

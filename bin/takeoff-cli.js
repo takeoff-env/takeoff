@@ -65,7 +65,6 @@ const init = async () => {
         shell.echo(`Error: Plugin not found`);
         shell.exit(1);
     }
-
     plugin.handler({ command, args, opts, shell, workingDir, h });
 };
 
