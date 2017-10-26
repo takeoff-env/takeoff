@@ -2,26 +2,33 @@
 
 module.exports = {
     command: 'destroy',
-    description: 'Destroys an environment. This is non-reversable.',
-    options: [
-        {
-            option: '-d, --dry',
-            description: "Do a dry run and don't actually destroy environment"
-        }
-    ],
+    description: 'Destroys an environment',
+    options: [],
     args: '<name>',
     group: 'takeoff',
     handler: async ({ command, shell, args, workingDir }) => {
-        if (shell.exec(`npm run compose:rm -- --env=${results[0]}`).code !== 0) {
-            shell.echo('Error with removing environments');
+
+        let [environment] = args.length > 0 ? args : ['default'];
+        const envDir = `${workingDir}/envs/${environment}`;
+
+        if (!shell.test('-e', envDir)) {
+            shell.echo(`The environment ${environment} doesn't exist`);
+            shell.exit(0);  // Don't exit 1 as this might break CI workflows
+        }
+
+        const dockerDown = shell.exec(`docker-compose -f ${envDir}/docker/docker-compose.yml down`);
+        if (dockerDown.code !== 0) {
+            shell.echo('Error stopping environments');
             shell.exit(1);
         }
 
-        if (shell.exec(`rm -rf envs/${results[0]}`).code !== 0) {
-            shell.echo('Error with removing environments');
+        const removeFolder = shell.rm('-rf', `${envDir}`);
+        if (dockerDown.code !== 0) {
+            shell.echo('Error deleting environments');
             shell.exit(1);
         }
-        shell.echo(`Successfully removed ${results[0]}`);
+        
+        shell.echo(`Successfully destroyed ${environment}`);
         shell.exit(0);
     }
 };
