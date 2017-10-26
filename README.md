@@ -107,3 +107,7 @@ After installing, you will find several folders and files:
 * This document environment was based on the tutorial [Dockerize your app and keep hot-reloading !](https://blog.bam.tech/developper-news/dockerize-your-app-and-keep-hot-reloading) but adding more utilities and making it easier to work as a starter kit.
 * [Blog post announcing Takeoff](https://medium.com/@tanepiper/takeoff-a-rapid-development-environment-designed-for-hack-days-9a45ae891366)
 * Logo made with [LogoMakr](http://logomakr.com)
+
+<a target='_blank' rel='nofollow' href='https://app.codesponsor.io/link/T2c5nPhtAEam9Py2cKQFyiFS/takeoff-env/takeoff'>
+  <img alt='Sponsor' width='888' height='68' src='https://app.codesponsor.io/embed/T2c5nPhtAEam9Py2cKQFyiFS/takeoff-env/takeoff.svg' />
+</a>
