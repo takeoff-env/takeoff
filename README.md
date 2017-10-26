@@ -33,11 +33,14 @@ cd myenv
 takeoff start
 ```
 
+#### Via cloning the github repo
+
 ```bash
 > git clone https://github.com/takeoff-env/takeoff.git
 > cd takeoff
-> npm install
-> npm start
+> npm link
+> takeoff new <envname>
+> takeoff start <envname>
 ```
 
 The above commands will install all the dependencies and have you up and running in minutes.
@@ -57,8 +60,8 @@ Currently there are two blueprints:
 When you want to create a new environment you can type:
 
 ```bash
-    npm run takeoff:new -- --env=<name of env>
-    npm start -- --env=<name of env>
+    takeoff new <environment>
+    takeoff start <environment>
 ```
 
 This will start up your new environment.

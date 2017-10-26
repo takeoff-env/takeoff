@@ -1,6 +1,6 @@
 # Takeoff Command Line
 
-Takeoff ships with several commands to use blueprints and environments.
+Takeoff ships with several commands to use blueprints and environments.  If you are looking for the docs for the deprecated npm commands they are [here](./command-line-old.md)
 
 > `init <folder-name> [blueprint-name] --blueprint-url=<url> --no-default`
 
@@ -12,4 +12,18 @@ You can also pass `--blueprint-url` a url to a git repository which will overrid
 
 Lists the environments, versions and apps.  More information to be added soon.
 
-> `start <environment>`
+> `start <environment> [app]`
+
+Starts an environment of that name.  If you pass `app` it will only start that app (e.g. `takeoff start default db`)
+
+> `stop <environment>`
+
+Stops any apps running in an environment
+
+> `build <environment>`
+
+Builds an environment.
+
+> `destroy <environment>`
+
+Destroys an environment
