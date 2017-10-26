@@ -1,16 +1,22 @@
 {
     "name": "@takeoff/takeoff",
-    "version": "1.1.5",
+    "version": "1.2.0-beta2",
     "description": "A easy to use docker environment powered by node and npm",
     "main": "index.js",
     "author": "Tane Piper <piper.tane@gmail.com>",
     "license": "MIT",
     "dependencies": {
-        "lerna": "^2.4.0",
-        "minimist": "^1.2.0"
+        "ascii-progress": "^1.0.5",
+        "glob": "^7.1.2",
+        "glob-promise": "^3.2.0",
+        "minimist": "^1.2.0",
+        "shelljs": "^0.7.8",
+        "tty-table": "^2.5.5"
+    },
+    "bin": {
+        "takeoff": "./bin/takeoff-cli.js"
     },
     "scripts": {
-        "postinstall": "node utilities/takeoff/docker-compose-build.js --lerna --dbinit",
         "compose:build": "node utilities/docker-compose/build.js",
         "compose:up": "node utilities/docker-compose/up.js",
         "compose:stop": "node utilities/docker-compose/stop.js",
