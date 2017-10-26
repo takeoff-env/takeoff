@@ -15,19 +15,5 @@
     },
     "bin": {
         "takeoff": "./bin/takeoff-cli.js"
-    },
-    "scripts": {
-        "compose:build": "node utilities/docker-compose/build.js",
-        "compose:up": "node utilities/docker-compose/up.js",
-        "compose:stop": "node utilities/docker-compose/stop.js",
-        "compose:down": "node utilities/docker-compose/down.js",
-        "compose:rm": "node utilities/docker-compose/uninstall.js",
-        "compose:pull": "node utilities/docker-compose/pull.js",
-        "takeoff:clean": "node utilities/takeoff/clean-env.js",
-        "takeoff:build": "node utilities/takeoff/docker-compose-build.js",
-        "takeoff:new": "node utilities/takeoff/new-environment.js",
-        "takeoff:start": "node utilities/docker-compose/up.js",
-        "start": "node utilities/docker-compose/up.js",
-        "stop": "node utilities/docker-compose/stop.js"
     }
 }
