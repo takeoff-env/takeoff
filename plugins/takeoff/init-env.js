@@ -15,7 +15,7 @@ module.exports = {
     ],
     args: '<name> [blueprint-name]',
     group: 'takeoff',
-    handler: async ({ command, shell, args, opts, workingDir, ProgressBar }) => {
+    handler: async ({ command, shell, args, opts, workingDir, h }) => {
         let [folderName, blueprintName] = args;
 
         if (!folderName) {
@@ -32,7 +32,12 @@ module.exports = {
             `${workingDir}/${folderName}/envs`
         ]);
 
-        let blueprint = opts['blueprint-url'] || `https://github.com/takeoff-env/takeoff-blueprint-${blueprintName}.git`;
+        if (opts['n'] || opts['no-default']) {
+            shell.echo('Skipping creating default environment');
+            return shell.exit(0);
+        }
+
+        let blueprint = opts['b'] || opts['blueprint-url'] || `https://github.com/takeoff-env/takeoff-blueprint-${blueprintName}.git`;
         let environment = 'default';
 
         if (!shell.test('-d', `${workingDir}/${folderName}/blueprints/${blueprintName}`)) {
@@ -59,7 +64,7 @@ module.exports = {
         try {
             shell.echo(`[Takeoff]: Running Takeoff Config`);
             const envFile = require(`${workingDir}/${folderName}/envs/${environment}/takeoff.config.js`);
-            const runEnv = await envFile({ command, shell, args, opts, workingDir, ProgressBar });
+            const runEnv = await envFile({ command, shell, args, opts, workingDir, h });
             if (runEnv) {
                 return shell.exit(0);
             }
