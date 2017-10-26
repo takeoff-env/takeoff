@@ -1,6 +1,6 @@
 {
     "name": "@takeoff/takeoff",
-    "version": "1.2.0-beta1.1",
+    "version": "1.2.0-beta2",
     "description": "A easy to use docker environment powered by node and npm",
     "main": "index.js",
     "author": "Tane Piper <piper.tane@gmail.com>",
