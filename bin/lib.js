@@ -1,10 +1,12 @@
 const fs = require('fs');
 const Path = require('path');
 const glob = require('glob-promise');
+const progressbar = require('ascii-progress');
+const table = require('tty-table');
 
 const h = {
-    progressbar: require('ascii-progress'),
-    table: require('tty-table')
+    progressbar,
+    table
 };
 
 module.exports = {
