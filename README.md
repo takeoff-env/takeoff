@@ -22,7 +22,16 @@ First install this, Once installed you will have the `docker` and `docker-compos
 
 ### Install Takeoff
 
-Installing takeoff is done in 4 easy steps.  Remember you can also clone the repository first to make it easier to manage your own copy.
+Installing takeoff is simple, via NPM, or you can clone in 4 easy steps.  Remember you can also clone the repository first to make it easier to manage your own copy.
+
+#### Via NPM
+
+```bash
+npm install -g @takeoff/takeoff@1.2.0-beta2
+takeoff init <myenv>
+cd myenv
+takeoff start
+```
 
 ```bash
 > git clone https://github.com/takeoff-env/takeoff.git

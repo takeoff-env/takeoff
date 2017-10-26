@@ -8,15 +8,17 @@ module.exports = {
     group: 'takeoff',
     handler: async ({ command, shell, args, workingDir }) => {
 
-        let [environment] = args.length > 0 ? args : ['default'];
+        let [environment, app] = args.length > 0 ? args : ['default'];
 
-        let runCmd = shell.exec(`docker-compose -f envs/${environment}/docker/docker-compose.yml down`)
+        let cmd = `docker-compose -f envs/${environment}/docker/docker-compose.yml stop`;
+
+        let runCmd = shell.exec(cmd)
 
         if (runCmd.code !== 0) {
-            shell.echo('Error starting environments');
+            shell.echo(`Error stopping ${environment}` + app ? `:${app}` : '');
             shell.exit(1);
         }
-        shell.echo(`Successfully stopped ${environment}`);
+        shell.echo(`Successfully stopped ${environment}` + app ? `:${app}` : '');
         shell.exit(0);
     }
 };

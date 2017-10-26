@@ -15,10 +15,10 @@ const getEnvPackages = async baseDir => {
     }
     return envs.sort((a, b) => {
         if (a.length < b.length) {
-            return -1;
+            return 1;
         }
         if (a.length > b.length) {
-            return 1;
+            return -1;
         }
         return 0;
     });
@@ -60,36 +60,11 @@ module.exports = {
             tableValues.push([env.envName, env.version, (apps[env.envName] || []).join(', ')]);
         });
 
-        const colWidths = (tableValues || [])
-            .map(([name, verion, apps]) => {
-                return [(name || '').length, (verion || '').length, (apps | '').length];
-            })
-            .reduce(
-                (red, val) => [
-                    val[0] > red[0] ? val[0] : red[0],
-                    val[1] > red[1] ? val[1] : red[1],
-                    val[2] > red[2] ? val[2] : red[2]
-                ],
-                ['Environment'.length, 'Version'.length, 'Apps'.length]
-            );
-
-        var commandsTable = new Table(
+        var commandsTable = h.table(
             [
-                {
-                    value: 'Environment',
-                    width: colWidths[0] + 5,
-                    align: 'left'
-                },
-                {
-                    value: 'Version',
-                    width: colWidths[2] + 5,
-                    align: 'left'
-                },
-                {
-                    value: 'Apps',
-                    width: colWidths[1] + 5,
-                    align: 'left'
-                }
+                { value: 'Environment', align: 'left' },
+                { value: 'Version', align: 'left' },
+                { value: 'Apps', align: 'left' }
             ],
             tableValues,
             { borderStyle: 0, compact: true, align: 'left', headerAlign: 'left' }

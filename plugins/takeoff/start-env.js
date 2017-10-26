@@ -4,13 +4,18 @@ module.exports = {
     command: 'start',
     description: 'Starts an environment',
     options: [],
-    args: '<name>',
+    args: '<name> [app]',
     group: 'takeoff',
     handler: async ({ command, shell, args, workingDir }) => {
 
-        let [environment] = args.length > 0 ? args : ['default'];
+        let [environment, app] = args.length > 0 ? args : ['default'];
 
-        let runCmd = shell.exec(`docker-compose -f envs/${environment}/docker/docker-compose.yml up`)
+        let cmd = `docker-compose -f envs/${environment}/docker/docker-compose.yml up`;
+        if (app) {
+            cmd = `${cmd} -d ${app}`;
+        }
+
+        let runCmd = shell.exec(cmd)
 
         if (runCmd.code !== 0) {
             shell.echo('Error starting environments');
