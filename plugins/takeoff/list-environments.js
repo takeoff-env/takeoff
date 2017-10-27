@@ -30,7 +30,7 @@ module.exports = {
     args: '',
     options: [],
     group: 'takeoff',
-    handler: async ({ command, shell, args, workingDir, h }) => {
+    handler: async ({ shell, workingDir, h }) => {
         const packagePaths = await getEnvPackages(workingDir);
         const tableValues = [];
         const environments = [];

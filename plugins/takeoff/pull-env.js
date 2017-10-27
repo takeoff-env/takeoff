@@ -2,16 +2,21 @@
 
 module.exports = {
     command: 'pull',
-    description: 'Pulls any pre-built images',
+    description: 'Pulls any pre-build images',
     options: [],
-    args: '<name>',
+    args: '<name> [service]',
     group: 'takeoff',
-    handler: async ({ command, shell, args, workingDir }) => {
+    handler: async ({ shell, args, workingDir }) => {
 
-        let [environment] = args.length > 0 ? args : ['default'];
+        let [environment, service] = args.length > 0 ? args : ['default'];
+        const envDir = `${workingDir}/envs/${environment}`;
 
-        let runCmd = shell.exec(`docker-compose -f envs/${environment}/docker/docker-compose.yml pull`)
-
+        let cmd = `docker-compose -f ${envDir}/docker/docker-compose.yml pull`;
+        if (service) {
+            cmd = cmd + ` ${service}`;
+        }
+        console.log(cmd);
+        const runCmd = shell.exec(cmd)
         if (runCmd.code !== 0) {
             shell.echo(`Error pulling in ${environment}.  Use -v to see verbose logs`);
             shell.exit(1);

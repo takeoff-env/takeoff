@@ -6,7 +6,7 @@ module.exports = {
     options: [],
     args: '<name>',
     group: 'takeoff',
-    handler: async ({ command, shell, args, workingDir }) => {
+    handler: async ({ shell, args, workingDir }) => {
 
         let [environment] = args.length > 0 ? args : ['default'];
         const envDir = `${workingDir}/envs/${environment}`;

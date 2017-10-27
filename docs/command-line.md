@@ -1,6 +1,6 @@
 # Takeoff Command Line
 
-Takeoff ships with several commands to use blueprints and environments.  If you are looking for the docs for the deprecated npm commands they are [here](./command-line-old.md)
+Takeoff ships with several commands to use blueprints and environments.
 
 ```bash
 takeoff init <folder-name> [blueprint-name] --blueprint-url=<url> --no-default
@@ -20,28 +20,28 @@ Lists the environments, versions and apps.  More information to be added soon.
 takeoff start <environment> [app]
 ```
 
-Starts an environment of that name.  If you pass `app` it will only start that app (e.g. `takeoff start default db`)
+Starts an `environment`.  If you pass `app` it will only start that app (e.g. `takeoff start default db`)
 
 ```bash
 takeoff stop <environment>
 ```
 
-Stops any apps running in an environment
+Stops any apps running in an `environment`
 
 ```bash
 takeoff build <environment>
 ```
 
-Builds an environment using the docker compose file
+Builds an `environment` using the docker compose file
 
 ```bash
 takeoff destroy <environment>
 ```
 
-Destroys an environment.  This is non-reversable and will remove the environment.
+Destroys an `environment`.  This is non-reversable and will remove the environment.
 
 ```bash
-takeoff pull <environment>
+takeoff pull <environment> [app]
 ```
 
-Pulls any pre-built images on an environment
+Pulls any pre-built images on an `environment`, or you can specify the `app`

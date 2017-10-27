@@ -6,11 +6,12 @@ module.exports = {
     options: [],
     args: '<name>',
     group: 'takeoff',
-    handler: async ({ command, shell, args, workingDir }) => {
+    handler: async ({ shell, args, workingDir }) => {
 
         let [environment] = args.length > 0 ? args : ['default'];
+        const envDir = `${workingDir}/envs/${environment}`;
 
-        let runCmd = shell.exec(`docker-compose -f envs/${environment}/docker/docker-compose.yml build`)
+        let runCmd = shell.exec(`docker-compose -f ${envDir}/docker/docker-compose.yml build`)
 
         if (runCmd.code !== 0) {
             shell.echo('Error starting environments');
