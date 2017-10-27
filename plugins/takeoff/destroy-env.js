@@ -6,7 +6,7 @@ module.exports = {
     options: [],
     args: '<name>',
     group: 'takeoff',
-    handler: async ({ command, shell, args, workingDir }) => {
+    handler: async ({ shell, args, workingDir }) => {
 
         let [environment] = args.length > 0 ? args : ['default'];
         const envDir = `${workingDir}/envs/${environment}`;
@@ -16,7 +16,7 @@ module.exports = {
             shell.exit(0);  // Don't exit 1 as this might break CI workflows
         }
 
-        const dockerDown = shell.exec(`docker-compose -f ${envDir}/docker/docker-compose.yml down`);
+        const dockerDown = shell.exec(`docker-compose -f ${envDir}/docker/docker-compose.yml down --rmi all`);
         if (dockerDown.code !== 0) {
             shell.echo('Error stopping environments');
             shell.exit(1);

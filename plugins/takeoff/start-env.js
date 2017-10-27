@@ -9,8 +9,9 @@ module.exports = {
     handler: async ({ command, shell, args, workingDir }) => {
 
         let [environment, app] = args.length > 0 ? args : ['default'];
+        const envDir = `${workingDir}/envs/${environment}`;
 
-        let cmd = `docker-compose -f envs/${environment}/docker/docker-compose.yml up`;
+        let cmd = `docker-compose -f ${envDir}/docker/docker-compose.yml up`;
         if (app) {
             cmd = `${cmd} -d ${app}`;
         }
