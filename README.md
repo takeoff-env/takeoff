@@ -4,11 +4,9 @@ Takeoff is a toolbox for rapid prototyping applications that uses scripts to mak
 
 It is not a framework and is agnostic to any solutions provided to it, but does have some configuration options and conventions it likes.
 
+Takeoff provides a command line tool that allows you to create and control environments provided by [Blueprints](docs/blueprints.md), repositories with configurations that Takeoff can use to create your environments.  You can find documentation for the [command line available commands](docs/command-line.md)
+
 Under the hood is uses `docker` and `docker-compose` to minimise the hassle out of setting up frontend, backend and database servers.
-
-The core takeoff package is a set of scripts that set up the default takeoff environment. The environments are provided by [Blueprints](docs/blueprints.md), repositories with configurations that Takeoff can use to create your environments.
-
-The core package scripts are currently powered by NPM and there are a set of [available commands](docs/command-line.md) for running the default environment, as well as creating new environments.
 
 Takeoff is designed to cut out those first few crutial hours where you are setting up your project environment, either at a hack day or for a work prototype. The default provided is opinionated but gives you basic authentication and hot reloading apps.  The Wordpress blueprint gives you a PHP and Wordpress environment reading files from your system.
 
@@ -24,10 +22,8 @@ First install this, Once installed you will have the `docker` and `docker-compos
 
 Installing takeoff is simple, via NPM.
 
-#### Via NPM
-
 ```bash
-npm install -g @takeoff/takeoff@1.2.0-beta2
+npm install -g @takeoff/takeoff
 takeoff init <myenv>
 cd myenv
 takeoff start
@@ -75,7 +71,7 @@ After installing, you will find several folders and files:
 
 ```bash
     -|
-     |- envs/takeoff # The default environment installed
+     |- envs/default # The default environment installed
         |- env # Folders with the source code you can change
             |- api # This is the Hapi API Server
             |- app # This is the frontend app
@@ -88,7 +84,7 @@ After installing, you will find several folders and files:
             |- nginx # Nginx configuration
             |- db # Postgres DB config
      |- docs # Docs folder, for Github Pages
-     |- utilities # Scripts that perform tasks for takeoff via npm commands
+     |- plugins # Scripts that perform tasks
      |- README.md # The file you are looking at!
 ```
 
