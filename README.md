@@ -1,6 +1,6 @@
 # Get ready to Takeoff
 
-Takeoff is a toolbox for rapid prototyping applications that uses scripts to make deployment of enironments easy
+Takeoff is a toolbox for rapid prototyping applications that uses scripts to make deployment of environments easy
 
 It is not a framework and is agnostic to any solutions provided to it, but does have some configuration options and conventions it likes.
 
