@@ -7,3 +7,5 @@ envs
 Gemfile
 Gemfile.lock
 assets
+PULL_REQUEST_TEMPLATE.md
+ISSUE_TEMPLATE.md
