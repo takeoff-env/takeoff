@@ -11,7 +11,8 @@
         "glob-promise": "^3.2.0",
         "minimist": "^1.2.0",
         "shelljs": "^0.7.8",
-        "tty-table": "^2.5.5"
+        "tty-table": "^2.5.5",
+        "update-notifier": "^2.3.0"
     },
     "bin": {
         "takeoff": "./bin/takeoff-cli.js"

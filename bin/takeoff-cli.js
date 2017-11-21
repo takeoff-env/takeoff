@@ -14,6 +14,14 @@ process.on('uncaughtException', error => {
     /*eslint-enable */
 });
 
+const updateNotifier = require('update-notifier');
+const pkg = require('./../package.json');
+
+const notifier = updateNotifier({
+    pkg,
+    updateCheckInterval: 1000 * 60 * 60 * 24
+});
+
 const argv = require('minimist')(process.argv.slice(2));
 const shell = require('shelljs');
 
@@ -23,14 +31,14 @@ const { getPluginsForDir, createTable, h, extractArguments } = require('./lib');
 
 // instantiate
 
-const pkg = require('../package.json');
-
 const workingDir = process.cwd();
 
 const plugins = [];
 
 const init = async () => {
     shell.echo(`Takeoff v${pkg.version}`);
+
+    notifier.notify();
 
     const pluginPaths = await getPluginsForDir();
     pluginPaths.forEach(pluginPath => {

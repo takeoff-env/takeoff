@@ -25,6 +25,11 @@ module.exports = {
 
         blueprintName = blueprintName || DEFAULT_BLUEPRINT_NAME;
 
+        if (shell.test('-e', folderName)) {
+            shell.echo(`Environment ${folderName} already exists`);
+            return shell.exit(1);
+        }
+
         shell.echo(`Creating folder ${folderName}`);
         shell.mkdir('-p', [
             `${workingDir}/${folderName}`,
