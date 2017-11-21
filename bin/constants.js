@@ -16,3 +16,5 @@ exports.COMMAND_TABLE_HEADERS = [
         align: 'left'
     }
 ];
+
+exports.DEFAULT_BLUEPRINT_NAME = 'basic';
