@@ -27,7 +27,7 @@ const shell = require('shelljs');
 
 const { COMMAND_TABLE_HEADERS } = require('./constants');
 
-const { getPluginsForDir, createTable, h, extractArguments } = require('./lib');
+const h = require('./lib');
 
 // instantiate
 
@@ -40,17 +40,17 @@ const init = async () => {
 
     notifier.notify();
 
-    const pluginPaths = await getPluginsForDir();
+    const pluginPaths = await h.getPluginsForDir();
     pluginPaths.forEach(pluginPath => {
         try {
             const plugin = require(pluginPath);
             plugins.push(plugin);
         } catch (e) {
-            shell.echo(`Unable to load plugin ${pluginPath}`);
+            shell.echo(`Unable to load command ${pluginPath}`);
         }
     });
 
-    const { command, args, opts } = extractArguments(argv);
+    const { command, args, opts } = h.extractArguments(argv);
     const tableValues = [];
 
     if (!command || command === 'help') {
@@ -58,7 +58,7 @@ const init = async () => {
             tableValues.push([command, args, (options || []).map(o => o.option).join('\n'), description]);
         });
 
-        const table = createTable(COMMAND_TABLE_HEADERS, tableValues, {
+        const table = h.createTable(COMMAND_TABLE_HEADERS, tableValues, {
             borderStyle: 0,
             compact: true,
             align: 'left',
@@ -70,7 +70,7 @@ const init = async () => {
 
     const plugin = plugins.find(plugin => plugin.command === argv._[0]);
     if (!plugin) {
-        shell.echo(`Error: Plugin not found`);
+        shell.echo(`Error: command ${argv._[0]} not found`);
         shell.exit(1);
     }
     plugin.handler({ command, args, opts, shell, workingDir, h });
