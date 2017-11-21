@@ -1,14 +1,25 @@
 # Get ready to Takeoff
 
-Takeoff is a toolbox for rapid prototyping applications that uses scripts to make deployment of environments easy
+Takeoff is a toolbox for rapid prototyping applications that uses scripts to make deployment of environments easy.
 
 It is not a framework and is agnostic to any solutions provided to it, but does have some configuration options and conventions it likes.
 
-Takeoff provides a command line tool that allows you to create and control environments provided by [Blueprints](docs/blueprints.md), repositories with configurations that Takeoff can use to create your environments.  You can find documentation for the [command line available commands](docs/command-line.md)
+This package is the Takeoff command line tool that allows you to create and control environments provided by [Blueprints](docs/blueprints.md) (repositories with configurations and containers that Takeoff can use to create your environments).
+
+You can find documentation for the [command line available commands](docs/command-line.md)
 
 Under the hood is uses `docker` and `docker-compose` to minimise the hassle out of setting up frontend, backend and database servers.
 
 Takeoff is designed to cut out those first few crucial hours where you are setting up your project environment, either at a hack day or for a work prototype. The default provided is opinionated but gives you basic authentication and hot reloading apps.  The Wordpress blueprint gives you a PHP and Wordpress environment reading files from your system.
+
+## Open Source Sponsorship
+
+Takeoff is provided as-is for free via Open Source.  If you find Takeoff useful then please click below to help support with basic costs such as the domain name.
+
+<a target='_blank' rel='nofollow' href='https://app.codesponsor.io/link/T2c5nPhtAEam9Py2cKQFyiFS/takeoff-env/takeoff'>
+  <img alt='Sponsor' width='888' height='68' src='https://app.codesponsor.io/embed/T2c5nPhtAEam9Py2cKQFyiFS/takeoff-env/takeoff.svg' />
+</a>
+
 
 ## How to get started
 
@@ -25,8 +36,8 @@ Installing takeoff is simple, via NPM.
 ```bash
 npm install -g @takeoff/takeoff
 takeoff init <myenv>
-cd myenv
-takeoff start
+cd <myenv>
+takeoff start # This starts the default environment container in `envs/default`
 ```
 
 The above commands will install all the dependencies and have you up and running in minutes.
@@ -50,7 +61,7 @@ When you want to create a new environment you can type:
     takeoff start <environment>
 ```
 
-This will start up your new environment.
+This will start up your new named environment.
 
 There is also a [Wordpress Blueprint](https://github.com/takeoff-env/takeoff-blueprint-wordpress), you can find out more about installing it via it's documentation
 
@@ -93,7 +104,3 @@ After installing, you will find several folders and files:
 * This document environment was based on the tutorial [Dockerize your app and keep hot-reloading !](https://blog.bam.tech/developper-news/dockerize-your-app-and-keep-hot-reloading) but adding more utilities and making it easier to work as a starter kit.
 * [Blog post announcing Takeoff](https://medium.com/@tanepiper/takeoff-a-rapid-development-environment-designed-for-hack-days-9a45ae891366)
 * Logo made with [LogoMakr](http://logomakr.com)
-
-<a target='_blank' rel='nofollow' href='https://app.codesponsor.io/link/T2c5nPhtAEam9Py2cKQFyiFS/takeoff-env/takeoff'>
-  <img alt='Sponsor' width='888' height='68' src='https://app.codesponsor.io/embed/T2c5nPhtAEam9Py2cKQFyiFS/takeoff-env/takeoff.svg' />
-</a>
