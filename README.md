@@ -1,14 +1,22 @@
-# Get ready to Takeoff
+# Takeoff Rapid Development Toolkit
 
-Takeoff is a toolbox for rapid prototyping applications that uses scripts to make deployment of environments easy.
+Takeoff is a toolkit for rapid development and prototyping applications.
 
-It is not a framework and is agnostic to any solutions provided to it, but does have some configuration options and conventions it likes.
+*It is not a framework* and is agnostic to any solutions provided to it, but does have some configuration options and conventions it likes.
 
-This package is the Takeoff command line tool that allows you to create and control environments provided by [Blueprints](docs/blueprints.md) (repositories with configurations and containers that Takeoff can use to create your environments).
+Takeoff itself is a command line tool installed via `npm` and has a [command line interface](docs/command-line.md) for creating Takeoff environments.  Environments are created based on [Blueprints](docs/blueprints.md).
 
-You can find documentation for the [command line available commands](docs/command-line.md)
+Blueprints are repositories with some batteries included applications and configurations for containers. Takeoff uses these to build a full working environment in minutes.  A blueprint generally contains a backend component, a frontend, a database and an ingress server.  The default blueprint for Takeoff provides:
 
-Under the hood is uses `docker` and `docker-compose` to minimise the hassle out of setting up frontend, backend and database servers.
+* A `node 8` API server powered by Hapi.  Using `node 8` allows the use of `async/await` to make code more readable.  Included in the application is a User system for username/password login and basic user management, 2 levels (admin and user - and easily extendible). There is also a JWT authentication system that gives you control over access to your API endpoints.
+* A `React` Frontend with React Router V4, Redux and ReactStrap (Bootstrap 4). The frontend comes with a basic Dashboard layout and homepage.  A login page with some basic validation allows you to log in (the default login is `admin/password` Do not expect this to be a fully secure environment). Once logged in you have a basic user CRUD application to manage users, and a navigation bar that you can customise.
+
+> *Disclaimer: If you build an app with this you wish you deploy, you are responsible for your own security.*
+
+* A Postgres 9 database.  Within the Hapi application, Sequelize is used as the database connection and ORM. Here we can use this to creat migrations and seeds, as well as create simple or complex model types.
+
+
+Currently, under the hood is uses `docker` and `docker-compose` to minimise the hassle out of setting up frontend, backend and database servers.
 
 Takeoff is designed to cut out those first few crucial hours where you are setting up your project environment, either at a hack day or for a work prototype. The default provided is opinionated but gives you basic authentication and hot reloading apps.  The Wordpress blueprint gives you a PHP and Wordpress environment reading files from your system.
 
