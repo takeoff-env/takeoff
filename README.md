@@ -13,12 +13,19 @@ Blueprints are repositories with some batteries included applications and config
 
 > *Disclaimer: If you build an app with this you wish you deploy, you are responsible for your own security.*
 
-* A Postgres 9 database.  Within the Hapi application, Sequelize is used as the database connection and ORM. Here we can use this to creat migrations and seeds, as well as create simple or complex model types.
+* A Postgres 9 database.  Within the Hapi application, Sequelize is used as the database connection and ORM. Here we can use this to create migrations and seeds, as well as create simple or complex model types.  The postgres also comes with a simple configuration file.
 
+* A Nginx ingress server, by default running on `port 80` (which means you get http://localhost or http://<your local host name> as your address. If you cannot run on `port 80`, it can be configured in the docker file
 
-Currently, under the hood is uses `docker` and `docker-compose` to minimise the hassle out of setting up frontend, backend and database servers.
+Under the hood is uses `docker` and `docker-compose` to minimise the hassle out of setting up frontend, backend and database servers (support for minikube is coming soon). The best part though is of course kept till last.
 
-Takeoff is designed to cut out those first few crucial hours where you are setting up your project environment, either at a hack day or for a work prototype. The default provided is opinionated but gives you basic authentication and hot reloading apps.  The Wordpress blueprint gives you a PHP and Wordpress environment reading files from your system.
+Using Docker volumes, the development files for the applications sit on your local computer file system, however the applications run within `docker` and hot reload on changes.  This means you can switch between your code and browser in seconds and see the changes.  On the server side this is accomplished with `nodemon` and on the clientside with `webpack`.
+
+## Why Takeoff?
+
+Takeoff is designed to cut out those first few crucial hours where you are setting up your project environment, such as babel and webpack configurations, user authentication or even just selecting a framework.  It's perfect for hackdays, rapid prototypes, teaching new coders by having a pre-configured environment in just 4 simple commands.
+
+It cut out the scary bit and gets right to the fun bit!
 
 ## Open Source Sponsorship
 
@@ -52,15 +59,34 @@ The above commands will install all the dependencies and have you up and running
 
 You should now have a server running at [http://localhost](http://localhost). You can access the API via [http://localhost/api](http://localhost/api).
 
-The default user is `admin` and password is `password`.  Do not expect this to be a fully secure environment.
+After installing, you will this folder structure in your Takeoff environment
 
-> *Disclaimer: If you build an app with this you wish you deploy, you are responsible for your own security.*
+```bash
+    -|
+     |- blueprints/basic # The basic blueprint that Takeoff ships
+     |- envs/default # The default environment installed
+        |- env # Folders with the source code you can change
+            |- api # This is the Hapi API Server
+            |- app # This is the frontend app
+            |- nginx # Nginx configuration
+            |- db # Postgres DB config
+        |- docker # This is where all the docker configurations are kept
+            |- docker-compose.yml # The glue file for your services
+            |- api # This is the Hapi API Server
+            |- app # This is the frontend app
+            |- nginx # Nginx configuration
+            |- db # Postgres DB config
+```
+
+### Blueprint Cache
+
+When you install a new blueprint, it is cached in the `blueprints` folder; this way when you create a new environment below it uses your local copy.  If you want to update a blueprint, for now go into the folder and type `git pull origin master`. A command will be coming for this soon.
 
 ## Creating new environments
 
 Currently there are two blueprints:
 
-* The default blueprint ([takeoff-blueprint-basic](https://github.com/takeoff-env/takeoff-blueprint-basic) is installed as the default `takeoff` environment in the `env` folder.)
+* The default blueprint ([takeoff-blueprint-basic](https://github.com/takeoff-env/takeoff-blueprint-basic) is installed as the `default` environment in the `env` folder and `basic` in the `blueprints` folder.
 
 When you want to create a new environment you can type:
 
@@ -69,7 +95,7 @@ When you want to create a new environment you can type:
     takeoff start <environment>
 ```
 
-This will start up your new named environment.
+This will start up your new named environment using the `basic` blueprint.  Make sure you have stopped any other environments running unless you have changed ingress port assignments.
 
 There is also a [Wordpress Blueprint](https://github.com/takeoff-env/takeoff-blueprint-wordpress), you can find out more about installing it via it's documentation
 
@@ -86,26 +112,7 @@ Currently only Linux is fully tested and supported out the box, but support for 
 
 ## Architecture
 
-After installing, you will find several folders and files:
 
-```bash
-    -|
-     |- envs/default # The default environment installed
-        |- env # Folders with the source code you can change
-            |- api # This is the Hapi API Server
-            |- app # This is the frontend app
-            |- nginx # Nginx configuration
-            |- db # Postgres DB config
-        |- docker # This is where all the docker configurations are kept
-            |- docker-compose.yml # The glue file for your services
-            |- api # This is the Hapi API Server
-            |- app # This is the frontend app
-            |- nginx # Nginx configuration
-            |- db # Postgres DB config
-     |- docs # Docs folder, for Github Pages
-     |- plugins # Scripts that perform tasks
-     |- README.md # The file you are looking at!
-```
 
 ## References
 
