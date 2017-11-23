@@ -37,9 +37,9 @@ Under the hood is uses `docker` and `docker-compose` to minimise the hassle out 
 
 ### The best part though is of course kept till last.
 
-Using Docker volumes, the development files for the applications sit on your local computer file system, however the applications run within `docker` and hot reload on changes.  This means you can switch between your code and browser in seconds and see the changes.  On the server side this is accomplished with `nodemon` and on the clientside with `webpack`.
+Using Docker volumes, the development files for the applications sit on your local computer file system, however the applications run within `docker` and hot reload on changes.  This means you can switch between your code and browser in seconds and see the changes and not have to worry about manually compiling before seeing your changes.  On the server side this is accomplished with `nodemon` and on the clientside with `webpack` using hot reloading, so in most cases you don't need to refresh the browser at all.
 
-This means you can make changes to your code without having to worry about the compilation steps.
+If you ever get disconnected from your docker sessions afer starting them up, you can type `takeoff start` again and you will reconnect to see any log output.
 
 ## Why Takeoff?
 
