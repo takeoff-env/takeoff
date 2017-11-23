@@ -90,7 +90,7 @@ When you install a new blueprint, it is cached in the `blueprints` folder; this 
 
 ## Creating new environments
 
-Currently there are two blueprints:
+Unofficially there are two blueprints:
 
 * The default blueprint ([takeoff-blueprint-basic](https://github.com/takeoff-env/takeoff-blueprint-basic) is installed as the `default` environment in the `env` folder and `basic` in the `blueprints` folder.
 
@@ -103,7 +103,7 @@ When you want to create a new environment you can type:
 
 This will start up your new named environment using the `basic` blueprint.  Make sure you have stopped any other environments running unless you have changed ingress port assignments.
 
-There is also a [Wordpress Blueprint](https://github.com/takeoff-env/takeoff-blueprint-wordpress), you can find out more about installing it via it's documentation
+There is also a [Wordpress Blueprint](https://github.com/takeoff-env/takeoff-blueprint-wordpress), you can find out more about installing it via it's documentation (it may currently be broken, and I want to make this into a more general PHP blueprint anyway).
 
 ## Platform Support
 
