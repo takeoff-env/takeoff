@@ -1,8 +1,8 @@
 # Takeoff Rapid Development Toolkit
 
-Takeoff is a toolkit for rapid development and prototyping applications.
+Takeoff is a toolkit for rapid development, allowing you to prototype web applications using it's command line tool.
 
-Takeoff itself is a command line tool [installed via `npm`](https://www.npmjs.com/package/@takeoff/takeoff) and has a [command line interface](docs/command-line.md) for creating and managing Takeoff environments.  Environments are created based on [Blueprints](docs/blueprints.md).
+[Installed via `npm`](https://www.npmjs.com/package/@takeoff/takeoff) you can find a list of [commands](docs/command-line.md) for creating and managing Takeoff environments.  Environments are created based on [Blueprints](docs/blueprints.md).
 
 ### Install Takeoff
 
