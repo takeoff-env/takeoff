@@ -31,7 +31,7 @@ Currently Takeoff only ships with the default blueprint (but it's relativly easy
 
 * A [Postgres 9](https://www.postgresql.org/) database.  Within the Hapi application, [Sequelize](http://docs.sequelizejs.com/) is used as the database connection and ORM. Here we can use this to create migrations and seeds, as well as create simple or complex model types as you like.  The postgres also comes with a simple configuration file.
 
-* A [Nginx](https://nginx.org) ingress server, by default running on `port 80` (which means you get http://localhost or http://<your local host name> as your address. If you cannot run on `port 80`, it can be configured in the [`docker-compose.yml`](https://github.com/takeoff-env/takeoff-blueprint-basic/blob/master/docker/docker-compose.yml#L12) by changing the first number of the pair (e.g `"8080:80"`)
+* A [Nginx](https://nginx.org) ingress server, by default running on `port 80` (which means you get http://localhost or http://<your local host name> as your address. If you cannot run on `port 80`, it can be configured in the [docker-compose.yml](https://github.com/takeoff-env/takeoff-blueprint-basic/blob/master/docker/docker-compose.yml#L12) by changing the first number of the pair (e.g `"8080:80"`)
 
 Under the hood is uses `docker` and `docker-compose` to minimise the hassle out of setting up frontend, backend and database servers (support for minikube is coming soon). 
 
