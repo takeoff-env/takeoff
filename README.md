@@ -47,14 +47,6 @@ Takeoff is designed to cut out those first few crucial hours where you are setti
 
 It cut out the scary/annoying bit and gets right to the fun bit!
 
-## Open Source Sponsorship
-
-Takeoff is provided as-is for free via Open Source.  If you find Takeoff useful then please click below to help support with basic costs such as the domain name.
-
-<a target='_blank' rel='nofollow' href='https://app.codesponsor.io/link/T2c5nPhtAEam9Py2cKQFyiFS/takeoff-env/takeoff'>
-  <img alt='Sponsor' width='888' height='68' src='https://app.codesponsor.io/embed/T2c5nPhtAEam9Py2cKQFyiFS/takeoff-env/takeoff.svg' />
-</a>
-
 ## System Dependencies
 
 This software has some dependencies, and currently has only been fully tested on Linux using [Docker Community Edition](https://www.docker.com/community-edition).
