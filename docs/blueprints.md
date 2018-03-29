@@ -41,7 +41,7 @@ The `package.json` should have the following minimum items in it:
 }
 ```
 
-Currently we don't use the keywords, but will the future CLI took will support these when searching for blueprints.
+Currently we don't use the keywords, but in future the CLI will support these when searching for blueprints.
 
 ### `takeoff.config.js`
 
@@ -60,14 +60,14 @@ module.exports = async ({ command, shell, args, opts, workingDir, h }) => {
 }
 ```
 
-You can see an example file [here](https://github.com/takeoff-env/takeoff-blueprint-basic/blob/master/takeoff.config.js).  **Please Note** as of version 1.2 this format is still in beta and there may be changes, the documentation will be kept up to date to reflect that.
+You can see an example file [here](https://github.com/takeoff-env/takeoff-blueprint-basic/blob/master/takeoff.config.js). **Please Note** as of version 1.2 this format is still in beta and there may be changes, the documentation will be kept up to date to reflect that.
 
 ### `env`
 
-The `env` folder contains all your application code and assets.  This allows you to mount these as volumes in the `docker-compose.yml` file.
+The `env` folder contains all your application code and assets. This allows you to mount these as volumes in the `docker-compose.yml` file.
 
 ### `docker`
 
 This is the docker configuration folder, it contains a `docker-compose.yml`. This is where you configure your services that talk to each other. Take a look at the [basic examples file](https://github.com/takeoff-env/takeoff-blueprint-basic/blob/master/docker/docker-compose.yml)
 
-Also within the docker folder are the name of your services you wish to serve.  These can be simple one line configurations, or complex sets of scripts to be run in order.
+Also within the docker folder are the name of your services you wish to serve. These can be simple one line configurations, or complex sets of scripts to be run in order.
