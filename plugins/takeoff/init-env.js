@@ -1,4 +1,6 @@
-const { DEFAULT_BLUEPRINT_NAME } = require('../../bin/constants');
+const {
+  DEFAULT_BLUEPRINT_NAME
+} = require('../../bin/constants');
 
 /**
  * Initialises a Takeoff environment
@@ -10,7 +12,14 @@ const { DEFAULT_BLUEPRINT_NAME } = require('../../bin/constants');
  * @param {object} takeoff.shell The ShellJS instance for doing shell-based commands
  * @param {object} takeoff.h The Helper object
  */
-const handler = async ({ command, shell, args, opts, workingDir, h }) => {
+const handler = async ({
+  command,
+  shell,
+  args,
+  opts,
+  workingDir,
+  h
+}) => {
   let [folderName, blueprintName] = args;
 
   if (!folderName) {
@@ -64,24 +73,22 @@ const handler = async ({ command, shell, args, opts, workingDir, h }) => {
     shell.exit(1);
   }
 
-  try {
-    shell.echo(`[Takeoff]: Running Takeoff Config`);
-    const envFile = require(`${workingDir}/${folderName}/envs/${environment}/takeoff.config.js`);
-    const runEnv = await envFile({ command, shell, args, opts, workingDir, h });
-    if (runEnv) {
-      return shell.exit(0);
-    }
-  } catch (e) {
-    shell.echo(e.message);
-    return shell.exit(1);
+
+  shell.echo(`[Takeoff]: Running Takeoff Config`);
+  const doMaid = shell.exec(
+    `cd ${workingDir}/${folderName}/envs/${environment} && npx maid takeoff`
+  )
+  if (doMaid.code === 0) {
+    shell.echo(`cd ${workingDir}/${folderName}/envs/${environment} && npx maid takeoff`, doClone.stdout);
+    shell.exit(1);
   }
+  shell.echo(`Ran Config`);
 };
 
 module.exports = {
   command: 'init',
   description: 'Creates a new environment container',
-  options: [
-    {
+  options: [{
       option: '-b, --blueprint-url',
       description: 'Pass a git repository as a url for a blueprint to begin the default with',
     },
