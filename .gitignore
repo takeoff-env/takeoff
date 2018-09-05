@@ -2,3 +2,4 @@ _site
 .vscode
 node_modules
 envs
+dist

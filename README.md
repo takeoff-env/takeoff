@@ -2,7 +2,7 @@
 
 Takeoff is a toolkit for rapid development, allowing you to prototype web applications using it's command line tool.
 
-[Installed via `npm`](https://www.npmjs.com/package/@takeoff/takeoff) you can find a list of [commands](docs/command-line.md) for creating and managing Takeoff environments.  Environments are created based on [Blueprints](docs/blueprints.md).
+[Installed via `npm`](https://www.npmjs.com/package/@takeoff/takeoff) you can find a list of [commands](docs/command-line.md) for creating and managing Takeoff environments and projects.  Projects are created based on [Blueprints](docs/blueprints.md).
 
 ### Install Takeoff
 
@@ -10,9 +10,9 @@ Installing takeoff is simple, via NPM.
 
 ```bash
 npm install -g @takeoff/takeoff
-takeoff init <myenv>
+takeoff init <myenv> # Creates an environment for your projects
 cd <myenv>
-takeoff start # This starts the default environment container in `envs/default`
+takeoff start # This starts the project in `projects/default`
 ```
 
 To see how this all works, it's all explained below.
@@ -62,7 +62,7 @@ After installing, you will have this folder structure in your Takeoff environmen
 ```bash
     -|
      |- blueprints/basic # The basic blueprint that Takeoff ships
-     |- envs/default # The default environment installed
+     |- project/default # The default environment installed
         |- env # Folders with the source code you can change
             |- api # This is the Hapi API Server
             |- app # This is the frontend app
@@ -78,9 +78,9 @@ After installing, you will have this folder structure in your Takeoff environmen
 
 ### Blueprint Cache
 
-When you install a new blueprint, it is cached in the `blueprints` folder; this way when you create a new environment below it uses your local copy. If you want to update a blueprint, for now go into the folder and type `git pull origin master`. A command will be coming for this soon.
+When you install a new blueprint, it is cached in the `blueprints` folder; this way when you create a new project below it uses your local copy. If you want to update a blueprint, for now go into the folder and type `git pull origin master`. A command will be coming for this soon.
 
-## Creating new environments
+## Creating new projects
 
 Unofficially there are two blueprints:
 
