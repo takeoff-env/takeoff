@@ -1,27 +1,34 @@
 import { DEFAULT_BLUEPRINT_NAME } from '../../lib/constants';
-import { TakeoffParser } from '../../lib/init-env/takeoff-parser';
+import takeoffParser from '../../lib/init-env/takeoff-parser';
 
 /**
  * Initialises a new Takeoff Environment.  This will create a cache folder
  * for blueprints and a new projects folder. By default it will create a `default`
  * environment using the blueprint.
  */
-export = ({ shell, args, workingDir, opts }: TakeoffCmdParameters): TakeoffCommand => ({
+export = ({
+  shell,
+  args,
+  workingDir,
+  opts,
+}: TakeoffCmdParameters): TakeoffCommand => ({
   command: 'init',
   description: 'Creates a new Takeoff Environment',
   options: [
     {
       option: '-b, --blueprint-url',
-      description: 'Pass a git repository as a url for a blueprint to begin the default with'
+      description:
+        'Pass a git repository as a url for a blueprint to begin the default with',
     },
     {
       option: '-d, --no-default',
-      description: 'Does not create a default project'
+      description: 'Does not create a default project',
     },
     {
       option: '-n, --name',
-      description: 'Set the name of the initial folder, otherwise it will be "default"'
-    }
+      description:
+        'Set the name of the initial folder, otherwise it will be "default"',
+    },
   ],
   args: '<name> [blueprint-name]',
   group: 'takeoff',
@@ -43,7 +50,11 @@ export = ({ shell, args, workingDir, opts }: TakeoffCmdParameters): TakeoffComma
     const basePath = `${workingDir}/${folderName}`;
 
     shell.echo(`Creating folder ${folderName}`);
-    shell.mkdir('-p', [basePath, `${basePath}/blueprints`, `${basePath}/projects`]);
+    shell.mkdir('-p', [
+      basePath,
+      `${basePath}/blueprints`,
+      `${basePath}/projects`,
+    ]);
 
     shell.touch(`${basePath}/.takeoffrc`);
 
@@ -53,7 +64,9 @@ export = ({ shell, args, workingDir, opts }: TakeoffCmdParameters): TakeoffComma
     }
 
     const blueprint =
-      opts['b'] || opts['blueprint-url'] || `https://github.com/takeoff-env/takeoff-blueprint-${blueprintName}.git`;
+      opts['b'] ||
+      opts['blueprint-url'] ||
+      `https://github.com/takeoff-env/takeoff-blueprint-${blueprintName}.git`;
     const environment = opts['n'] || opts['name'] || 'default';
 
     const blueprintPath = `${basePath}/blueprints/${blueprintName}`;
@@ -61,9 +74,12 @@ export = ({ shell, args, workingDir, opts }: TakeoffCmdParameters): TakeoffComma
 
     if (!shell.test('-d', blueprintPath)) {
       shell.mkdir('-p', blueprintPath);
-      const doClone = shell.exec(`git clone ${blueprint} ${blueprintPath} --depth 1`, {
-        slient: opts.v ? false : true
-      });
+      const doClone = shell.exec(
+        `git clone ${blueprint} ${blueprintPath} --depth 1`,
+        {
+          slient: opts.v ? false : true,
+        },
+      );
       if (doClone.code !== 0) {
         shell.echo(`Error cloning ${blueprint}`, doClone.stdout);
         shell.exit(1);
@@ -72,20 +88,23 @@ export = ({ shell, args, workingDir, opts }: TakeoffCmdParameters): TakeoffComma
     }
 
     shell.mkdir('-p', envDir);
-    const doClone = shell.exec(`git clone ${blueprintPath} ${envDir} --depth 1 && rm -rf ${envDir}/${blueprintName}/.git `, { slient: opts.v ? false : true });
+    const doClone = shell.exec(
+      `git clone ${blueprintPath} ${envDir} --depth 1 && rm -rf ${envDir}/${blueprintName}/.git `,
+      { slient: opts.v ? false : true },
+    );
     if (doClone.code !== 0) {
       shell.echo(`Error cloning ${blueprint}`, doClone.stdout);
       shell.exit(1);
     }
 
     shell.echo(`[Takeoff]: Initilising Project`);
-    const parser = new TakeoffParser(
+    await takeoffParser(
       {
-        cwd: envDir
+        cwd: envDir,
       },
-      shell
-    );
-    await parser.runFile('takeoff');
+      shell,
+    )('takeoff');
+
     shell.echo(`[Takeoff]: Project Ready`);
-  }
+  },
 });

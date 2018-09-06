@@ -8,6 +8,7 @@
     "scripts": {
         "build": "tsc -p tsconfig.json"
     },
+    "types": "src/types/**/*.d.ts",
     "dependencies": {
         "@types/package-json": "^4.0.1",
         "ascii-progress": "^1.0.5",

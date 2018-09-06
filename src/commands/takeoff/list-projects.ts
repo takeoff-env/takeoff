@@ -12,7 +12,7 @@ const getProjects = async (baseDir: string) => {
   try {
     projects = await glob('**/package.json', {
       cwd: basePath,
-      ignore: ['**/node_modules/**']
+      ignore: ['**/node_modules/**'],
     });
   } catch (e) {
     throw e;
@@ -63,16 +63,24 @@ export = ({ shell, workingDir }: TakeoffCmdParameters): TakeoffCommand => ({
     });
 
     projects.forEach((project: TakeoffProject) => {
-      tableValues.push([project.projectName, project.version, (apps[project.projectName] || []).join(', ')]);
+      tableValues.push([
+        project.projectName,
+        project.version,
+        (apps[project.projectName] || []).join(', '),
+      ]);
     });
 
     var commandsTable = generateTable(
       tableValues as any,
-      [{ value: 'Environment', align: 'left' }, { value: 'Version', align: 'left' }, { value: 'Apps', align: 'left' }],
+      [
+        { value: 'Environment', align: 'left', width: 11 },
+        { value: 'Version', align: 'left', width: 10 },
+        { value: 'Apps', align: 'left', width: 10 },
+      ],
 
-      { borderStyle: 0, compact: true, align: 'left', headerAlign: 'left' }
+      { borderStyle: 0, compact: true, align: 'left', headerAlign: 'left' },
     );
     shell.echo(commandsTable.render());
     shell.exit(0);
-  }
+  },
 });

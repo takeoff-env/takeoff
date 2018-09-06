@@ -52,7 +52,7 @@ const run = async (workingDir: string, cliArgs: string[]) => {
   }
 
   try {
-    await plugin.handler({ command, args, opts, shell, workingDir });
+    await plugin.handler();
   } catch (e) {
     throw e;
   }

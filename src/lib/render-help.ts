@@ -8,7 +8,7 @@ export = (takeoffCommands: Map<string, TakeoffCommand>, shell: any) => {
     tableValues.push([
       group === 'takeoff' ? command : `${group}:${command}`,
       args || '',
-      (options || []).map((o: PluginOption) => o.option).join('\n'),
+      (options || []).map((o: CommandOption) => o.option).join('\n'),
       description
     ]);
   });
