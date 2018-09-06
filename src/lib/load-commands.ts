@@ -33,8 +33,9 @@ export = async (
       const plugin: TakeoffCommand = require(requirePath)(params);
       commandMap.set(`${plugin.group}:${plugin.command}`, plugin);
     } catch (e) {
+      console.log(e);
       throw new Error(
-        `${chalk.red(`Unable to load command`)}${chalk.cyan(`${requirePath}`)}`,
+        `${chalk.red(`Unable to load command`)} ${chalk.cyan(`${requirePath}`)}`,
       );
     }
   });

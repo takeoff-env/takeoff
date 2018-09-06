@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import glob from 'glob-promise';
+import fg from 'fast-glob';
 import Path from 'path';
 import generateTable from '../../lib/generate-table';
 import rcCheck from '../../lib/rc-check';
@@ -10,7 +10,7 @@ const getProjects = async (baseDir: string) => {
   const basePath = `${Path.normalize(baseDir)}/projects`;
   let projects = [];
   try {
-    projects = await glob('**/package.json', {
+    projects = await fg('**/package.json', {
       cwd: basePath,
       ignore: ['**/node_modules/**'],
     });

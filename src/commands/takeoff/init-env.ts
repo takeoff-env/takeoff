@@ -109,7 +109,11 @@ export = ({
       shell.exit(1);
     }
 
-    shell.echo(`${chalk.magenta('[Takeoff]')} ${chalk.whiteBright('Initilising Project')}`);
+    shell.echo(
+      `${chalk.magenta('[Takeoff]')} ${chalk.whiteBright(
+        'Initilising Project',
+      )}`,
+    );
     await taskRunner(
       {
         cwd: envDir,

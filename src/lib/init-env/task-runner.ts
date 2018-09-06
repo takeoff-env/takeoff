@@ -14,9 +14,11 @@ const handleError = (task: Task, err: Error) => {
 export = (opts: TakeoffParserOptions, shell: any): Function => {
   const takeoffFile = readFile(opts);
 
+
   if (!takeoffFile) {
     throw new Error('No takeoff.md file was found.');
   }
+
 
   const createTaskPromise = async (task: Task) => {
     return new Promise((resolve, reject) => {

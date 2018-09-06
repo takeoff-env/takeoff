@@ -2,7 +2,7 @@
 
 Takeoff is a toolkit for rapid development, allowing you to prototype web applications using it's command line tool.
 
-[Installed via `npm`](https://www.npmjs.com/package/@takeoff/takeoff) you can find a list of [commands](docs/command-line.md) for creating and managing Takeoff environments and projects.  Projects are created based on [Blueprints](docs/blueprints.md).
+[Installed via `npm`](https://www.npmjs.com/package/@takeoff/takeoff) you can find a list of [commands](docs/command-line.md) for creating and managing Takeoff environments and projects. Projects are created based on [Blueprints](docs/blueprints.md).
 
 ### Install Takeoff
 
@@ -10,7 +10,7 @@ Installing takeoff is simple, via NPM.
 
 ```bash
 npm install -g @takeoff/takeoff
-takeoff init <myenv> # Creates an environment for your projects
+takeoff init <myenv> # Creates an environment for your projects, if not passed will create a folder called "takeoff"
 cd <myenv>
 takeoff start # This starts the project in `projects/default`
 ```
@@ -23,17 +23,17 @@ Blueprints are repositories with some batteries included applications and config
 
 Currently Takeoff only ships with the default blueprint (but it's relativly easy to create new ones!) called [takeoff-blueprint-basic](https://github.com/takeoff-env/takeoff-blueprint-basic) and it provides:
 
-* A [`node 8`](https://nodejs.org) API server powered by [Hapi](https://hapijs.com/). Using `node 8` allows the use of `async/await` to make code more readable. Included in the application is a User system for username/password login and basic user management, 2 levels (admin and user - and easily extendible). There is also a [JSON Web Token](https://jwt.io/) (JWT) authentication system that gives you control over access to your API endpoints.
+- A [`node 8`](https://nodejs.org) API server powered by [Hapi](https://hapijs.com/). Using `node 8` allows the use of `async/await` to make code more readable. Included in the application is a User system for username/password login and basic user management, 2 levels (admin and user - and easily extendible). There is also a [JSON Web Token](https://jwt.io/) (JWT) authentication system that gives you control over access to your API endpoints.
 
-* A [`React`](https://reactjs.org/) Frontend with [React Router V4](https://github.com/ReactTraining/react-router), [Redux](https://redux.js.org/) and [ReactStrap (Bootstrap 4)](https://reactstrap.github.io/). The frontend comes with a basic Dashboard layout and homepage. A login page with some basic validation allows you to log in (the default login is `admin/password`). Do not expect this to be a fully secure environment. Once logged in you have a basic user CRUD application to manage users, and a navigation bar that you can customise.
+- A [`React`](https://reactjs.org/) Frontend with [React Router V4](https://github.com/ReactTraining/react-router), [Redux](https://redux.js.org/) and [ReactStrap (Bootstrap 4)](https://reactstrap.github.io/). The frontend comes with a basic Dashboard layout and homepage. A login page with some basic validation allows you to log in (the default login is `admin/password`). Do not expect this to be a fully secure environment. Once logged in you have a basic user CRUD application to manage users, and a navigation bar that you can customise.
 
-> *Disclaimer: If you build an app with this you wish to deploy, you are responsible for your own security.*
+> _Disclaimer: If you build an app with this you wish to deploy, you are responsible for your own security._
 
-* A [Postgres 9](https://www.postgresql.org/) database. Within the Hapi application, [Sequelize](http://docs.sequelizejs.com/) is used as the database connection and ORM. Here we can use this to create migrations and seeds, as well as create simple or complex model types as you like. The postgres setup also comes with a simple configuration file.
+- A [Postgres 9](https://www.postgresql.org/) database. Within the Hapi application, [Sequelize](http://docs.sequelizejs.com/) is used as the database connection and ORM. Here we can use this to create migrations and seeds, as well as create simple or complex model types as you like. The postgres setup also comes with a simple configuration file.
 
-* A [Nginx](https://nginx.org) ingress server, by default running on `port 80` (which means you get http://localhost or http://<your local host name> as your address. If you cannot run on `port 80`, it can be configured in the [docker-compose.yml](https://github.com/takeoff-env/takeoff-blueprint-basic/blob/master/docker/docker-compose.yml#L12) by changing the first number of the pair (e.g `"8080:80"`)
+- A [Nginx](https://nginx.org) ingress server, by default running on `port 80` (which means you get http://localhost or http://<your local host name> as your address. If you cannot run on `port 80`, it can be configured in the [docker-compose.yml](https://github.com/takeoff-env/takeoff-blueprint-basic/blob/master/docker/docker-compose.yml#L12) by changing the first number of the pair (e.g `"8080:80"`)
 
-Under the hood it uses `docker` and `docker-compose` to minimise the hassle of setting up frontend, backend and database servers (support for minikube is coming soon). 
+Under the hood it uses `docker` and `docker-compose` to minimise the hassle of setting up frontend, backend and database servers (support for minikube is coming soon).
 
 ### The best part though is of course kept till last.
 
@@ -84,7 +84,7 @@ When you install a new blueprint, it is cached in the `blueprints` folder; this 
 
 Unofficially there are two blueprints:
 
-* The default blueprint ([takeoff-blueprint-basic](https://github.com/takeoff-env/takeoff-blueprint-basic) is installed as the `default` environment in the `env` folder and `basic` in the `blueprints` folder.
+- The default blueprint ([takeoff-blueprint-basic](https://github.com/takeoff-env/takeoff-blueprint-basic) is installed as the `default` environment in the `env` folder and `basic` in the `blueprints` folder.
 
 When you want to create a new environment you can type:
 
@@ -103,13 +103,14 @@ Currently only Linux is fully tested and supported out of the box, but support f
 
 ## Documentation
 
-* [Command Line Tools](docs/command-line.md)
-* [Default Blueprint API](https://github.com/takeoff-env/takeoff-blueprint-basic/blob/master/env/api/README.md)
-* [Default Blueprint Frontend App](https://github.com/takeoff-env/takeoff-blueprint-basic/blob/master/env/app/README.md)
-* [Wordpress Docs](https://github.com/takeoff-env/takeoff-blueprint-wordpress/blob/master/README.md)
+- [Command Line Tools](docs/command-line.md)
+- [Default Blueprint API](https://github.com/takeoff-env/takeoff-blueprint-basic/blob/master/env/api/README.md)
+- [Default Blueprint Frontend App](https://github.com/takeoff-env/takeoff-blueprint-basic/blob/master/env/app/README.md)
+- [Wordpress Docs](https://github.com/takeoff-env/takeoff-blueprint-wordpress/blob/master/README.md)
 
 ## References
 
-* This environment was based on the tutorial [Dockerize your app and keep hot-reloading !](https://blog.bam.tech/developper-news/dockerize-your-app-and-keep-hot-reloading) but adding more utilities and making it easier to work as a starter kit.
-* [Blog post announcing Takeoff](https://medium.com/@tanepiper/takeoff-a-rapid-development-environment-designed-for-hack-days-9a45ae891366)
-* Logo made with [LogoMakr](http://logomakr.com)
+- This tool was inspired by [Dockerize your app and keep hot-reloading !](https://blog.bam.tech/developper-news/dockerize-your-app-and-keep-hot-reloading) but adding more utilities and making it easier to work as a starter kit.
+- [Blog post announcing Takeoff](https://medium.com/@tanepiper/takeoff-a-rapid-development-environment-designed-for-hack-days-9a45ae891366)
+- Logo made with [LogoMakr](http://logomakr.com)
+- Takeoff v2 new task runner based on [Maid task runner](https://github.com/egoist/maid)
