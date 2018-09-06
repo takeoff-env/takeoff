@@ -1,5 +1,5 @@
 import { DEFAULT_BLUEPRINT_NAME } from '../../lib/constants';
-import takeoffParser from '../../lib/init-env/takeoff-parser';
+import taskRunner from '../../lib/init-env/task-runner';
 import rcCheck from '../../lib/rc-check';
 
 /**
@@ -51,12 +51,12 @@ export = ({ shell, args, workingDir, opts }: TakeoffCmdParameters): TakeoffComma
     }
 
     shell.echo(`[Takeoff]: Initilising Project`);
-    await takeoffParser(
+    await taskRunner(
       {
         cwd: envDir,
       },
       shell,
-    )('takeoff');
+    )();
     shell.echo(`[Takeoff]: Project Ready`);
   }
 });

@@ -1,6 +1,7 @@
 import requireFromString from 'require-from-string';
 import readFile from './read-takeoff-file';
 import executeTask from './run-task';
+import chalk from 'chalk';
 
 function checkTypes(task: any, types: string[]) {
   return types.some(type => type === task.type);
@@ -71,6 +72,7 @@ export = (opts: TakeoffParserOptions, shell: any): Function => {
     );
 
     await runTasks(tasks.map((task: Task) => task.name));
+
     for (const item of task[when]) {
       const { taskNames, inParallel }: any = item;
       await runTasks(taskNames, inParallel);
@@ -78,10 +80,10 @@ export = (opts: TakeoffParserOptions, shell: any): Function => {
   };
 
   const runTask = async (taskName: string, throwWhenNoMatchedTask = true) => {
-    const task =
-      taskName &&
-      takeoffFile &&
-      takeoffFile.tasks.find((task: any) => task.name === taskName);
+    const task = !taskName
+      ? takeoffFile.tasks[0]
+      : takeoffFile &&
+        takeoffFile.tasks.find((task: any) => task.name === taskName);
 
     if (!task) {
       if (throwWhenNoMatchedTask) {
@@ -90,6 +92,12 @@ export = (opts: TakeoffParserOptions, shell: any): Function => {
         return;
       }
     }
+
+    shell.echo(
+      `${chalk.magenta('[Takeoff]')} Running task ${chalk.whiteBright(
+        task.name,
+      )}`,
+    );
 
     // Start running task
     await runTaskHooks(task, 'before');

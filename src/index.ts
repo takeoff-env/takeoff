@@ -6,6 +6,7 @@ import pkg from '../package.json';
 import updateNotifier from 'update-notifier';
 import minimist from 'minimist';
 import shell from 'shelljs';
+import chalk from 'chalk';
 
 import { SEVEN_DAYS } from './lib/constants';
 import loadCommands from './lib/load-commands';
@@ -15,11 +16,11 @@ import renderHelp from './lib/render-help';
 
 const notifier = updateNotifier({
   pkg,
-  updateCheckInterval: SEVEN_DAYS
+  updateCheckInterval: SEVEN_DAYS,
 });
 
 const run = async (workingDir: string, cliArgs: string[]) => {
-  shell.echo(`Takeoff v${pkg.version}`);
+  shell.echo(`${chalk.magenta('Takeoff')} v${chalk.blueBright(pkg.version)}`);
 
   notifier.notify();
 
@@ -27,7 +28,13 @@ const run = async (workingDir: string, cliArgs: string[]) => {
 
   let takeoffCommands;
   try {
-    takeoffCommands = await loadCommands(`${__dirname}/commands`, { shell, command, args, opts, workingDir });
+    takeoffCommands = await loadCommands(`${__dirname}/commands`, {
+      shell,
+      command,
+      args,
+      opts,
+      workingDir,
+    });
   } catch (e) {
     throw e;
   }
@@ -37,7 +44,7 @@ const run = async (workingDir: string, cliArgs: string[]) => {
     commandParts.length > 1
       ? {
           group: commandParts[0],
-          cmd: commandParts[1]
+          cmd: commandParts[1],
         }
       : { group: 'takeoff', cmd: commandParts[0] };
 
@@ -47,7 +54,11 @@ const run = async (workingDir: string, cliArgs: string[]) => {
 
   const plugin = takeoffCommands.get(`${run.group}:${run.cmd}`);
   if (!plugin) {
-    shell.echo(`Error: ${run.group}:${run.cmd} not found`);
+    shell.echo(
+      chalk.red(
+        `Error: ${chalk.cyan(`${run.group}:${run.cmd}`)} not found`,
+      ),
+    );
     shell.exit(1);
   }
 

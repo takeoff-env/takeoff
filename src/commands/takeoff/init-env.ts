@@ -1,5 +1,6 @@
 import { DEFAULT_BLUEPRINT_NAME } from '../../lib/constants';
-import takeoffParser from '../../lib/init-env/takeoff-parser';
+import taskRunner from '../../lib/init-env/task-runner';
+import chalk from 'chalk';
 
 /**
  * Initialises a new Takeoff Environment.  This will create a cache folder
@@ -34,22 +35,28 @@ export = ({
   group: 'takeoff',
   async handler(): Promise<void> {
     let [folderName, blueprintName] = args;
+    blueprintName = blueprintName || DEFAULT_BLUEPRINT_NAME;
 
     if (!folderName) {
       folderName = 'takeoff';
-      shell.echo(`No folder name passed, setting to default "takeoff"`);
+      shell.echo(
+        `${chalk.blueBright(
+          'No folder name passed, setting to default',
+        )} ${chalk.yellow('takeoff')}`,
+      );
     }
 
     if (shell.test('-e', folderName)) {
-      shell.echo(`Environment ${folderName} already exists`);
+      shell.echo(
+        `${chalk.red('Environment')} ${chalk.yellow(folderName)} ${chalk.red(
+          'already exists',
+        )}`,
+      );
       return shell.exit(1);
     }
 
-    blueprintName = blueprintName || DEFAULT_BLUEPRINT_NAME;
-
     const basePath = `${workingDir}/${folderName}`;
 
-    shell.echo(`Creating folder ${folderName}`);
     shell.mkdir('-p', [
       basePath,
       `${basePath}/blueprints`,
@@ -59,7 +66,7 @@ export = ({
     shell.touch(`${basePath}/.takeoffrc`);
 
     if (opts['d'] || opts['no-default']) {
-      shell.echo('Skipping creating default environment');
+      shell.echo(`${chalk.yellow('Skipping creating default environment')}`);
       return shell.exit(0);
     }
 
@@ -81,10 +88,12 @@ export = ({
         },
       );
       if (doClone.code !== 0) {
-        shell.echo(`Error cloning ${blueprint}`, doClone.stdout);
+        shell.echo(
+          `${chalk.red('Error cloning')} ${chalk.yellow(blueprint)}`,
+          doClone.stdout,
+        );
         shell.exit(1);
       }
-      shell.echo(`Cloned ${blueprint} to cache`);
     }
 
     shell.mkdir('-p', envDir);
@@ -93,18 +102,21 @@ export = ({
       { slient: opts.v ? false : true },
     );
     if (doClone.code !== 0) {
-      shell.echo(`Error cloning ${blueprint}`, doClone.stdout);
+      shell.echo(
+        `${chalk.red('Error cloning')} ${chalk.yellow(blueprint)}`,
+        doClone.stdout,
+      );
       shell.exit(1);
     }
 
-    shell.echo(`[Takeoff]: Initilising Project`);
-    await takeoffParser(
+    shell.echo(`${chalk.magenta('[Takeoff]')} ${chalk.whiteBright('Initilising Project')}`);
+    await taskRunner(
       {
         cwd: envDir,
       },
       shell,
-    )('takeoff');
+    )();
 
-    shell.echo(`[Takeoff]: Project Ready`);
+    shell.echo(`${chalk.magenta('[Takeoff]')} Project Ready`);
   },
 });
