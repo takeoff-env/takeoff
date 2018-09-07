@@ -34,28 +34,28 @@ export = ({
   args: '<name> [blueprint-name]',
   group: 'takeoff',
   async handler(): Promise<void> {
-    let [folderName, blueprintName] = args;
+    let [environmentName, blueprintName] = args;
     blueprintName = blueprintName || DEFAULT_BLUEPRINT_NAME;
 
-    if (!folderName) {
-      folderName = 'takeoff';
+    if (!environmentName) {
+      environmentName = 'takeoff';
       shell.echo(
         `${chalk.blueBright(
-          'No folder name passed, setting to default',
+          `No environment folder name passed, setting to ${environmentName}`,
         )} ${chalk.yellow('takeoff')}`,
       );
     }
 
-    if (shell.test('-e', folderName)) {
+    if (shell.test('-e', environmentName)) {
       shell.echo(
-        `${chalk.red('Environment')} ${chalk.yellow(folderName)} ${chalk.red(
-          'already exists',
-        )}`,
+        `${chalk.red('Environment')} ${chalk.yellow(
+          environmentName,
+        )} ${chalk.red('already exists')}`,
       );
       return shell.exit(1);
     }
 
-    const basePath = `${workingDir}/${folderName}`;
+    const basePath = `${workingDir}/${environmentName}`;
 
     shell.mkdir('-p', [
       basePath,
@@ -74,10 +74,11 @@ export = ({
       opts['b'] ||
       opts['blueprint-url'] ||
       `https://github.com/takeoff-env/takeoff-blueprint-${blueprintName}.git`;
-    const environment = opts['n'] || opts['name'] || 'default';
+
+    const projectName = opts['n'] || opts['name'] || 'default';
 
     const blueprintPath = `${basePath}/blueprints/${blueprintName}`;
-    const envDir = `${basePath}/projects/${environment}`;
+    const projectDir = `${basePath}/projects/${projectName}`;
 
     if (!shell.test('-d', blueprintPath)) {
       shell.mkdir('-p', blueprintPath);
@@ -96,9 +97,9 @@ export = ({
       }
     }
 
-    shell.mkdir('-p', envDir);
+    shell.mkdir('-p', projectDir);
     const doClone = shell.exec(
-      `git clone ${blueprintPath} ${envDir} --depth 1 && rm -rf ${envDir}/${blueprintName}/.git `,
+      `git clone ${blueprintPath} ${projectDir} --depth 1 && rm -rf ${projectDir}/${blueprintName}/.git `,
       { slient: opts.v ? false : true },
     );
     if (doClone.code !== 0) {
@@ -116,11 +117,11 @@ export = ({
     );
     await taskRunner(
       {
-        cwd: envDir,
+        cwd: projectDir,
       },
       shell,
     )();
 
-    shell.echo(`${chalk.magenta('[Takeoff]')} Project Ready`);
+    shell.echo(`${chalk.magenta('[Takeoff]')} Environment provisioned and Project Ready`);
   },
 });
