@@ -43,14 +43,16 @@ export = ({
       opts['b'] ||
       opts['blueprint-url'] ||
       (cachedBlueprint
-        ? `${workingDir}/blueprints/${blueprintName}`
+        ? `file://${workingDir}/blueprints/${blueprintName}`
         : `https://github.com/takeoff-env/takeoff-blueprint-${blueprintName}.git`);
 
     const projectDir = `${workingDir}/projects/${projectName}`;
 
     shell.mkdir('-p', projectDir);
     const doClone = shell.exec(
-      `git clone ${blueprint} ${projectDir} --depth 1 && rm -rf ${projectDir}/${blueprintName}.git`,
+      `git clone ${blueprint} ${projectDir}${
+        cachedBlueprint ? '' : '--depth 1'
+      } && rm -rf ${projectDir}/${blueprintName}.git`,
       {
         slient: opts.v ? false : true,
       },

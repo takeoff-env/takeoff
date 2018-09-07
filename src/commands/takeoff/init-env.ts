@@ -99,7 +99,7 @@ export = ({
 
     shell.mkdir('-p', projectDir);
     const doClone = shell.exec(
-      `git clone ${blueprintPath} ${projectDir} --depth 1 && rm -rf ${projectDir}/${blueprintName}/.git `,
+      `git clone file://${blueprintPath} ${projectDir} && rm -rf ${projectDir}/${blueprintName}/.git `,
       { slient: opts.v ? false : true },
     );
     if (doClone.code !== 0) {
