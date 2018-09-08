@@ -27,5 +27,7 @@ interface TakeoffCommand {
 
   group?: string;
 
+  skipRcCheck?: boolean;
+
   handler: () => void | Promise<void>;
 }

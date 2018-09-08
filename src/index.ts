@@ -17,7 +17,7 @@ import rcCheck from './lib/rc-check';
 
 const notifier = updateNotifier({
   pkg,
-  updateCheckInterval: SEVEN_DAYS,
+  updateCheckInterval: SEVEN_DAYS
 });
 
 const run = async (workingDir: string, cliArgs: string[]) => {
@@ -34,7 +34,7 @@ const run = async (workingDir: string, cliArgs: string[]) => {
       command,
       args,
       opts,
-      workingDir,
+      workingDir
     });
   } catch (e) {
     throw e;
@@ -45,7 +45,7 @@ const run = async (workingDir: string, cliArgs: string[]) => {
     commandParts.length > 1
       ? {
           group: commandParts[0],
-          cmd: commandParts[1],
+          cmd: commandParts[1]
         }
       : { group: 'takeoff', cmd: commandParts[0] };
 
@@ -53,16 +53,14 @@ const run = async (workingDir: string, cliArgs: string[]) => {
     return renderHelp(takeoffCommands, shell);
   }
 
-  rcCheck(workingDir);
-
   const plugin = takeoffCommands.get(`${run.group}:${run.cmd}`);
   if (!plugin) {
-    shell.echo(
-      chalk.red(
-        `Error: ${chalk.cyan(`${run.group}:${run.cmd}`)} not found`,
-      ),
-    );
+    shell.echo(`${chalk.red('[Takeoff]')} ${chalk.cyan(`${run.group}:${run.cmd}`)} not found`);
     shell.exit(1);
+  }
+
+  if (!plugin.skipRcCheck) {
+    rcCheck(workingDir);
   }
 
   try {

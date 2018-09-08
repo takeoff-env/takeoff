@@ -33,6 +33,7 @@ export = ({
   ],
   args: '<name> [blueprint-name]',
   group: 'takeoff',
+  skipRcCheck: true,
   async handler(): Promise<void> {
     let [environmentName, blueprintName] = args;
     blueprintName = blueprintName || DEFAULT_BLUEPRINT_NAME;
