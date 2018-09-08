@@ -1,6 +1,5 @@
 import { DEFAULT_BLUEPRINT_NAME } from '../../lib/constants';
 import taskRunner from '../../lib/init-env/task-runner';
-import rcCheck from '../../lib/rc-check';
 
 /**
  * Command for creating a new project inside an environment
@@ -23,7 +22,6 @@ export = ({
   ],
   group: 'takeoff',
   async handler(): Promise<void> {
-    rcCheck(shell, workingDir);
 
     const [projectName, userBlueprintName] = args;
 

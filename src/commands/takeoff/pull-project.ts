@@ -1,5 +1,3 @@
-import rcCheck from '../../lib/rc-check';
-
 /**
  * Command for pulling an environment
  */
@@ -10,8 +8,6 @@ export = ({ shell, args, workingDir, opts }: TakeoffCmdParameters): TakeoffComma
   args: '<name> [service]',
   group: 'takeoff',
   handler(): void {
-    rcCheck(shell, workingDir);
-
     let [environment, service]: string[] = args.length > 0 ? args : ['default'];
 
     const envDir = `${workingDir}/projects/${environment}`;
@@ -25,7 +21,7 @@ export = ({ shell, args, workingDir, opts }: TakeoffCmdParameters): TakeoffComma
     if (service) {
       cmd = cmd + ` ${service}`;
     }
-    const runCmd = shell.exec(cmd, { slient: opts.v ? false: true });
+    const runCmd = shell.exec(cmd, { slient: opts.v ? false : true });
     if (runCmd.code !== 0) {
       shell.echo(`Error pulling in ${environment}.  Use -v to see verbose logs`);
       shell.exit(1);

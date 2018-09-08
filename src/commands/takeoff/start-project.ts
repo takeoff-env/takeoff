@@ -1,5 +1,3 @@
-import rcCheck from '../../lib/rc-check';
-
 /**
  * Command for starting a project
  */
@@ -11,8 +9,6 @@ export = ({ shell, args, workingDir, opts }: TakeoffCmdParameters): TakeoffComma
   args: '<name> [service]',
   group: 'takeoff',
   handler(): void {
-    rcCheck(shell, workingDir);
-
     let [project, app]: string[] = args.length > 0 ? args : ['default'];
 
     const projectDir = `${workingDir}/projects/${project}`;
@@ -22,7 +18,7 @@ export = ({ shell, args, workingDir, opts }: TakeoffCmdParameters): TakeoffComma
       cmd = `${cmd} -d ${app}`;
     }
 
-    let runCmd = shell.exec(cmd, { slient: opts.v ? false: true });
+    let runCmd = shell.exec(cmd, { slient: opts.v ? false : true });
 
     if (runCmd.code !== 0) {
       shell.echo(`Error starting project ${project}` + app ? `:${app}` : '');

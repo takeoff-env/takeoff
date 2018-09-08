@@ -1,5 +1,3 @@
-import rcCheck from '../../lib/rc-check';
-
 /**
  * Command that handles the stopping of a project
  */
@@ -10,8 +8,6 @@ export = ({ shell, args, workingDir, opts }: TakeoffCmdParameters): TakeoffComma
   args: '<name>',
   group: 'takeoff',
   handler(): void {
-    rcCheck(shell, workingDir);
-
     let [project]: string[] = args.length > 0 ? args : ['default'];
 
     const projectDir = `${workingDir}/projects/${project}`;
@@ -23,7 +19,7 @@ export = ({ shell, args, workingDir, opts }: TakeoffCmdParameters): TakeoffComma
 
     let cmd = `docker-compose -f ${projectDir}/docker/docker-compose.yml stop`;
 
-    let runCmd = shell.exec(cmd, { slient: opts.v ? false: true });
+    let runCmd = shell.exec(cmd, { slient: opts.v ? false : true });
 
     if (runCmd.code !== 0) {
       shell.echo(`Error stopping ${project}`);

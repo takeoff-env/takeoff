@@ -89,7 +89,7 @@ export = (opts: TakeoffParserOptions, shell: any): Function => {
 
     if (!task) {
       if (throwWhenNoMatchedTask) {
-        throw new Error(`No task called "${taskName}" was found. Stop.`);
+        throw new Error(`${chalk.red('[Takeoff]')} No task called "${taskName}" was found. Stop.`);
       } else {
         return;
       }

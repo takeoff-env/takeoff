@@ -13,6 +13,7 @@ import loadCommands from './lib/load-commands';
 
 import extractArguments from './lib/extract-arguments';
 import renderHelp from './lib/render-help';
+import rcCheck from './lib/rc-check';
 
 const notifier = updateNotifier({
   pkg,
@@ -51,6 +52,8 @@ const run = async (workingDir: string, cliArgs: string[]) => {
   if (!run.cmd || run.cmd === 'help') {
     return renderHelp(takeoffCommands, shell);
   }
+
+  rcCheck(workingDir);
 
   const plugin = takeoffCommands.get(`${run.group}:${run.cmd}`);
   if (!plugin) {

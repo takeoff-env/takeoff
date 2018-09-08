@@ -3,7 +3,6 @@
 import fg from 'fast-glob';
 import Path from 'path';
 import generateTable from '../../lib/generate-table';
-import rcCheck from '../../lib/rc-check';
 
 const getProjects = async (baseDir: string) => {
   // Do all the pre-plugin loading
@@ -30,7 +29,6 @@ export = ({ shell, workingDir }: TakeoffCmdParameters): TakeoffCommand => ({
   description: 'List all the available projects and their apps',
   group: 'takeoff',
   async handler(): Promise<void> {
-    rcCheck(shell, workingDir);
 
     const packagePaths = await getProjects(workingDir);
 

@@ -6,14 +6,8 @@ import fg from 'fast-glob';
  * Load plugins from the basePath. Will attempt to load both Typescript and JavaScript plugins
  * Returns a map of plugins with the key as the command and value as the plugin object
  */
-export = async (
-  cwd: string,
-  params: TakeoffCmdParameters,
-): Promise<Map<string, TakeoffCommand>> => {
-  const commandMap: Map<string, TakeoffCommand> = new Map<
-    string,
-    TakeoffCommand
-  >();
+export = async (cwd: string, params: TakeoffCmdParameters): Promise<Map<string, TakeoffCommand>> => {
+  const commandMap: Map<string, TakeoffCommand> = new Map<string, TakeoffCommand>();
 
   const commandPath = normalize(cwd);
 
@@ -21,7 +15,7 @@ export = async (
   try {
     commandPaths = await fg(['**/*.js', '**/*.ts'], {
       cwd: cwd,
-      ignore: ['**/*.spec.js', '**/*.spec.ts', '**/*.d.ts'],
+      ignore: ['**/*.spec.js', '**/*.spec.ts', '**/*.d.ts']
     });
   } catch (e) {
     throw e;
@@ -33,10 +27,8 @@ export = async (
       const plugin: TakeoffCommand = require(requirePath)(params);
       commandMap.set(`${plugin.group}:${plugin.command}`, plugin);
     } catch (e) {
-      console.log(e);
-      throw new Error(
-        `${chalk.red(`Unable to load command`)} ${chalk.cyan(`${requirePath}`)}`,
-      );
+      console.error(e);
+      throw new Error(`${chalk.red('[Takeoff]')} Unable to load command ${chalk.cyan(`${requirePath}`)}`);
     }
   });
 
