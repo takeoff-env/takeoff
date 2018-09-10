@@ -13,7 +13,7 @@
   "types": "src/types/**/*.d.ts",
   "dependencies": {
     "fast-glob": "^2.2.2",
-    "joycon": "^2.1.0",
+    "joycon": "^2.1.2",
     "markdown-it": "^8.4.2",
     "minimist": "^1.2.0",
     "require-from-string": "^2.0.2",
