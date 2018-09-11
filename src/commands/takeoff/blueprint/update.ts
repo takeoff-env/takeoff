@@ -30,7 +30,6 @@ export = ({ shell, args, workingDir, opts, exitWithMessage, printMessage }: Take
     }
 
     let cmd = `git pull ${remote} ${branch}`;
-    console.log(cmd);
     const runCmd = shell.exec(cmd, {
       cwd: envDir,
       slient: opts.v ? false : true,
