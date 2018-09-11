@@ -1,23 +1,23 @@
-import { TakeoffCmdParameters } from 'takeoff';
 import { TakeoffCommand } from 'commands';
+import { TakeoffCmdParameters } from 'takeoff';
 
 /**
  * Destroys an project in a non-reversable way
  */
 export = ({ shell, args, workingDir, opts, printMessage, exitWithMessage }: TakeoffCmdParameters): TakeoffCommand => ({
+  args: '<name>',
   command: 'destroy',
   description:
     'Destroys the docker containers for a project. Can also optionally remove the folder, this operation cannot be reversed.',
-  args: '<name>',
+  group: 'takeoff',
   options: [
     {
-      option: '-r, --remove-dir',
       description: 'Also removes the directory, otherwise only docker images and volumes are destroyed',
+      option: '-r, --remove-dir',
     },
   ],
-  group: 'takeoff',
   handler(): void {
-    let [project]: string[] = args.length > 0 ? args : ['default'];
+    const [project]: string[] = args.length > 0 ? args : ['default'];
 
     printMessage(`Destroying project ${project}`);
 

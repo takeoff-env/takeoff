@@ -1,8 +1,9 @@
 import chalk from 'chalk';
-import { normalize } from 'path';
 import fg from 'fast-glob';
-import { TakeoffCmdParameters } from 'takeoff';
+import { normalize } from 'path';
+
 import { TakeoffCommand } from 'commands';
+import { TakeoffCmdParameters } from 'takeoff';
 
 /**
  * Load plugins from the basePath. Will attempt to load both Typescript and JavaScript plugins
@@ -17,7 +18,7 @@ export = async (cwdList: string[], params: TakeoffCmdParameters): Promise<Map<st
     let commandPaths = [];
     try {
       commandPaths = await fg([`**/*.js`, `**/*.ts`], {
-        cwd: cwd,
+        cwd,
         ignore: [`**/*.spec.js`, `**/*spec.js`, `**/*.d.ts`],
       });
     } catch (e) {

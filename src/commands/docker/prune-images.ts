@@ -1,5 +1,5 @@
-import { TakeoffCmdParameters } from 'takeoff';
 import { TakeoffCommand } from 'commands';
+import { TakeoffCmdParameters } from 'takeoff';
 
 /**
  * Command for pulling an environment
@@ -8,13 +8,13 @@ import { TakeoffCommand } from 'commands';
 export = ({ shell, opts, exitWithMessage, printMessage }: TakeoffCmdParameters): TakeoffCommand => ({
   command: 'pi',
   description: 'Convenience method to prune all images',
+  group: 'docker',
   options: [
     {
-      option: '-f, --filter',
       description: 'Filter the prune command with expressions (e.g "label=foo")',
+      option: '-f, --filter',
     },
   ],
-  group: 'docker',
   handler(): void {
     printMessage(`Pruning Docker Images`);
 

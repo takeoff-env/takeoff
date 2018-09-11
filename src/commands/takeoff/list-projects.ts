@@ -2,9 +2,11 @@
 
 import fg from 'fast-glob';
 import Path from 'path';
-import generateTable from '../../lib/generate-table';
-import { TakeoffCmdParameters, TakeoffProject, TakeoffProjectApps } from 'takeoff';
+
 import { TakeoffCommand } from 'commands';
+import { TakeoffCmdParameters, TakeoffProject, TakeoffProjectApps } from 'takeoff';
+
+import generateTable from '../../lib/generate-table';
 
 const getProjects = async (baseDir: string) => {
   // Do all the pre-plugin loading
@@ -43,7 +45,10 @@ export = ({ shell, workingDir, exitWithMessage, printMessage }: TakeoffCmdParame
     const apps: TakeoffProjectApps = {};
 
     packagePaths.forEach((pkg: string) => {
-      let projectName, app, a, b;
+      let projectName;
+      let app;
+      let a;
+      let b;
       let split;
       if (pkg.match('/env/')) {
         split = pkg.split('/');
@@ -58,7 +63,9 @@ export = ({ shell, workingDir, exitWithMessage, printMessage }: TakeoffCmdParame
           const { version } = pkgJson;
           projects.push({ projectName, version });
           apps[projectName] = apps[projectName] || [];
-        } catch (e) {}
+        } catch (e) {
+          // Do nothing
+        }
       }
     });
 
@@ -66,7 +73,7 @@ export = ({ shell, workingDir, exitWithMessage, printMessage }: TakeoffCmdParame
       tableValues.push([project.projectName, project.version, (apps[project.projectName] || []).join(', ')]);
     });
 
-    var commandsTable = generateTable(
+    const commandsTable = generateTable(
       tableValues as any,
       [
         { value: 'Environment', align: 'left', width: 11 },

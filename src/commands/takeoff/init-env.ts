@@ -1,7 +1,8 @@
+import { TakeoffCommand } from 'commands';
+import { TakeoffCmdParameters } from 'takeoff';
+
 import { DEFAULT_BLUEPRINT_NAME } from '../../lib/constants';
 import taskRunner from '../../lib/init-env/task-runner';
-import { TakeoffCmdParameters } from 'takeoff';
-import { TakeoffCommand } from 'commands';
 
 /**
  * Initialises a new Takeoff Environment.  This will create a cache folder
@@ -9,25 +10,25 @@ import { TakeoffCommand } from 'commands';
  * environment using the blueprint.
  */
 export = ({ shell, args, workingDir, opts, printMessage, exitWithMessage }: TakeoffCmdParameters): TakeoffCommand => ({
+  args: '<name> [blueprint-name]',
   command: 'init',
   description:
     'Creates a new Takeoff Environment. This will create a new folder that contains an initial blueprint and project based on that blueprint.',
+  group: 'takeoff',
   options: [
     {
-      option: '-b, --blueprint-url',
       description: 'Pass a git repository as a url for a blueprint to begin the default with',
+      option: '-b, --blueprint-url',
     },
     {
-      option: '-d, --no-default',
       description: 'Does not create a default project',
+      option: '-d, --no-default',
     },
     {
-      option: '-n, --name',
       description: 'Set the name of the initial folder, otherwise it will be "default"',
+      option: '-n, --name',
     },
   ],
-  args: '<name> [blueprint-name]',
-  group: 'takeoff',
   skipRcCheck: true,
   async handler(): Promise<void> {
     let [environmentName, blueprintName] = args;
@@ -65,23 +66,23 @@ export = ({ shell, args, workingDir, opts, printMessage, exitWithMessage }: Take
     if (!shell.test('-d', blueprintPath)) {
       shell.mkdir('-p', blueprintPath);
 
-      const doClone = shell.exec(`git clone ${blueprint} ${blueprintPath} --depth 1`, {
+      const remoteClone = shell.exec(`git clone ${blueprint} ${blueprintPath} --depth 1`, {
         slient: opts.v ? false : true,
       });
 
-      if (doClone.code !== 0) {
-        return exitWithMessage(`Error cloning ${blueprint}`, 1);
+      if (remoteClone.code !== 0) {
+        return exitWithMessage(`Error cloning ${blueprint}`, 1, remoteClone.stdout);
       }
     }
 
     shell.mkdir('-p', projectDir);
-    const doClone = shell.exec(
+    const localClone = shell.exec(
       `git clone file://${blueprintPath} ${projectDir} && rm -rf ${projectDir}/${blueprintName}/.git `,
       { slient: opts.v ? false : true },
     );
 
-    if (doClone.code !== 0) {
-      return exitWithMessage(`Error cloning ${blueprint} to ${projectDir}`, 1, doClone.stdout);
+    if (localClone.code !== 0) {
+      return exitWithMessage(`Error cloning ${blueprint} to ${projectDir}`, 1, localClone.stdout);
     }
 
     printMessage(`Initilising Project ${projectName}`);

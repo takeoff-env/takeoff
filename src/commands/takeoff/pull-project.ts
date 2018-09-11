@@ -1,17 +1,17 @@
-import { TakeoffCmdParameters } from 'takeoff';
 import { TakeoffCommand } from 'commands';
+import { TakeoffCmdParameters } from 'takeoff';
 
 /**
  * Command for pulling an project
  */
 
 export = ({ shell, args, workingDir, opts, exitWithMessage, printMessage }: TakeoffCmdParameters): TakeoffCommand => ({
+  args: '<name> [service]',
   command: 'pull',
   description: 'Pulls any pre-build images within a project (such a database images).',
-  args: '<name> [service]',
   group: 'takeoff',
   handler(): void {
-    let [project, service]: string[] = args.length > 0 ? args : ['default'];
+    const [project, service]: string[] = args.length > 0 ? args : ['default'];
 
     printMessage(`Pullng project ${project}`);
 
@@ -23,7 +23,7 @@ export = ({ shell, args, workingDir, opts, exitWithMessage, printMessage }: Take
 
     let cmd = `docker-compose -f ${envDir}/docker/docker-compose.yml pull`;
     if (service) {
-      cmd = cmd + ` ${service}`;
+      cmd = `${cmd} ${service}`;
     }
 
     const runCmd = shell.exec(cmd, { slient: opts.v ? false : true });

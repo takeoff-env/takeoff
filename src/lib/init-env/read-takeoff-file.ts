@@ -1,8 +1,8 @@
-import { dirname } from 'path';
-import parseMarkdown from './parse-markdown';
 import JoyCon from 'joycon';
+import { dirname } from 'path';
 import { ReadFileOptions, TakeoffFileData } from 'takeoff';
 
+import parseMarkdown from './parse-markdown';
 export = ({ cwd }: ReadFileOptions): TakeoffFileData => {
   const loadTakeoffFile = new JoyCon({
     // Stop reading at parent dir
@@ -12,7 +12,9 @@ export = ({ cwd }: ReadFileOptions): TakeoffFileData => {
   });
 
   const { path: filepath, data } = loadTakeoffFile.loadSync(['takeoff.md']);
-  if (!filepath) return null;
+  if (!filepath) {
+    return null;
+  }
 
   return { filepath, tasks: parseMarkdown(data) };
 };

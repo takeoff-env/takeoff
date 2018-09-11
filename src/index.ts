@@ -1,27 +1,28 @@
 #!/usr/bin/env node
 
 import './lib/bootstrap';
-import pkg from '../package.json';
 
-import updateNotifier from 'update-notifier';
+import chalk from 'chalk';
 import minimist from 'minimist';
 import shell from 'shelljs';
-import chalk from 'chalk';
+import updateNotifier from 'update-notifier';
 
 import { SEVEN_DAYS } from './lib/constants';
 import loadCommands from './lib/load-commands';
 
+import pjson from 'pjson';
+
 import extractArguments from './lib/extract-arguments';
-import renderHelp from './lib/render-help';
 import rcCheck from './lib/rc-check';
+import renderHelp from './lib/render-help';
 
 const notifier = updateNotifier({
-  pkg,
+  pkg: pjson,
   updateCheckInterval: SEVEN_DAYS,
 });
 
 const printMessage = (message: string, stdout = '') => {
-  let takeoffHeader = chalk.yellow('[Takeoff]');
+  const takeoffHeader = chalk.yellow('[Takeoff]');
   shell.echo(`${takeoffHeader} ${message}`, stdout);
 };
 
@@ -38,7 +39,7 @@ const exitWithMessage = (message: string, code: number, stdout = '') => {
 };
 
 const run = async (workingDir: string, cliArgs: string[]) => {
-  shell.echo(`${chalk.magenta('Takeoff')} v${chalk.blueBright(pkg.version)}`);
+  shell.echo(`${chalk.magenta('Takeoff')} v${chalk.blueBright(pjson.version)}`);
 
   notifier.notify();
 
@@ -47,33 +48,33 @@ const run = async (workingDir: string, cliArgs: string[]) => {
   let takeoffCommands;
   try {
     takeoffCommands = await loadCommands([`${__dirname}/commands`, `${workingDir}/commands`], {
-      shell,
-      exitWithMessage,
-      printMessage,
-      command,
       args,
+      command,
+      exitWithMessage,
       opts,
+      printMessage,
+      shell,
       workingDir,
     });
   } catch (e) {
     throw e;
   }
   const commandParts = (command && command.split(':')) || [];
-  const run =
+  const request =
     commandParts.length > 1
       ? {
-          group: commandParts[0],
           cmd: commandParts[1],
+          group: commandParts[0],
         }
       : { group: 'takeoff', cmd: commandParts[0] };
 
-  if (!run.cmd || run.cmd === 'help') {
+  if (!request.cmd || request.cmd === 'help') {
     return renderHelp(takeoffCommands, shell);
   }
 
-  const plugin = takeoffCommands.get(`${run.group}:${run.cmd}`);
+  const plugin = takeoffCommands.get(`${request.group}:${request.cmd}`);
   if (!plugin) {
-    shell.echo(`${chalk.red('[Takeoff]')} ${chalk.cyan(`${run.group}:${run.cmd}`)} not found`);
+    shell.echo(`${chalk.red('[Takeoff]')} ${chalk.cyan(`${request.group}:${request.cmd}`)} not found`);
     shell.exit(1);
   }
 

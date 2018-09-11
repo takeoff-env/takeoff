@@ -1,5 +1,5 @@
-import { dirname } from 'path';
 import JoyCon from 'joycon';
+import { dirname } from 'path';
 /**
  * Check to see if there is a .takeoffrc file in the environment folder, if not then we exit
  */

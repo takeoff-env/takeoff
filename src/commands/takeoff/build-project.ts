@@ -1,17 +1,17 @@
-import { TakeoffCmdParameters } from 'takeoff';
 import { TakeoffCommand } from 'commands';
+import { TakeoffCmdParameters } from 'takeoff';
 
 /**
  * Builds an project based on a docker-compose file
  */
 
 export = ({ shell, args, workingDir, opts, printMessage, exitWithMessage }: TakeoffCmdParameters): TakeoffCommand => ({
+  args: '<name>',
   command: 'build',
   description: 'Builds containers based on a docker-compose file',
-  args: '<name>',
   group: 'takeoff',
   handler(): void {
-    let [project] = args.length > 0 ? args : ['default'];
+    const [project] = args.length > 0 ? args : ['default'];
 
     printMessage(`Building project ${project}`);
 
@@ -21,7 +21,7 @@ export = ({ shell, args, workingDir, opts, printMessage, exitWithMessage }: Take
       return exitWithMessage(`The project ${project} doesn't exist`, 1);
     }
 
-    let runCmd = shell.exec(`docker-compose -f ${projectDir}/docker/docker-compose.yml build`, {
+    const runCmd = shell.exec(`docker-compose -f ${projectDir}/docker/docker-compose.yml build`, {
       slient: opts.v ? false : true,
     });
 

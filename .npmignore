@@ -9,3 +9,6 @@ Gemfile.lock
 assets
 PULL_REQUEST_TEMPLATE.md
 ISSUE_TEMPLATE.md
+src
+tsconfig.json
+.prettierrc

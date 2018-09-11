@@ -1,6 +1,7 @@
-import generateTable from './generate-table';
+import { CommandOption, TakeoffCommand } from 'commands';
+
 import { COMMAND_TABLE_HEADERS } from './constants';
-import { TakeoffCommand, CommandOption } from 'commands';
+import generateTable from './generate-table';
 
 export = (takeoffCommands: Map<string, TakeoffCommand>, shell: any) => {
   const tableValues: Array<[string, string, string, string]> = [];
@@ -15,9 +16,9 @@ export = (takeoffCommands: Map<string, TakeoffCommand>, shell: any) => {
   });
 
   const table = generateTable(tableValues as any, COMMAND_TABLE_HEADERS, {
+    align: 'left',
     borderStyle: 1,
     compact: false,
-    align: 'left',
     headerAlign: 'left',
   });
 

@@ -1,7 +1,7 @@
 import MarkdownIt, { Token } from 'markdown-it';
 import rexrex from 'rexrex';
-import { Task, TaskEvent } from 'task';
 import { ParsedCommand, When } from 'takeoff';
+import { Task, TaskEvent } from 'task';
 
 const md = new MarkdownIt({
   // Enable HTML so that we can ignore it later
@@ -24,11 +24,11 @@ const isCommand = (v: string) => Boolean(v.match(isCommandRe)) && Boolean(v.matc
 const parseCommand = (v: string): ParsedCommand => {
   const inParallel = Boolean(v.match(/in\s+parallel/i));
   const when = (v.match(/before|after/i) || ['before'])[0] as When;
-  const taskNames = v.match(commandsRe).map(v => /`(.+)`/.exec(v)[1]);
+  const taskNames = v.match(commandsRe).map(c => /`(.+)`/.exec(c)[1]);
   return {
+    inParallel: Boolean(inParallel),
     taskNames,
     when,
-    inParallel: Boolean(inParallel),
   };
 };
 
@@ -53,16 +53,16 @@ const selectSubset = (tokens: Token[], firstIndex: number, tag = 'h2') => {
 };
 
 export = (content: string): Task[] => {
-  let tokens = md.parse(content, null);
+  const tokens = md.parse(content, null);
 
   const tasks: Task[] = [];
 
   for (const [index, token] of tokens.entries()) {
     if (isOpenHeader(token, 'h2')) {
       const task: Partial<Task> = {
-        name: tokens[index + 1].content,
-        before: [],
         after: [],
+        before: [],
+        name: tokens[index + 1].content,
       };
 
       const sectionTokens = selectSubset(tokens, index, 'h2');
@@ -77,8 +77,8 @@ export = (content: string): Task[] => {
           if (isCommandBool) {
             const { taskNames, when, inParallel } = parseCommand(p);
             (task[when] as TaskEvent[]).push({
-              taskNames,
               inParallel,
+              taskNames,
             });
           }
           return !isCommandBool;
@@ -87,15 +87,15 @@ export = (content: string): Task[] => {
 
       // Get task script from the tokens' code fences
       // Currently only use the first one
-      for (const token of sectionTokens) {
-        if (token.type === 'fence') {
-          task.script = token.content;
-          task.type = token.info;
+      for (const sectionToken of sectionTokens) {
+        if (sectionToken.type === 'fence') {
+          task.script = sectionToken.content;
+          task.type = sectionToken.info;
           break;
         }
       }
 
-      tasks.push(<Task>task);
+      tasks.push(task as Task);
     }
   }
 

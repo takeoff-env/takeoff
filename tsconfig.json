@@ -12,9 +12,10 @@
     "rootDir": ".",
     "baseUrl": ".",
     "paths": {
+      "@takeoff/takeoff/types": ["src/types/*"],
       "*": ["node_modules/*", "src/types/*"]
     }
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules/**/*", "**/*.spec.ts"]
+  "include": ["src"],
+  "exclude": ["node_modules", "src/**/*.spec.ts"]
 }

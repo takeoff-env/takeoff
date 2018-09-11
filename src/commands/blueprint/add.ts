@@ -1,17 +1,18 @@
-import { TakeoffCmdParameters } from 'takeoff';
 import { TakeoffCommand } from 'commands';
+import { TakeoffCmdParameters } from 'takeoff';
+
 /**
  * Command for pulling an environment
  */
 
 export = ({ shell, args, workingDir, opts, exitWithMessage, printMessage }: TakeoffCmdParameters): TakeoffCommand => ({
+  args: '<name> <blueprint-url>',
   command: 'add',
   description:
     'Add a new blueprint. You need to provide the name of the folder and the location of the git repo you want to clone',
-  args: '<name> <blueprint-url>',
   group: 'blueprint',
   handler(): void {
-    let [blueprint, newUrl]: string[] = args.length > 0 ? args : ['default'];
+    const [blueprint, newUrl]: string[] = args.length > 0 ? args : ['default'];
 
     printMessage(`Adding Blueprint ${blueprint}`);
 

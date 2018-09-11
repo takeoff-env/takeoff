@@ -1,5 +1,5 @@
-import { TakeoffCmdParameters } from 'takeoff';
 import { TakeoffCommand } from 'commands';
+import { TakeoffCmdParameters } from 'takeoff';
 import { DEFAULT_BLUEPRINT_NAME } from '../../lib/constants';
 
 /**
@@ -7,20 +7,16 @@ import { DEFAULT_BLUEPRINT_NAME } from '../../lib/constants';
  */
 
 export = ({ shell, args, workingDir, opts, exitWithMessage, printMessage }: TakeoffCmdParameters): TakeoffCommand => ({
+  args: '<name> [remote] [branch]',
   command: 'update',
   description:
     'Updates a named blueprint. Can optionally pass a remote name and branch name, otherwise the default is "origin" and "master"',
-  args: '<name> [remote] [branch]',
   group: 'blueprint',
   handler(): void {
-    let [blueprint, remote, branch]: string[] = args.length > 0 ? args : [DEFAULT_BLUEPRINT_NAME];
+    const [blueprint, ...rest]: string[] = args.length > 0 ? args : [DEFAULT_BLUEPRINT_NAME];
 
-    if (!remote) {
-      remote = 'origin';
-    }
-    if (!branch) {
-      branch = 'master';
-    }
+    const remote = rest[0] ? rest[0] : 'origin';
+    const branch = rest[1] ? rest[1] : 'master';
 
     printMessage(`Updating Blueprint ${blueprint} on ${branch} from ${remote}`);
 

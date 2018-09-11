@@ -1,5 +1,5 @@
-import table from 'tty-table';
 import { TableHeader, TableOptions } from 'tables';
+import table from 'tty-table';
 
 const DEFAULT_WIDTH = 10;
 const PADDING = 2;

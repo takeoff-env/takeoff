@@ -2,24 +2,24 @@ import { TableHeader } from 'tables';
 
 export const COMMAND_TABLE_HEADERS: TableHeader[] = [
   {
-    width: 10,
+    align: 'left',
     value: 'Command',
-    align: 'left',
+    width: 10,
   },
   {
-    width: 10,
+    align: 'left',
     value: 'Arguments',
-    align: 'left',
+    width: 10,
   },
   {
-    width: 10,
+    align: 'left',
     value: 'Options',
-    align: 'left',
+    width: 10,
   },
   {
-    width: 10,
-    value: 'Description',
     align: 'left',
+    value: 'Description',
+    width: 10,
   },
 ];
 

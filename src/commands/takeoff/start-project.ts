@@ -1,18 +1,18 @@
-import { TakeoffCmdParameters } from 'takeoff';
 import { TakeoffCommand } from 'commands';
+import { TakeoffCmdParameters } from 'takeoff';
 
 /**
  * Command for starting a project
  */
 
 export = ({ shell, args, workingDir, opts, exitWithMessage, printMessage }: TakeoffCmdParameters): TakeoffCommand => ({
+  args: '<name> [service]',
   command: 'start',
   description:
     'Starts the named project. Optionally a docker app name can be passed to only start individual services.',
-  args: '<name> [service]',
   group: 'takeoff',
   handler(): void {
-    let [project, app]: string[] = args.length > 0 ? args : ['default'];
+    const [project, app]: string[] = args.length > 0 ? args : ['default'];
 
     printMessage(`Starting project ${project}`);
 
@@ -27,7 +27,7 @@ export = ({ shell, args, workingDir, opts, exitWithMessage, printMessage }: Take
       cmd = `${cmd} -d ${app}`;
     }
 
-    let runCmd = shell.exec(cmd, { slient: opts.v ? false : true });
+    const runCmd = shell.exec(cmd, { slient: opts.v ? false : true });
 
     if (runCmd.code !== 0) {
       return exitWithMessage(`Cannot start ${project}` + app ? `:${app}` : '', 1, runCmd.stdout);

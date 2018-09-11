@@ -1,9 +1,10 @@
+import chalk from 'chalk';
 import requireFromString from 'require-from-string';
+import { TakeoffParserOptions, When } from 'takeoff';
+import { Task } from 'task';
+
 import readFile from './read-takeoff-file';
 import executeTask from './run-task';
-import chalk from 'chalk';
-import { Task } from 'task';
-import { TakeoffParserOptions, When } from 'takeoff';
 
 function checkTypes(task: any, types: string[]) {
   return types.some(type => type === task.type);
@@ -13,7 +14,7 @@ const handleError = (task: Task, err: Error) => {
   throw new Error(`Task '${task.name}' failed.\n${err.stack}`);
 };
 
-export = (opts: TakeoffParserOptions, shell: any): Function => {
+export = (opts: TakeoffParserOptions, shell: any): (taskName?: string) => Promise<void> => {
   const takeoffFile = readFile(opts);
 
   if (!takeoffFile) {
@@ -24,10 +25,10 @@ export = (opts: TakeoffParserOptions, shell: any): Function => {
     return new Promise((resolve, reject) => {
       if (checkTypes(task, ['sh', 'bash'])) {
         return executeTask(shell, opts, {
-          task,
-          resolve,
-          reject,
           cwd: opts.cwd,
+          reject,
+          resolve,
+          task,
         });
       }
 
@@ -47,7 +48,9 @@ export = (opts: TakeoffParserOptions, shell: any): Function => {
   };
 
   const runTasks = async (taskNames: string[], inParallel?: boolean) => {
-    if (!taskNames || taskNames.length === 0) return;
+    if (!taskNames || taskNames.length === 0) {
+      return;
+    }
 
     if (inParallel) {
       await Promise.all(
@@ -67,7 +70,7 @@ export = (opts: TakeoffParserOptions, shell: any): Function => {
 
     const tasks = takeoffFile.tasks.filter(({ name }: Task) => name === `${prefix}:${task.name}`);
 
-    await runTasks(tasks.map((task: Task) => task.name));
+    await runTasks(tasks.map((t: Task) => t.name));
 
     for (const item of task[when]) {
       const { taskNames, inParallel }: any = item;
@@ -78,7 +81,7 @@ export = (opts: TakeoffParserOptions, shell: any): Function => {
   const runTask = async (taskName: string, throwWhenNoMatchedTask = true) => {
     const task = !taskName
       ? takeoffFile.tasks[0]
-      : takeoffFile && takeoffFile.tasks.find((task: any) => task.name === taskName);
+      : takeoffFile && takeoffFile.tasks.find((t: any) => t.name === taskName);
 
     if (!task) {
       if (throwWhenNoMatchedTask) {
@@ -96,7 +99,7 @@ export = (opts: TakeoffParserOptions, shell: any): Function => {
     await runTaskHooks(task, 'after');
   };
 
-  return async (taskName: string) => {
+  return async (taskName: string): Promise<void> => {
     await runTask('beforeAll', false);
     await runTask(taskName);
     await runTask('afterAll', false);
