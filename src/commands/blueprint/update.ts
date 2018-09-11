@@ -1,5 +1,6 @@
 import { TakeoffCmdParameters } from 'takeoff';
 import { TakeoffCommand } from 'commands';
+import { DEFAULT_BLUEPRINT_NAME } from '../../lib/constants';
 
 /**
  * Command for pulling an environment
@@ -12,7 +13,7 @@ export = ({ shell, args, workingDir, opts, exitWithMessage, printMessage }: Take
   args: '<name> [remote] [branch]',
   group: 'blueprint',
   handler(): void {
-    let [blueprint, remote, branch]: string[] = args.length > 0 ? args : ['basic'];
+    let [blueprint, remote, branch]: string[] = args.length > 0 ? args : [DEFAULT_BLUEPRINT_NAME];
 
     if (!remote) {
       remote = 'origin';
