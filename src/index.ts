@@ -46,7 +46,7 @@ const run = async (workingDir: string, cliArgs: string[]) => {
 
   let takeoffCommands;
   try {
-    takeoffCommands = await loadCommands(`${__dirname}/commands`, {
+    takeoffCommands = await loadCommands([`${__dirname}/commands`, `${workingDir}/commands`], {
       shell,
       exitWithMessage,
       printMessage,
