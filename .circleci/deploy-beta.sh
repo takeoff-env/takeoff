@@ -23,8 +23,8 @@ echo "Version and Publish"
 npm version $BETA_PACKAGE_VERSION -m "$CIRCLE_BRANCH %s [ci skip]"
 npm publish --tag beta
 
-echo "Push changes to branch"
-git push --tags
-git push --set-upstream origin $CIRCLE_BRANCH
+## echo "Push changes to branch"
+## git push --tags
+## git push --set-upstream origin $CIRCLE_BRANCH
 
 echo "Release done"

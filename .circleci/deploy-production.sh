@@ -19,14 +19,9 @@ git diff-index --quiet HEAD || git commit -m "Commit changes for $PACKAGE_VERSIO
 
 npm version ${VERSION_COMMAND:-patch} -m "$CIRCLE_BRANCH %s [ci skip]"
 
-if [[ "5" -eq "$VERSION_NUMBER" ]] ;
-then
-  npm publish --tag stable
-else
-  npm publish --tag latest
-fi
+npm publish --tag latest
 
-git push --tags
-git push --set-upstream origin $CIRCLE_BRANCH
+## git push --tags
+## git push --set-upstream origin $CIRCLE_BRANCH
 
 echo "Release done"
