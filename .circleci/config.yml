@@ -1,0 +1,93 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2
+
+defaults: &defaults
+  working_directory: ~/repo
+  docker:
+    - image: circleci/node:10
+
+jobs:
+  run_install:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - takeoff-{{ .Branch }}-{{ checksum "package.json" }}
+      - run:
+          name: Install Dependencies
+          command: npm upgrade && npm install
+      - save_cache:
+          paths:
+            - node_modules
+          key: takeoff-{{ .Branch }}-{{ checksum "package.json" }}
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - repo
+
+  build:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Building Distribution
+          command: ./.circleci/build-dist.sh
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - repo
+
+  run_distribution:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/
+      - add-ssh-keys:
+          fingerprints:
+            - "58:a0:03:43:27:f0:9b:d2:ce:b1:dc:af:77:c7:b1:6a"
+      - run:
+          name: Running Distribution
+          command: ./.circleci/deploy-production.sh
+
+  run_distribution_beta:
+    <<: *defaults
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/
+      - add-ssh-keys:
+          fingerprints:
+            - "58:a0:03:43:27:f0:9b:d2:ce:b1:dc:af:77:c7:b1:6a"
+      - run:
+          name: Running Beta Distribution
+          command: ./.circleci/deploy-beta.sh
+
+workflows:
+  version: 2
+  test-and-build:
+    jobs:
+      - run_install
+      - build:
+          requires:
+            - run_install
+      - run_distribution:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - release
+      - run_distribution_beta:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - master
