@@ -8,9 +8,11 @@
   },
   "license": "MIT",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "prepublishOnly": "npm run compile",
+    "build": "npm run clean && tsc -p tsconfig.json",
     "format": "prettier --write \"src/**/*.ts\"",
-    "lint": "tslint -p tsconfig.json"
+    "lint": "tslint -p tsconfig.json",
+    "clean": "rm -rf dist"
   },
   "types": "src/types/**/*.d.ts",
   "dependencies": {
