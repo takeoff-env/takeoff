@@ -83,7 +83,7 @@ workflows:
                 - master
       - run_distribution_beta:
           requires:
-            - build
+            - run_install
           filters:
             branches:
               only:
