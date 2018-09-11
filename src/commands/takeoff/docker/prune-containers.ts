@@ -5,19 +5,13 @@ import { TakeoffCommand } from 'commands';
  * Command for pulling an environment
  */
 
-export = ({
-  shell,
-  opts,
-  exitWithMessage,
-  printMessage,
-}: TakeoffCmdParameters): TakeoffCommand => ({
+export = ({ shell, opts, exitWithMessage, printMessage }: TakeoffCmdParameters): TakeoffCommand => ({
   command: 'pc',
   description: 'Convenience method to prune all containers',
   options: [
     {
       option: '-f, --filter',
-      description:
-        'Filter the prune command with expressions (e.g "label=foo")',
+      description: 'Filter the prune command with expressions (e.g "label=foo")',
     },
   ],
   group: 'docker',
@@ -33,11 +27,7 @@ export = ({
       slient: opts.v ? false : true,
     });
     if (runCmd.code !== 0) {
-      return exitWithMessage(
-        'Error pruning containers.  Use -v to see verbose logs',
-        1,
-        runCmd.stdout,
-      );
+      return exitWithMessage('Error pruning containers.  Use -v to see verbose logs', 1, runCmd.stdout);
     }
     return exitWithMessage('Docker containers pruned', 0);
   },

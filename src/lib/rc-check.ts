@@ -9,7 +9,7 @@ export = (cwd: string): boolean => {
     // Stop reading at parent dir
     // i.e. Only read file from process.cwd()
     cwd,
-    stopDir: dirname(process.cwd())
+    stopDir: dirname(process.cwd()),
   });
 
   const { path: filepath } = loadTakeoffRc.loadSync(['.takeoffrc']);

@@ -3,11 +3,7 @@
 import fg from 'fast-glob';
 import Path from 'path';
 import generateTable from '../../lib/generate-table';
-import {
-  TakeoffCmdParameters,
-  TakeoffProject,
-  TakeoffProjectApps,
-} from 'takeoff';
+import { TakeoffCmdParameters, TakeoffProject, TakeoffProjectApps } from 'takeoff';
 import { TakeoffCommand } from 'commands';
 
 const getProjects = async (baseDir: string) => {
@@ -30,12 +26,7 @@ const getProjects = async (baseDir: string) => {
   });
 };
 
-export = ({
-  shell,
-  workingDir,
-  exitWithMessage,
-  printMessage,
-}: TakeoffCmdParameters): TakeoffCommand => ({
+export = ({ shell, workingDir, exitWithMessage, printMessage }: TakeoffCmdParameters): TakeoffCommand => ({
   command: 'list',
   description: 'List all the available projects and their apps',
   group: 'takeoff',
@@ -45,10 +36,7 @@ export = ({
     const packagePaths = await getProjects(workingDir);
 
     if (packagePaths.length === 0) {
-      return exitWithMessage(
-        'No projects found in this environment',
-        0,
-      );
+      return exitWithMessage('No projects found in this environment', 0);
     }
     const tableValues: Array<[string, string, string]> = [];
     const projects: TakeoffProject[] = [];
@@ -75,11 +63,7 @@ export = ({
     });
 
     projects.forEach((project: TakeoffProject) => {
-      tableValues.push([
-        project.projectName,
-        project.version,
-        (apps[project.projectName] || []).join(', '),
-      ]);
+      tableValues.push([project.projectName, project.version, (apps[project.projectName] || []).join(', ')]);
     });
 
     var commandsTable = generateTable(

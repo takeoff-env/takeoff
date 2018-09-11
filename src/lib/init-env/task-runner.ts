@@ -39,11 +39,7 @@ export = (opts: TakeoffParserOptions, shell: any): Function => {
           return handleError(task, err);
         }
         res = res.default || res;
-        return resolve(
-          typeof res === 'function'
-            ? Promise.resolve(res()).catch(e => handleError(task, e))
-            : res,
-        );
+        return resolve(typeof res === 'function' ? Promise.resolve(res()).catch(e => handleError(task, e)) : res);
       }
 
       return resolve();
@@ -69,9 +65,7 @@ export = (opts: TakeoffParserOptions, shell: any): Function => {
   const runTaskHooks = async (task: Task, when: string) => {
     const prefix: When = when === 'before' ? 'pre' : 'post';
 
-    const tasks = takeoffFile.tasks.filter(
-      ({ name }: Task) => name === `${prefix}:${task.name}`,
-    );
+    const tasks = takeoffFile.tasks.filter(({ name }: Task) => name === `${prefix}:${task.name}`);
 
     await runTasks(tasks.map((task: Task) => task.name));
 
@@ -84,26 +78,17 @@ export = (opts: TakeoffParserOptions, shell: any): Function => {
   const runTask = async (taskName: string, throwWhenNoMatchedTask = true) => {
     const task = !taskName
       ? takeoffFile.tasks[0]
-      : takeoffFile &&
-        takeoffFile.tasks.find((task: any) => task.name === taskName);
+      : takeoffFile && takeoffFile.tasks.find((task: any) => task.name === taskName);
 
     if (!task) {
       if (throwWhenNoMatchedTask) {
-        throw new Error(
-          `${chalk.red(
-            '[Takeoff]',
-          )} No task called "${taskName}" was found. Stop.`,
-        );
+        throw new Error(`${chalk.red('[Takeoff]')} No task called "${taskName}" was found. Stop.`);
       } else {
         return;
       }
     }
 
-    shell.echo(
-      `${chalk.magenta('[Takeoff]')} Running task ${chalk.whiteBright(
-        task.name,
-      )}`,
-    );
+    shell.echo(`${chalk.magenta('[Takeoff]')} Running task ${chalk.whiteBright(task.name)}`);
 
     // Start running task
     await runTaskHooks(task, 'before');

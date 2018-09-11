@@ -1,5 +1,5 @@
-import { TakeoffCmdParameters } from "takeoff";
-import { TakeoffCommand } from "commands";
+import { TakeoffCmdParameters } from 'takeoff';
+import { TakeoffCommand } from 'commands';
 
 /**
  * Command for starting a project
@@ -33,5 +33,5 @@ export = ({ shell, args, workingDir, opts, exitWithMessage, printMessage }: Take
       return exitWithMessage(`Cannot start ${project}` + app ? `:${app}` : '', 1, runCmd.stdout);
     }
     return exitWithMessage(`Started ${project}` + app ? `:${app}` : '', 0);
-  }
+  },
 });

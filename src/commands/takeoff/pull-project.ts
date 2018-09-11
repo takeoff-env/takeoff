@@ -1,5 +1,5 @@
-import { TakeoffCmdParameters } from "takeoff";
-import { TakeoffCommand } from "commands";
+import { TakeoffCmdParameters } from 'takeoff';
+import { TakeoffCommand } from 'commands';
 
 /**
  * Command for pulling an project
@@ -31,5 +31,5 @@ export = ({ shell, args, workingDir, opts, exitWithMessage, printMessage }: Take
       return exitWithMessage(`Unable to pull ${project}.  Use -v to see verbose logs`, 1, runCmd.stdout);
     }
     return exitWithMessage(`Pulled pre-built images for ${project}.  Use -v to see verbose logs`, 0);
-  }
+  },
 });

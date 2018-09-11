@@ -5,7 +5,7 @@ import { ParsedCommand, When } from 'takeoff';
 
 const md = new MarkdownIt({
   // Enable HTML so that we can ignore it later
-  html: true
+  html: true,
 });
 
 const space = rexrex.extra(rexrex.matchers.WHITE_SPACE);
@@ -13,7 +13,7 @@ const space = rexrex.extra(rexrex.matchers.WHITE_SPACE);
 const isCommandReTemplate = rexrex.and(
   rexrex.matchers.START, // ^
   rexrex.wildcard(rexrex.matchers.WHITE_SPACE),
-  ['Runs' + rexrex.matchers.LAZY, 'tasks' + rexrex.matchers.LAZY].join(space)
+  ['Runs' + rexrex.matchers.LAZY, 'tasks' + rexrex.matchers.LAZY].join(space),
 );
 
 const isCommandRe = new RegExp(isCommandReTemplate, rexrex.flags.INSENSITIVE);
@@ -28,7 +28,7 @@ const parseCommand = (v: string): ParsedCommand => {
   return {
     taskNames,
     when,
-    inParallel: Boolean(inParallel)
+    inParallel: Boolean(inParallel),
   };
 };
 
@@ -62,7 +62,7 @@ export = (content: string): Task[] => {
       const task: Partial<Task> = {
         name: tokens[index + 1].content,
         before: [],
-        after: []
+        after: [],
       };
 
       const sectionTokens = selectSubset(tokens, index, 'h2');
@@ -78,7 +78,7 @@ export = (content: string): Task[] => {
             const { taskNames, when, inParallel } = parseCommand(p);
             (task[when] as TaskEvent[]).push({
               taskNames,
-              inParallel
+              inParallel,
             });
           }
           return !isCommandBool;

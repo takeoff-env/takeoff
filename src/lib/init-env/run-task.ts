@@ -11,8 +11,8 @@ export = (shell: any, opts: any, { task, resolve, reject, cwd }: TaskRunnerOptio
     cwd,
     env: {
       ...process.env,
-      PATH: `${path.resolve('node_modules/.bin')}:${process.env.PATH}`
-    }
+      PATH: `${path.resolve('node_modules/.bin')}:${process.env.PATH}`,
+    },
   });
   if (run.code !== 0) {
     return reject(new Error(`${chalk.red('[Takeoff]')} Task "${task.name}" exited with code ${run.code}`));

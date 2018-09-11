@@ -17,7 +17,7 @@ export = async (cwd: string, params: TakeoffCmdParameters): Promise<Map<string, 
   try {
     commandPaths = await fg(['**/*.js', '**/*.ts'], {
       cwd: cwd,
-      ignore: ['**/*.spec.js', '**/*.spec.ts', '**/*.d.ts']
+      ignore: ['**/*.spec.js', '**/*.spec.ts', '**/*.d.ts'],
     });
   } catch (e) {
     throw e;

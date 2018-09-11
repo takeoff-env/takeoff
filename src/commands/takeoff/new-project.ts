@@ -7,14 +7,7 @@ import { TakeoffCommand } from 'commands';
  * Command for creating a new project inside an environment
  */
 
-export = ({
-  shell,
-  args,
-  workingDir,
-  opts,
-  printMessage,
-  exitWithMessage,
-}: TakeoffCmdParameters): TakeoffCommand => ({
+export = ({ shell, args, workingDir, opts, printMessage, exitWithMessage }: TakeoffCmdParameters): TakeoffCommand => ({
   command: 'new',
   description: 'Creates a new project within the current environment',
   args: '<name> [blueprint-name]',
@@ -29,20 +22,14 @@ export = ({
     const [projectName, userBlueprintName] = args;
 
     if (!projectName) {
-      return exitWithMessage(
-        `You must pass a project name to create a new folder`,
-        1,
-      );
+      return exitWithMessage(`You must pass a project name to create a new folder`, 1);
     }
 
     printMessage(`Creating new project ${projectName}`);
 
     const blueprintName = userBlueprintName || DEFAULT_BLUEPRINT_NAME;
 
-    let cachedBlueprint = shell.test(
-      '-d',
-      `${workingDir}/blueprints/${blueprintName}`,
-    );
+    let cachedBlueprint = shell.test('-d', `${workingDir}/blueprints/${blueprintName}`);
 
     let blueprint =
       opts['b'] ||
@@ -63,11 +50,7 @@ export = ({
       },
     );
     if (doClone.code !== 0) {
-      return exitWithMessage(
-        `You must pass a project name to create a new folder`,
-        1,
-        doClone.stdout,
-      );
+      return exitWithMessage(`You must pass a project name to create a new folder`, 1, doClone.stdout);
     }
 
     printMessage(`Initilising Project`);

@@ -1,4 +1,4 @@
-import { TableHeader } from "tables";
+import { TableHeader } from 'tables';
 
 export const COMMAND_TABLE_HEADERS: TableHeader[] = [
   {

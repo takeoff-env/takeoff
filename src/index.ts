@@ -17,26 +17,25 @@ import rcCheck from './lib/rc-check';
 
 const notifier = updateNotifier({
   pkg,
-  updateCheckInterval: SEVEN_DAYS
+  updateCheckInterval: SEVEN_DAYS,
 });
 
 const printMessage = (message: string, stdout = '') => {
   let takeoffHeader = chalk.yellow('[Takeoff]');
   shell.echo(`${takeoffHeader} ${message}`, stdout);
-}
+};
 
 const exitWithMessage = (message: string, code: number, stdout = '') => {
-
   let takeoffHeader = chalk.magenta('[Takeoff]');
   if (!Number.isNaN(code) && code > 0) {
     takeoffHeader = chalk.red('[Takeoff]');
   }
   shell.echo(`${takeoffHeader} ${message}`, stdout);
-  
+
   if (!Number.isNaN(code) && code > -1) {
     shell.exit(code);
   }
-}
+};
 
 const run = async (workingDir: string, cliArgs: string[]) => {
   shell.echo(`${chalk.magenta('Takeoff')} v${chalk.blueBright(pkg.version)}`);
@@ -54,7 +53,7 @@ const run = async (workingDir: string, cliArgs: string[]) => {
       command,
       args,
       opts,
-      workingDir
+      workingDir,
     });
   } catch (e) {
     throw e;
@@ -64,7 +63,7 @@ const run = async (workingDir: string, cliArgs: string[]) => {
     commandParts.length > 1
       ? {
           group: commandParts[0],
-          cmd: commandParts[1]
+          cmd: commandParts[1],
         }
       : { group: 'takeoff', cmd: commandParts[0] };
 

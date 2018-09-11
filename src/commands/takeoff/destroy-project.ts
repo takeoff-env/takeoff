@@ -1,18 +1,10 @@
-import chalk from 'chalk';
 import { TakeoffCmdParameters } from 'takeoff';
 import { TakeoffCommand } from 'commands';
 
 /**
  * Destroys an project in a non-reversable way
  */
-export = ({
-  shell,
-  args,
-  workingDir,
-  opts,
-  printMessage,
-  exitWithMessage,
-}: TakeoffCmdParameters): TakeoffCommand => ({
+export = ({ shell, args, workingDir, opts, printMessage, exitWithMessage }: TakeoffCmdParameters): TakeoffCommand => ({
   command: 'destroy',
   description:
     'Destroys the docker containers for a project. Can also optionally remove the folder, this operation cannot be reversed.',
@@ -20,8 +12,7 @@ export = ({
   options: [
     {
       option: '-r, --remove-dir',
-      description:
-        'Also removes the directory, otherwise only docker images and volumes are destroyed',
+      description: 'Also removes the directory, otherwise only docker images and volumes are destroyed',
     },
   ],
   group: 'takeoff',
@@ -33,18 +24,12 @@ export = ({
     const envDir = `${workingDir}/projects/${project}`;
 
     if (!shell.test('-e', envDir)) {
-      return exitWithMessage(
-        `The project ${project} doesn't exist`,
-        1,
-      );
+      return exitWithMessage(`The project ${project} doesn't exist`, 1);
     }
 
-    const dockerDown = shell.exec(
-      `docker-compose -f ${envDir}/docker/docker-compose.yml down --rmi all`,
-      {
-        slient: opts.v ? false : true,
-      },
-    );
+    const dockerDown = shell.exec(`docker-compose -f ${envDir}/docker/docker-compose.yml down --rmi all`, {
+      slient: opts.v ? false : true,
+    });
     if (dockerDown.code !== 0) {
       return exitWithMessage(`Error stopping ${project}`, 1);
     }
@@ -54,11 +39,7 @@ export = ({
 
       const removeFolder = shell.rm('-rf', `${envDir}`);
       if (removeFolder.code !== 0) {
-        return exitWithMessage(
-          `Error deleting ${project}`,
-          1,
-          removeFolder.stdout,
-        );
+        return exitWithMessage(`Error deleting ${project}`, 1, removeFolder.stdout);
       }
       printMessage(`Folder ${envDir} removed`);
     }
