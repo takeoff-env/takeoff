@@ -10,6 +10,4 @@ assets
 PULL_REQUEST_TEMPLATE.md
 ISSUE_TEMPLATE.md
 .circleci
-src
-tsconfig.json
-.prettierrc
+./src
