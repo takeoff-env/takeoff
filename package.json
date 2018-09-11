@@ -1,23 +1,41 @@
 {
-    "name": "@takeoff/takeoff",
-    "version": "1.2.3",
-    "description": "A easy to use docker environment powered by node and npm",
-    "main": "index.js",
-    "author": "Tane Piper <piper.tane@gmail.com>",
-    "license": "MIT",
-    "dependencies": {
-        "ascii-progress": "^1.0.5",
-        "glob": "^7.1.2",
-        "glob-promise": "^3.2.0",
-        "minimist": "^1.2.0",
-        "shelljs": "^0.7.8",
-        "tty-table": "^2.5.5",
-        "update-notifier": "^2.3.0"
-    },
-    "bin": {
-        "takeoff": "./bin/takeoff-cli.js"
-    },
-    "devDependencies": {
-        "eslint": "^4.9.0"
-    }
+  "name": "@takeoff/takeoff",
+  "version": "2.0.0",
+  "description": "A easy to use batteries-included development environment using containers and powered by node, npm and docker.",
+  "author": {
+    "name": "Tane Piper",
+    "url": "https://github.com.tanepiper"
+  },
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "format": "prettier --write \"src/**/*.ts\""
+  },
+  "types": "src/types/**/*.d.ts",
+  "dependencies": {
+    "fast-glob": "^2.2.2",
+    "joycon": "^2.1.2",
+    "markdown-it": "^8.4.2",
+    "minimist": "^1.2.0",
+    "require-from-string": "^2.0.2",
+    "rexrex": "^1.2.0",
+    "shelljs": "^0.8.2",
+    "tty-table": "^2.6.8",
+    "update-notifier": "^2.5.0"
+  },
+  "bin": {
+    "takeoff": "./dist/src/index.js"
+  },
+  "devDependencies": {
+    "@types/markdown-it": "0.0.5",
+    "@types/minimist": "^1.2.0",
+    "@types/node": "^10.9.4",
+    "@types/package-json": "^4.0.1",
+    "@types/require-from-string": "^1.2.0",
+    "@types/shelljs": "^0.8.0",
+    "@types/update-notifier": "^2.2.0",
+    "prettier": "^1.14.2",
+    "tslint": "^5.11.0",
+    "typescript": "^3.0.3"
+  }
 }

@@ -2,7 +2,7 @@
 
 Takeoff is a toolkit for rapid development, allowing you to prototype web applications using it's command line tool.
 
-[Installed via `npm`](https://www.npmjs.com/package/@takeoff/takeoff) you can find a list of [commands](docs/command-line.md) for creating and managing Takeoff environments.  Environments are created based on [Blueprints](docs/blueprints.md).
+[Installed via `npm`](https://www.npmjs.com/package/@takeoff/takeoff) you can find a list of [commands](docs/command-line.md) for creating and managing Takeoff environments and projects. Projects are created based on [Blueprints](docs/blueprints.md).
 
 ### Install Takeoff
 
@@ -10,9 +10,9 @@ Installing takeoff is simple, via NPM.
 
 ```bash
 npm install -g @takeoff/takeoff
-takeoff init <myenv>
+takeoff init <myenv> # Creates an environment for your projects, if not passed will create a folder called "takeoff"
 cd <myenv>
-takeoff start # This starts the default environment container in `envs/default`
+takeoff start # This starts the project in `projects/default`
 ```
 
 To see how this all works, it's all explained below.
@@ -23,21 +23,57 @@ Blueprints are repositories with some batteries included applications and config
 
 Currently Takeoff only ships with the default blueprint (but it's relativly easy to create new ones!) called [takeoff-blueprint-basic](https://github.com/takeoff-env/takeoff-blueprint-basic) and it provides:
 
-* A [`node 8`](https://nodejs.org) API server powered by [Hapi](https://hapijs.com/). Using `node 8` allows the use of `async/await` to make code more readable. Included in the application is a User system for username/password login and basic user management, 2 levels (admin and user - and easily extendible). There is also a [JSON Web Token](https://jwt.io/) (JWT) authentication system that gives you control over access to your API endpoints.
+### Configuring the Blueprint
 
-* A [`React`](https://reactjs.org/) Frontend with [React Router V4](https://github.com/ReactTraining/react-router), [Redux](https://redux.js.org/) and [ReactStrap (Bootstrap 4)](https://reactstrap.github.io/). The frontend comes with a basic Dashboard layout and homepage. A login page with some basic validation allows you to log in (the default login is `admin/password`). Do not expect this to be a fully secure environment. Once logged in you have a basic user CRUD application to manage users, and a navigation bar that you can customise.
+Configuring the setup of the blueprint application is done via a very easy `takeoff.md` file included in the root directory.
 
-> *Disclaimer: If you build an app with this you wish to deploy, you are responsible for your own security.*
+```md
+    ## npm:install:api
 
-* A [Postgres 9](https://www.postgresql.org/) database. Within the Hapi application, [Sequelize](http://docs.sequelizejs.com/) is used as the database connection and ORM. Here we can use this to create migrations and seeds, as well as create simple or complex model types as you like. The postgres setup also comes with a simple configuration file.
+    Run task `npm:install:app` after this
 
-* A [Nginx](https://nginx.org) ingress server, by default running on `port 80` (which means you get http://localhost or http://<your local host name> as your address. If you cannot run on `port 80`, it can be configured in the [docker-compose.yml](https://github.com/takeoff-env/takeoff-blueprint-basic/blob/master/docker/docker-compose.yml#L12) by changing the first number of the pair (e.g `"8080:80"`)
+    ```bash
+    cd env/api && npm install --silent
+    ```
 
-Under the hood it uses `docker` and `docker-compose` to minimise the hassle of setting up frontend, backend and database servers (support for minikube is coming soon). 
+    ## npm:install:app
+
+    Run task `docker:compose` after this
+
+    ```bash
+    cd env/frontend-app && npm install --silent
+    ```
+
+    ## docker:compose
+
+    ```bash
+    docker-compose -f docker/docker-compose.yml build --no-cache
+    ```
+```
+
+Each task is done in order, and you specify which task you run after, and is explicit to give full control over the commands. The format is inspired by the [Maid task runner](https://github.com/egoist/maid) and Takeoff uses some of it's code re-written in TypeScript.
+
+### Default Blueprint
+
+- A [`node 8`](https://nodejs.org) API server powered by [Hapi](https://hapijs.com/). Using `node 8` allows the use of `async/await` to make code more readable. Included in the application is a User system for username/password login and basic user management, 2 levels (admin and user - and easily extendible). There is also a [JSON Web Token](https://jwt.io/) (JWT) authentication system that gives you control over access to your API endpoints.
+
+- An [`Angular`](https://angular.io) Frontend with [Bootstrap 4](https://getbootstrap.com/). The frontend comes with a basic Dashboard layout and homepage. A login page with some basic validation allows you to log in (the default login is `admin/password`). There are some additional components in development, but this is enough to get started on a basic app. 
+
+> Do not expect this to be a fully secure environment. Once logged in you have a basic user CRUD application to manage users, and a navigation bar that you can customise. _Disclaimer: If you build an app with this you wish to deploy, you are responsible for your own security._
+
+- A [MongoDB](https://www.mongodb.com/) database using [Mongoose](https://mongoosejs.com/) to make model development easy. There is a basic user table and seeded admin user provided.  It's easy to add your own models, or update pre-existing ones.
+
+- A [Nginx](https://nginx.org) ingress server, by default running on `port 80` (which means you get http://localhost or http://<your local host name> as your address. If you cannot run on `port 80`, it can be configured in the [docker-compose.yml](https://github.com/takeoff-env/takeoff-blueprint-basic/blob/master/docker/docker-compose.yml#L12) by changing the first number of the pair (e.g `"8080:80"`)
+
+Under the hood it uses `docker` and `docker-compose` to minimise the hassle of setting up frontend, backend and database servers.
 
 ### The best part though is of course kept till last.
 
-Using Docker volumes, the development files for the applications sit on your local computer file system, however the applications run within `docker` and hot reload on changes. This means you can switch between your code and browser in seconds and see the changes and not have to worry about manually compiling before seeing your changes. On the server side this is accomplished with `nodemon` and on the clientside with `webpack` using hot reloading, so in most cases you don't need to refresh the browser at all.
+Using Docker volumes, the development files for the applications sit on your local computer file system, however the applications run within `docker` and reload on changes. This means you can switch between your code and browser in seconds and see the changes and not have to worry about manually compiling before seeing your changes. Node Modules have their own volume inside the container, so your local ones won't be affected.
+
+On the server side this is accomplished with `nodemon` and on the clientside with `ng serve` using page reloading.
+
+Each container also has an internal volume for `node_modules` so there are no issues with cross-OS compatibility.
 
 If you ever get disconnected from your docker sessions afer starting them up, you can type `takeoff start` again and you will reconnect to see any log output.
 
@@ -51,51 +87,107 @@ It cuts out the scary/annoying bit and gets right to the fun bit!
 
 This software has some dependencies, and currently has only been fully tested on Linux using [Docker Community Edition](https://www.docker.com/community-edition).
 
-First install this, once installed you will have the `docker` and `docker-compose` commands. You also need `git` and `node >= 8.4.0`.
+First install this, once installed you will have the `docker` and `docker-compose` commands. You also need `git` and it's recommended you have `node >= 10.0.0`.
 
 ## Up and running
 
 You should now have a server running at [http://localhost](http://localhost). You can access the API via [http://localhost/api](http://localhost/api).
 
+The default blueprint ([takeoff-blueprint-basic](https://github.com/takeoff-env/takeoff-blueprint-basic) is installed as the `default` environment in the `env` and `blueprints` folders.
+
 After installing, you will have this folder structure in your Takeoff environment:
 
 ```bash
-    -|
-     |- blueprints/basic # The basic blueprint that Takeoff ships
-     |- envs/default # The default environment installed
+    -|- .takeoffrc
+     |- blueprints/default # The basic blueprint that Takeoff ships
+     |- project/default # The default environment installed
+        |- takeoff.md
         |- env # Folders with the source code you can change
             |- api # This is the Hapi API Server
-            |- app # This is the frontend app
+            |- frontend-app # Angular application
             |- nginx # Nginx configuration
-            |- db # Postgres DB config
         |- docker # This is where all the docker configurations are kept
             |- docker-compose.yml # The glue file for your services
             |- api # This is the Hapi API Server
-            |- app # This is the frontend app
+            |- frontend-app # Angular app docker file
             |- nginx # Nginx configuration
-            |- db # Postgres DB config
 ```
 
 ### Blueprint Cache
 
-When you install a new blueprint, it is cached in the `blueprints` folder; this way when you create a new environment below it uses your local copy. If you want to update a blueprint, for now go into the folder and type `git pull origin master`. A command will be coming for this soon.
+When you install a new blueprint, it is cached in the `blueprints` folder; this way when you create a new project below it uses your local copy. If you want to update a blueprint, you can type `takeoff blueprint:update [name]`.  The default one is installed as `basic` for now. You can also install new blueprints via `takeoff blueprint:add [name] [git-url]`.
 
-## Creating new environments
-
-Unofficially there are two blueprints:
-
-* The default blueprint ([takeoff-blueprint-basic](https://github.com/takeoff-env/takeoff-blueprint-basic) is installed as the `default` environment in the `env` folder and `basic` in the `blueprints` folder.
+## Creating new projects
 
 When you want to create a new environment you can type:
 
 ```bash
-    takeoff new <environment>
-    takeoff start <environment>
+    takeoff new [environment] [blueprint-name] --blueprint-url
+    # Both blueprints here are optional, the first uses the local cache the second specifies a remote
+    takeoff start [environment]
 ```
 
-This will start up your new named environment using the `basic` blueprint. Make sure you have stopped any other environments running unless you have changed ingress port assignments.
+This will start up your new named environment using the `default` blueprint if no name is specified. It's good to make sure you have stopped any other environments running unless you have changed ingress port assignments.
 
-There is also a [Wordpress Blueprint](https://github.com/takeoff-env/takeoff-blueprint-wordpress), you can find out more about installing it via it's documentation (it may currently be broken, and I want to make this into a more general PHP blueprint anyway).
+## Custom Commands
+
+In the Takeoff environment you can create a folder called `commands` and place JavaScript and Typescript commands.  Here is a basic JavaScript example:
+
+```js
+module.exports = ({
+  command, // The command being run as a string
+  workingDir, // The directory the command is being run in
+  shell,    // An instance of ShellJS
+  args, // A object map of key/val args
+  opts, // A object map of key/val options
+  printMessage, // A function to print to the console, takes a string
+  /**
+   * A function to print to the console but also exit the shell
+   * - 0 for a clean exit
+   * - 1 for a error exit
+   * You can also pass an optional third string such as runCmd.stdout
+   */
+  exitWithMessage, 
+}) => ({
+    /**
+     * The below command is available via
+     * > takeoff myapp:my-command -w
+     */
+  command: 'my-command',
+  description: 'A custom greeting command',
+  args: '[word]',
+  options: [{
+    option: '-c, --world',
+    description: 'Add world to the output'
+  }],
+  group: 'myapp',
+  handler() {
+    printMessage(`My script does something`);
+
+    let cmd = 'echo "Hello"';
+
+    const [word] = args.length > 0 ? args: [false];
+
+    if (word) {
+      cmd = `${cmd} ${word}`;
+    }
+
+    if (opts['w'] || opts['world']) {
+      cmd = `${cmd} world`;
+    }
+
+    const runCmd = shell.exec(cmd, {
+      slient: opts.v ? false : true
+    });
+
+    if (runCmd.code !== 0) {
+      return exitWithMessage('Error running command.  Use -v to see verbose logs', 1, `${runCmd.stdout} ${runCmd.stderr}`);
+    }
+
+    return exitWithMessage('Script exited with no errors', 0);
+  }
+});
+```
 
 ## Platform Support
 
@@ -103,13 +195,14 @@ Currently only Linux is fully tested and supported out of the box, but support f
 
 ## Documentation
 
-* [Command Line Tools](docs/command-line.md)
-* [Default Blueprint API](https://github.com/takeoff-env/takeoff-blueprint-basic/blob/master/env/api/README.md)
-* [Default Blueprint Frontend App](https://github.com/takeoff-env/takeoff-blueprint-basic/blob/master/env/app/README.md)
-* [Wordpress Docs](https://github.com/takeoff-env/takeoff-blueprint-wordpress/blob/master/README.md)
+- [Command Line Tools](docs/command-line.md)
+- [Default Blueprint API](https://github.com/takeoff-env/takeoff-blueprint-basic/blob/master/env/api/README.md)
+- [Default Blueprint Frontend App](https://github.com/takeoff-env/takeoff-blueprint-basic/blob/master/env/app/README.md)
+- [Wordpress Docs](https://github.com/takeoff-env/takeoff-blueprint-wordpress/blob/master/README.md)
 
 ## References
 
-* This environment was based on the tutorial [Dockerize your app and keep hot-reloading !](https://blog.bam.tech/developper-news/dockerize-your-app-and-keep-hot-reloading) but adding more utilities and making it easier to work as a starter kit.
-* [Blog post announcing Takeoff](https://medium.com/@tanepiper/takeoff-a-rapid-development-environment-designed-for-hack-days-9a45ae891366)
-* Logo made with [LogoMakr](http://logomakr.com)
+- This tool was inspired by [Dockerize your app and keep hot-reloading !](https://blog.bam.tech/developper-news/dockerize-your-app-and-keep-hot-reloading) but adding more utilities and making it easier to work as a starter kit.
+- [Blog post announcing Takeoff](https://medium.com/@tanepiper/takeoff-a-rapid-development-environment-designed-for-hack-days-9a45ae891366)
+- Logo made with [LogoMakr](http://logomakr.com)
+- Takeoff v2 new task runner based on [Maid task runner](https://github.com/egoist/maid)
