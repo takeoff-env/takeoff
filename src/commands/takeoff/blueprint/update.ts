@@ -29,8 +29,7 @@ export = ({ shell, args, workingDir, opts, exitWithMessage, printMessage }: Take
       return exitWithMessage(`The blueprint ${blueprint} doesn't exist`, 1);
     }
 
-    let cmd = `git pull ${remote} ${branch}`;
-    const runCmd = shell.exec(cmd, {
+    const runCmd = shell.exec(`git pull ${remote} ${branch}`, {
       cwd: envDir,
       slient: opts.v ? false : true,
     });

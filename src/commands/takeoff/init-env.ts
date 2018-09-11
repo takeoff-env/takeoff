@@ -63,9 +63,11 @@ export = ({ shell, args, workingDir, opts, printMessage, exitWithMessage }: Take
 
     if (!shell.test('-d', blueprintPath)) {
       shell.mkdir('-p', blueprintPath);
+
       const doClone = shell.exec(`git clone ${blueprint} ${blueprintPath} --depth 1`, {
         slient: opts.v ? false : true,
       });
+
       if (doClone.code !== 0) {
         return exitWithMessage(`Error cloning ${blueprint}`, 1);
       }
@@ -76,17 +78,20 @@ export = ({ shell, args, workingDir, opts, printMessage, exitWithMessage }: Take
       `git clone file://${blueprintPath} ${projectDir} && rm -rf ${projectDir}/${blueprintName}/.git `,
       { slient: opts.v ? false : true },
     );
+
     if (doClone.code !== 0) {
       return exitWithMessage(`Error cloning ${blueprint} to ${projectDir}`, 1, doClone.stdout);
     }
 
     printMessage(`Initilising Project ${projectName}`);
+
     await taskRunner(
       {
         cwd: projectDir,
       },
       shell,
     )();
+
     return exitWithMessage(`Environment provisioned and Project Ready`, 0);
   },
 });

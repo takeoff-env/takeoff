@@ -21,8 +21,7 @@ export = ({ shell, args, workingDir, opts, exitWithMessage, printMessage }: Take
       return exitWithMessage(`The blueprint ${blueprint} already exists exist`, 1);
     }
 
-    let cmd = `git clone ${newUrl} ${blueprint} --depth 1`;
-    const runCmd = shell.exec(cmd, {
+    const runCmd = shell.exec(`git clone ${newUrl} ${blueprint} --depth 1`, {
       cwd: blueprintsPath,
       slient: opts.v ? false : true,
     });

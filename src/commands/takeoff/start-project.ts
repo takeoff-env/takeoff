@@ -32,6 +32,7 @@ export = ({ shell, args, workingDir, opts, exitWithMessage, printMessage }: Take
     if (runCmd.code !== 0) {
       return exitWithMessage(`Cannot start ${project}` + app ? `:${app}` : '', 1, runCmd.stdout);
     }
+
     return exitWithMessage(`Started ${project}` + app ? `:${app}` : '', 0);
   },
 });

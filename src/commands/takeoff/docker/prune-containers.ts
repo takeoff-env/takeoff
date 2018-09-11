@@ -26,9 +26,11 @@ export = ({ shell, opts, exitWithMessage, printMessage }: TakeoffCmdParameters):
     const runCmd = shell.exec(cmd, {
       slient: opts.v ? false : true,
     });
+
     if (runCmd.code !== 0) {
       return exitWithMessage('Error pruning containers.  Use -v to see verbose logs', 1, runCmd.stdout);
     }
+
     return exitWithMessage('Docker containers pruned', 0);
   },
 });

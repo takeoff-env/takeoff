@@ -49,6 +49,7 @@ export = ({ shell, args, workingDir, opts, printMessage, exitWithMessage }: Take
         slient: opts.v ? false : true,
       },
     );
+
     if (doClone.code !== 0) {
       return exitWithMessage(`You must pass a project name to create a new folder`, 1, doClone.stdout);
     }
@@ -61,6 +62,7 @@ export = ({ shell, args, workingDir, opts, printMessage, exitWithMessage }: Take
       },
       shell,
     )();
+
     return exitWithMessage(`Project Ready`, 0);
   },
 });

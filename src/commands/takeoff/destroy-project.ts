@@ -30,6 +30,7 @@ export = ({ shell, args, workingDir, opts, printMessage, exitWithMessage }: Take
     const dockerDown = shell.exec(`docker-compose -f ${envDir}/docker/docker-compose.yml down --rmi all`, {
       slient: opts.v ? false : true,
     });
+
     if (dockerDown.code !== 0) {
       return exitWithMessage(`Error stopping ${project}`, 1);
     }
@@ -41,6 +42,7 @@ export = ({ shell, args, workingDir, opts, printMessage, exitWithMessage }: Take
       if (removeFolder.code !== 0) {
         return exitWithMessage(`Error deleting ${project}`, 1, removeFolder.stdout);
       }
+
       printMessage(`Folder ${envDir} removed`);
     }
 

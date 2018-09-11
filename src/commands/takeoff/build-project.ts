@@ -28,6 +28,7 @@ export = ({ shell, args, workingDir, opts, printMessage, exitWithMessage }: Take
     if (runCmd.code !== 0) {
       return exitWithMessage(`Error starting project ${project}`, 1, runCmd.stdout);
     }
+
     return exitWithMessage(`Successfully started ${project}`, 0);
   },
 });

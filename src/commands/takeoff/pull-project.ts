@@ -25,11 +25,13 @@ export = ({ shell, args, workingDir, opts, exitWithMessage, printMessage }: Take
     if (service) {
       cmd = cmd + ` ${service}`;
     }
+
     const runCmd = shell.exec(cmd, { slient: opts.v ? false : true });
 
     if (runCmd.code !== 0) {
       return exitWithMessage(`Unable to pull ${project}.  Use -v to see verbose logs`, 1, runCmd.stdout);
     }
+
     return exitWithMessage(`Pulled pre-built images for ${project}.  Use -v to see verbose logs`, 0);
   },
 });
