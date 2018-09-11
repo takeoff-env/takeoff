@@ -5,7 +5,7 @@ Takeoff is the core program that allows the easy deployment of blueprints as env
 A basic blueprint has the following layout:
 
     |package.json
-    |takeoff.config.js
+    |takeoff.md
     |- env
         |- <application 1>
         |- <application 2>
@@ -17,6 +17,37 @@ A basic blueprint has the following layout:
             |- Dockerfile
 
 ## Components
+
+### `takeoff.md`
+
+The `takeoff.md` file is used to define the tasks that get run in order in a blueprint for setup.  This allows you to install local dependencies as well as run shell commands before running the docker commands.  Here you have full control over how the blueprint setup runs.
+
+```md
+    ## npm:install:api
+
+    Run task `npm:install:app` after this
+
+    ```bash
+    cd env/api && npm install --silent
+    ```
+
+    ## npm:install:app
+
+    Run task `docker:compose` after this
+
+    ```bash
+    cd env/frontend-app && npm install --silent
+    ```
+
+    ## docker:compose
+
+    ```bash
+    docker-compose -f docker/docker-compose.yml build --no-cache
+    ```
+```
+
+The first task in the file is always run, and then you tell is which subsequent tasks you want it to run.  Use `bash` as a tick block helper to define the commands. They are run from the root of the project directory (e.g. `takeoff/projects/my-project`). The format has been simplified from [Maid](https://github.com/egoist/maid) which it is inspired from, and the intention is to re-add features however this is a lower priority just now.
+
 
 ### `package.json`
 
@@ -42,25 +73,6 @@ The `package.json` should have the following minimum items in it:
 ```
 
 Currently we don't use the keywords, but in future the CLI will support these when searching for blueprints.
-
-### `takeoff.config.js`
-
-This is a plugin file that is used to bootstrap an environment. It will be run when your environment is installed via the `init` or `new` commands. To start a config file:
-
-```js
-module.exports = async ({ command, shell, args, opts, workingDir, h }) => {
-  // Do code in here
-  // command = string name of the command called
-  // shell = shelljs instance for doing shell commands and echo
-  // args = An array of args for you to detructure
-  // opts = An object of options, either boolean or string values
-  // workingDir = The working directory where the command was run from
-  // h = A helper library, currently contains table and progressbar
-  return true;  // Return true at the end, if your code fails at any point return false
-}
-```
-
-You can see an example file [here](https://github.com/takeoff-env/takeoff-blueprint-basic/blob/master/takeoff.config.js). **Please Note** as of version 1.2 this format is still in beta and there may be changes, the documentation will be kept up to date to reflect that.
 
 ### `env`
 

@@ -62,3 +62,39 @@ takeoff pull <environment> [app]
 ```
 
 Pulls any pre-built images on an `environment`, or you can specify the `app`.
+
+```bash
+takeoff new [project] <blueprint>
+```
+
+Creates a new project in the environment, using the default if no blueprint name specified.
+
+```bash
+takeoff blueprint:update [blueprint] <remote> <branch>
+```
+
+Update a blueprint, you can specify the remote name and the branch to pull to
+
+```bash
+takeoff blueprint:add [blueprint] [git-repo]
+```
+
+Add a new blueprint to the blueprint cache from a remote or local git repo
+
+```bash
+takeoff docker:pi
+```
+
+Helper command to remove ALL docker images, but also support --filter
+
+```bash
+takeoff docker:pc
+```
+
+Helper command to remove ALL docker containers, but also support --filter
+
+```bash
+takeoff docker:pv
+```
+
+Helper command to remove ALL docker volumes, but also support --filter
