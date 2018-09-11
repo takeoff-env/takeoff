@@ -106,13 +106,11 @@ After installing, you will have this folder structure in your Takeoff environmen
             |- api # This is the Hapi API Server
             |- frontend-app # Angular application
             |- nginx # Nginx configuration
-            |- db # Postgres DB config
         |- docker # This is where all the docker configurations are kept
             |- docker-compose.yml # The glue file for your services
             |- api # This is the Hapi API Server
             |- frontend-app # Angular app docker file
             |- nginx # Nginx configuration
-            |- db # Postgres DB config
 ```
 
 ### Blueprint Cache
