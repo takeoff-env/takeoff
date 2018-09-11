@@ -1,5 +1,7 @@
 import { DEFAULT_BLUEPRINT_NAME } from '../../lib/constants';
 import taskRunner from '../../lib/init-env/task-runner';
+import { TakeoffCmdParameters } from 'takeoff';
+import { TakeoffCommand } from 'commands';
 
 /**
  * Command for creating a new project inside an environment
@@ -10,6 +12,8 @@ export = ({
   args,
   workingDir,
   opts,
+  printMessage,
+  exitWithMessage,
 }: TakeoffCmdParameters): TakeoffCommand => ({
   command: 'new',
   description: 'Creates a new project within the current environment',
@@ -22,13 +26,16 @@ export = ({
   ],
   group: 'takeoff',
   async handler(): Promise<void> {
-
     const [projectName, userBlueprintName] = args;
 
     if (!projectName) {
-      shell.echo('You must pass a project name to create a new folder');
-      return shell.exit(1);
+      return exitWithMessage(
+        `You must pass a project name to create a new folder`,
+        1,
+      );
     }
+
+    printMessage(`Creating new project ${projectName}`);
 
     const blueprintName = userBlueprintName || DEFAULT_BLUEPRINT_NAME;
 
@@ -56,17 +63,21 @@ export = ({
       },
     );
     if (doClone.code !== 0) {
-      shell.echo(`Error cloning ${blueprint}`, doClone.stdout);
-      shell.exit(1);
+      return exitWithMessage(
+        `You must pass a project name to create a new folder`,
+        1,
+        doClone.stdout,
+      );
     }
 
-    shell.echo(`[Takeoff]: Initilising Project`);
+    printMessage(`Initilising Project`);
+
     await taskRunner(
       {
         cwd: projectDir,
       },
       shell,
     )();
-    shell.echo(`[Takeoff]: Project Ready`);
+    return exitWithMessage(`Project Ready`, 0);
   },
 });

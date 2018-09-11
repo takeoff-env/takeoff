@@ -1,8 +1,11 @@
+import { TakeoffCmdParameters } from "takeoff";
+import { TakeoffCommand } from "commands";
+
 /**
  * Command for starting a project
  */
 
-export = ({ shell, args, workingDir, opts }: TakeoffCmdParameters): TakeoffCommand => ({
+export = ({ shell, args, workingDir, opts, exitWithMessage, printMessage }: TakeoffCmdParameters): TakeoffCommand => ({
   command: 'start',
   description:
     'Starts the named project. Optionally a docker app name can be passed to only start individual services.',
@@ -11,7 +14,13 @@ export = ({ shell, args, workingDir, opts }: TakeoffCmdParameters): TakeoffComma
   handler(): void {
     let [project, app]: string[] = args.length > 0 ? args : ['default'];
 
+    printMessage(`Starting project ${project}`);
+
     const projectDir = `${workingDir}/projects/${project}`;
+
+    if (!shell.test('-e', projectDir)) {
+      return exitWithMessage(`The project ${project} doesn't exist`, 1);
+    }
 
     let cmd = `docker-compose -f ${projectDir}/docker/docker-compose.yml up`;
     if (app) {
@@ -21,10 +30,8 @@ export = ({ shell, args, workingDir, opts }: TakeoffCmdParameters): TakeoffComma
     let runCmd = shell.exec(cmd, { slient: opts.v ? false : true });
 
     if (runCmd.code !== 0) {
-      shell.echo(`Error starting project ${project}` + app ? `:${app}` : '');
-      shell.exit(1);
+      return exitWithMessage(`Cannot start ${project}` + app ? `:${app}` : '', 1, runCmd.stdout);
     }
-    shell.echo(`Successfully started ${project}` + app ? `:${app}` : '');
-    shell.exit(0);
+    return exitWithMessage(`Started ${project}` + app ? `:${app}` : '', 0);
   }
 });

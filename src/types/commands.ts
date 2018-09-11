@@ -1,7 +1,7 @@
 /**
  * Plugin Options
  */
-interface CommandOption {
+export interface CommandOption {
   /**
    * The name of the option
    */
@@ -16,7 +16,7 @@ interface CommandOption {
 /**
  * A takeoff command to be run
  */
-interface TakeoffCommand {
+export interface TakeoffCommand {
   command: string;
 
   description: string;

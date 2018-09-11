@@ -1,5 +1,6 @@
 import generateTable from './generate-table';
 import { COMMAND_TABLE_HEADERS } from './constants';
+import { TakeoffCommand, CommandOption } from 'commands';
 
 export = (takeoffCommands: Map<string, TakeoffCommand>, shell: any) => {
   const tableValues: Array<[string, string, string, string]> = [];
@@ -8,16 +9,16 @@ export = (takeoffCommands: Map<string, TakeoffCommand>, shell: any) => {
     tableValues.push([
       group === 'takeoff' ? command : `${group}:${command}`,
       args || '',
-      (options || []).map((o: CommandOption) => o.option).join('\n'),
-      description
+      (options || []).map((o: CommandOption) => o.option.trim()).join('\n '),
+      description,
     ]);
   });
 
   const table = generateTable(tableValues as any, COMMAND_TABLE_HEADERS, {
-    borderStyle: 0,
-    compact: true,
+    borderStyle: 1,
+    compact: false,
     align: 'left',
-    headerAlign: 'left'
+    headerAlign: 'left',
   });
 
   shell.echo(table.render());

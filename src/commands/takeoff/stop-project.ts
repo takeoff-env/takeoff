@@ -1,8 +1,18 @@
+import { TakeoffCmdParameters } from "takeoff";
+import { TakeoffCommand } from "commands";
+
 /**
  * Command that handles the stopping of a project
  */
 
-export = ({ shell, args, workingDir, opts }: TakeoffCmdParameters): TakeoffCommand => ({
+export = ({
+  shell,
+  args,
+  workingDir,
+  opts,
+  printMessage,
+  exitWithMessage,
+}: TakeoffCmdParameters): TakeoffCommand => ({
   command: 'stop',
   description: 'Stops all services in a named project',
   args: '<name>',
@@ -10,22 +20,22 @@ export = ({ shell, args, workingDir, opts }: TakeoffCmdParameters): TakeoffComma
   handler(): void {
     let [project]: string[] = args.length > 0 ? args : ['default'];
 
+    printMessage(`Stopping project ${project}`);
+
     const projectDir = `${workingDir}/projects/${project}`;
 
     if (!shell.test('-e', projectDir)) {
-      shell.echo(`The project ${project} doesn't exist`);
-      shell.exit(0); // Don't exit 1 as this might break CI workflows
+      return exitWithMessage(`The project ${project} doesn't exist`, 1);
     }
 
     let cmd = `docker-compose -f ${projectDir}/docker/docker-compose.yml stop`;
 
     let runCmd = shell.exec(cmd, { slient: opts.v ? false : true });
-
+    
     if (runCmd.code !== 0) {
-      shell.echo(`Error stopping ${project}`);
-      shell.exit(1);
+      return exitWithMessage(`The project ${project} doesn't exist`, 1, runCmd.stdout);
     }
-    shell.echo(`Successfully stopped ${project}`);
-    shell.exit(0);
-  }
+
+    return exitWithMessage(`Successfully stopped ${project}`, 0);
+  },
 });

@@ -1,33 +1,50 @@
-import chalk from 'chalk';
+import { TakeoffCmdParameters } from 'takeoff';
+import { TakeoffCommand } from 'commands';
 
 /**
  * Builds an project based on a docker-compose file
  */
 
-export = ({ shell, args, workingDir, opts }: TakeoffCmdParameters): TakeoffCommand => ({
+export = ({
+  shell,
+  args,
+  workingDir,
+  opts,
+  printMessage,
+  exitWithMessage,
+}: TakeoffCmdParameters): TakeoffCommand => ({
   command: 'build',
-  description: 'Builds an project',
+  description: 'Builds containers based on a docker-compose file',
   args: '<name>',
   group: 'takeoff',
   handler(): void {
-
     let [project] = args.length > 0 ? args : ['default'];
+
+    printMessage(`Building project ${project}`);
+
     const projectDir = `${workingDir}/projects/${project}`;
 
     if (!shell.test('-e', projectDir)) {
-      shell.echo(`${chalk.red('[Takeoff]')}} The project ${project} doesn't exist`);
-      shell.exit(1); // Don't exit 1 as this might break CI workflows
+      return exitWithMessage(
+        `The project ${project} doesn't exist`,
+        1,
+      );
     }
 
-    let runCmd = shell.exec(`docker-compose -f ${projectDir}/docker/docker-compose.yml build`, {
-      slient: opts.v ? false : true
-    });
+    let runCmd = shell.exec(
+      `docker-compose -f ${projectDir}/docker/docker-compose.yml build`,
+      {
+        slient: opts.v ? false : true,
+      },
+    );
 
     if (runCmd.code !== 0) {
-      shell.echo(`${chalk.red('[Takeoff]')} Error starting project ${project}`);
-      shell.exit(1);
+      return exitWithMessage(
+        `Error starting project ${project}`,
+        1,
+        runCmd.stdout,
+      );
     }
-    shell.echo(`${chalk.magenta('[Takeoff]')}} Successfully started ${project}`);
-    shell.exit(0);
-  }
+    return exitWithMessage(`Successfully started ${project}`, 0);
+  },
 });

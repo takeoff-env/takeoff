@@ -3,6 +3,12 @@
 import fg from 'fast-glob';
 import Path from 'path';
 import generateTable from '../../lib/generate-table';
+import {
+  TakeoffCmdParameters,
+  TakeoffProject,
+  TakeoffProjectApps,
+} from 'takeoff';
+import { TakeoffCommand } from 'commands';
 
 const getProjects = async (baseDir: string) => {
   // Do all the pre-plugin loading
@@ -24,17 +30,25 @@ const getProjects = async (baseDir: string) => {
   });
 };
 
-export = ({ shell, workingDir }: TakeoffCmdParameters): TakeoffCommand => ({
+export = ({
+  shell,
+  workingDir,
+  exitWithMessage,
+  printMessage,
+}: TakeoffCmdParameters): TakeoffCommand => ({
   command: 'list',
   description: 'List all the available projects and their apps',
   group: 'takeoff',
   async handler(): Promise<void> {
+    printMessage(`Listing all projects and application`);
 
     const packagePaths = await getProjects(workingDir);
 
     if (packagePaths.length === 0) {
-      shell.echo(`No projects found in this environment`);
-      return shell.exit(0);
+      return exitWithMessage(
+        'No projects found in this environment',
+        0,
+      );
     }
     const tableValues: Array<[string, string, string]> = [];
     const projects: TakeoffProject[] = [];

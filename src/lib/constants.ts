@@ -1,3 +1,5 @@
+import { TableHeader } from "tables";
+
 export const COMMAND_TABLE_HEADERS: TableHeader[] = [
   {
     width: 10,

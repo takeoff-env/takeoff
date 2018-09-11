@@ -1,5 +1,7 @@
 import MarkdownIt, { Token } from 'markdown-it';
 import rexrex from 'rexrex';
+import { Task, TaskEvent } from 'task';
+import { ParsedCommand, When } from 'takeoff';
 
 const md = new MarkdownIt({
   // Enable HTML so that we can ignore it later

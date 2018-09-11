@@ -1,6 +1,8 @@
 import { DEFAULT_BLUEPRINT_NAME } from '../../lib/constants';
 import taskRunner from '../../lib/init-env/task-runner';
 import chalk from 'chalk';
+import { TakeoffCmdParameters } from 'takeoff';
+import { TakeoffCommand } from 'commands';
 
 /**
  * Initialises a new Takeoff Environment.  This will create a cache folder
@@ -12,6 +14,8 @@ export = ({
   args,
   workingDir,
   opts,
+  printMessage,
+  exitWithMessage,
 }: TakeoffCmdParameters): TakeoffCommand => ({
   command: 'init',
   description: 'Creates a new Takeoff Environment',
@@ -40,20 +44,16 @@ export = ({
 
     if (!environmentName) {
       environmentName = 'takeoff';
-      shell.echo(
-        `${chalk.blueBright(
-          `No environment folder name passed, setting to ${environmentName}`,
-        )} ${chalk.yellow('takeoff')}`,
-      );
+      printMessage(`No environment folder name passed, setting to "takeoff"`);
     }
 
+    printMessage(`Initialising environment ${environmentName}`);
+
     if (shell.test('-e', environmentName)) {
-      shell.echo(
-        `${chalk.red('Environment')} ${chalk.yellow(
-          environmentName,
-        )} ${chalk.red('already exists')}`,
+      return exitWithMessage(
+        `Environment ${environmentName} already exists`,
+        1,
       );
-      return shell.exit(1);
     }
 
     const basePath = `${workingDir}/${environmentName}`;
@@ -67,8 +67,10 @@ export = ({
     shell.touch(`${basePath}/.takeoffrc`);
 
     if (opts['d'] || opts['no-default']) {
-      shell.echo(`${chalk.yellow('Skipping creating default environment')}`);
-      return shell.exit(0);
+      return exitWithMessage(
+        `Skip creating default project. Done.`,
+        0,
+      );
     }
 
     const blueprint =
@@ -90,11 +92,7 @@ export = ({
         },
       );
       if (doClone.code !== 0) {
-        shell.echo(
-          `${chalk.red('Error cloning')} ${chalk.yellow(blueprint)}`,
-          doClone.stdout,
-        );
-        shell.exit(1);
+        return exitWithMessage(`Error cloning ${blueprint}`, 1);
       }
     }
 
@@ -104,25 +102,23 @@ export = ({
       { slient: opts.v ? false : true },
     );
     if (doClone.code !== 0) {
-      shell.echo(
-        `${chalk.red('Error cloning')} ${chalk.yellow(blueprint)}`,
+      return exitWithMessage(
+        `Error cloning ${blueprint} to ${projectDir}`,
+        1,
         doClone.stdout,
       );
-      shell.exit(1);
     }
 
-    shell.echo(
-      `${chalk.magenta('[Takeoff]')} ${chalk.whiteBright(
-        'Initilising Project',
-      )}`,
-    );
+    printMessage(`Initilising Project ${projectName}`);
     await taskRunner(
       {
         cwd: projectDir,
       },
       shell,
     )();
-
-    shell.echo(`${chalk.magenta('[Takeoff]')} Environment provisioned and Project Ready`);
+    return exitWithMessage(
+      `Environment provisioned and Project Ready`,
+      0,
+    );
   },
 });

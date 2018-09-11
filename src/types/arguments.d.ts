@@ -1,9 +1,9 @@
 /**
  * Intermediate argument type for converting to {ExtractedArgs}
  */
-type IntermediateArgs = [string, string];
+export type IntermediateArgs = [string, string];
 
-interface ArgumentOptions {
+export interface ArgumentOptions {
   [key: string]: string;
 }
 
@@ -11,7 +11,7 @@ interface ArgumentOptions {
  * Extracted arguments from the process.argv. Contains the command
  * and arguments and any -x or --foo options passed
  */
-interface ExtractedArgs {
+export interface ExtractedArgs {
   command: string;
 
   args: string[];

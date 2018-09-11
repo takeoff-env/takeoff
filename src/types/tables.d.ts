@@ -1,7 +1,7 @@
 /**
  * Defines a table header
  */
-interface TableHeader {
+export interface TableHeader {
   width: number;
 
   value: string;
@@ -9,7 +9,7 @@ interface TableHeader {
   align: string;
 }
 
-interface TableOptions {
+export interface TableOptions {
   borderStyle?: number;
   compact?: boolean;
   align?: string;

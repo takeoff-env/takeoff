@@ -1,4 +1,5 @@
 import { ParsedArgs } from 'minimist';
+import { ExtractedArgs, IntermediateArgs } from 'arguments';
 
 export = ({ _: [command, ...args], ...opts }: ParsedArgs): ExtractedArgs => ({
   command,

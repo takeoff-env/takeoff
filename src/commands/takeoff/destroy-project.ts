@@ -1,47 +1,68 @@
 import chalk from 'chalk';
+import { TakeoffCmdParameters } from 'takeoff';
+import { TakeoffCommand } from 'commands';
 
 /**
  * Destroys an project in a non-reversable way
  */
-export = ({ shell, args, workingDir, opts }: TakeoffCmdParameters): TakeoffCommand => ({
+export = ({
+  shell,
+  args,
+  workingDir,
+  opts,
+  printMessage,
+  exitWithMessage,
+}: TakeoffCmdParameters): TakeoffCommand => ({
   command: 'destroy',
-  description: 'Destroys an named project. This action cannot be reversed.',
+  description:
+    'Destroys the docker containers for a project. Can also optionally remove the folder, this operation cannot be reversed.',
   args: '<name>',
   options: [
     {
       option: '-r, --remove-dir',
-      description: 'Also removes the directory, otherwise only docker images and volumes are destroyed'
-    }
+      description:
+        'Also removes the directory, otherwise only docker images and volumes are destroyed',
+    },
   ],
   group: 'takeoff',
   handler(): void {
-
     let [project]: string[] = args.length > 0 ? args : ['default'];
+
+    printMessage(`Destroying project ${project}`);
+
     const envDir = `${workingDir}/projects/${project}`;
 
     if (!shell.test('-e', envDir)) {
-      shell.echo(`${chalk.red('[Takeoff]')} The project ${project} doesn't exist`);
-      shell.exit(1);
+      return exitWithMessage(
+        `The project ${project} doesn't exist`,
+        1,
+      );
     }
 
-    const dockerDown = shell.exec(`docker-compose -f ${envDir}/docker/docker-compose.yml down --rmi all`, {
-      slient: opts.v ? false : true
-    });
+    const dockerDown = shell.exec(
+      `docker-compose -f ${envDir}/docker/docker-compose.yml down --rmi all`,
+      {
+        slient: opts.v ? false : true,
+      },
+    );
     if (dockerDown.code !== 0) {
-      shell.echo(`${chalk.red('[Takeoff]')} Error stopping projects`);
-      shell.exit(1);
+      return exitWithMessage(`Error stopping ${project}`, 1);
     }
 
     if (opts['r'] || opts['remove-dir']) {
+      printMessage(`Removing folder ${envDir}`);
+
       const removeFolder = shell.rm('-rf', `${envDir}`);
       if (removeFolder.code !== 0) {
-        shell.echo(`${chalk.red('[Takeoff]')} Error deleting projects`);
-        shell.exit(1);
+        return exitWithMessage(
+          `Error deleting ${project}`,
+          1,
+          removeFolder.stdout,
+        );
       }
-      shell.echo(`${chalk.magenta('[Takeoff]')} Folder ${envDir} removed`);
+      printMessage(`Folder ${envDir} removed`);
     }
 
-    shell.echo(`${chalk.magenta('[Takeoff]')} Successfully destroyed ${project}`);
-    shell.exit(0);
-  }
+    return exitWithMessage(`Successfully destroyed ${project}`, 0);
+  },
 });

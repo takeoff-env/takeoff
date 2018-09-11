@@ -1,20 +1,24 @@
+import { TakeoffCmdParameters } from "takeoff";
+import { TakeoffCommand } from "commands";
+
 /**
- * Command for pulling an environment
+ * Command for pulling an project
  */
 
-export = ({ shell, args, workingDir, opts }: TakeoffCmdParameters): TakeoffCommand => ({
+export = ({ shell, args, workingDir, opts, exitWithMessage, printMessage }: TakeoffCmdParameters): TakeoffCommand => ({
   command: 'pull',
   description: 'Pulls any pre-build images',
   args: '<name> [service]',
   group: 'takeoff',
   handler(): void {
-    let [environment, service]: string[] = args.length > 0 ? args : ['default'];
+    let [project, service]: string[] = args.length > 0 ? args : ['default'];
 
-    const envDir = `${workingDir}/projects/${environment}`;
+    printMessage(`Pullng project ${project}`);
+
+    const envDir = `${workingDir}/projects/${project}`;
 
     if (!shell.test('-e', envDir)) {
-      shell.echo(`The environment ${environment} doesn't exist`);
-      shell.exit(0); // Don't exit 1 as this might break CI workflows
+      return exitWithMessage(`The project ${project} doesn't exist`, 1);
     }
 
     let cmd = `docker-compose -f ${envDir}/docker/docker-compose.yml pull`;
@@ -22,11 +26,10 @@ export = ({ shell, args, workingDir, opts }: TakeoffCmdParameters): TakeoffComma
       cmd = cmd + ` ${service}`;
     }
     const runCmd = shell.exec(cmd, { slient: opts.v ? false : true });
+
     if (runCmd.code !== 0) {
-      shell.echo(`Error pulling in ${environment}.  Use -v to see verbose logs`);
-      shell.exit(1);
+      return exitWithMessage(`Unable to pull ${project}.  Use -v to see verbose logs`, 1, runCmd.stdout);
     }
-    shell.echo(`Pulled pre-built images on ${environment}`);
-    shell.exit(0);
+    return exitWithMessage(`Pulled pre-built images for ${project}.  Use -v to see verbose logs`, 0);
   }
 });

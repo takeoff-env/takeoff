@@ -1,6 +1,8 @@
 import chalk from 'chalk';
 import { normalize } from 'path';
 import fg from 'fast-glob';
+import { TakeoffCmdParameters } from 'takeoff';
+import { TakeoffCommand } from 'commands';
 
 /**
  * Load plugins from the basePath. Will attempt to load both Typescript and JavaScript plugins

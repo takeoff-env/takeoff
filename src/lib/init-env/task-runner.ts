@@ -2,6 +2,8 @@ import requireFromString from 'require-from-string';
 import readFile from './read-takeoff-file';
 import executeTask from './run-task';
 import chalk from 'chalk';
+import { Task } from 'task';
+import { TakeoffParserOptions, When } from 'takeoff';
 
 function checkTypes(task: any, types: string[]) {
   return types.some(type => type === task.type);
@@ -14,11 +16,9 @@ const handleError = (task: Task, err: Error) => {
 export = (opts: TakeoffParserOptions, shell: any): Function => {
   const takeoffFile = readFile(opts);
 
-
   if (!takeoffFile) {
     throw new Error('No takeoff.md file was found.');
   }
-
 
   const createTaskPromise = async (task: Task) => {
     return new Promise((resolve, reject) => {
@@ -89,7 +89,11 @@ export = (opts: TakeoffParserOptions, shell: any): Function => {
 
     if (!task) {
       if (throwWhenNoMatchedTask) {
-        throw new Error(`${chalk.red('[Takeoff]')} No task called "${taskName}" was found. Stop.`);
+        throw new Error(
+          `${chalk.red(
+            '[Takeoff]',
+          )} No task called "${taskName}" was found. Stop.`,
+        );
       } else {
         return;
       }

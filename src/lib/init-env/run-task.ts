@@ -3,6 +3,7 @@
  */
 import chalk from 'chalk';
 import path from 'path';
+import { TaskRunnerOptions } from 'task';
 
 export = (shell: any, opts: any, { task, resolve, reject, cwd }: TaskRunnerOptions): void => {
   const run = shell.exec(`${task.script}`, {

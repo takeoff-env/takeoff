@@ -20,6 +20,24 @@ const notifier = updateNotifier({
   updateCheckInterval: SEVEN_DAYS
 });
 
+const printMessage = (message: string, stdout = '') => {
+  let takeoffHeader = chalk.yellow('[Takeoff]');
+  shell.echo(`${takeoffHeader} ${message}`, stdout);
+}
+
+const exitWithMessage = (message: string, code: number, stdout = '') => {
+
+  let takeoffHeader = chalk.magenta('[Takeoff]');
+  if (!Number.isNaN(code) && code > 0) {
+    takeoffHeader = chalk.red('[Takeoff]');
+  }
+  shell.echo(`${takeoffHeader} ${message}`, stdout);
+  
+  if (!Number.isNaN(code) && code > -1) {
+    shell.exit(code);
+  }
+}
+
 const run = async (workingDir: string, cliArgs: string[]) => {
   shell.echo(`${chalk.magenta('Takeoff')} v${chalk.blueBright(pkg.version)}`);
 
@@ -31,6 +49,8 @@ const run = async (workingDir: string, cliArgs: string[]) => {
   try {
     takeoffCommands = await loadCommands(`${__dirname}/commands`, {
       shell,
+      exitWithMessage,
+      printMessage,
       command,
       args,
       opts,
@@ -39,7 +59,6 @@ const run = async (workingDir: string, cliArgs: string[]) => {
   } catch (e) {
     throw e;
   }
-
   const commandParts = (command && command.split(':')) || [];
   const run =
     commandParts.length > 1

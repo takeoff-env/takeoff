@@ -1,4 +1,5 @@
 import table from 'tty-table';
+import { TableHeader, TableOptions } from 'tables';
 
 const DEFAULT_WIDTH = 10;
 const PADDING = 2;
@@ -31,7 +32,9 @@ export = (
         headers.map(
           (h: TableHeader, index: number) =>
             textWidths[index] > headerWidths[index]
-              ? textWidths[index]
+              ? textWidths[index] > 60
+                ? 60
+                : textWidths[index]
               : headerWidths[index],
         ),
       [DEFAULT_WIDTH, DEFAULT_WIDTH, DEFAULT_WIDTH, DEFAULT_WIDTH],

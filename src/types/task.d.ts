@@ -1,7 +1,7 @@
 /**
  * Internal task event
  */
-interface TaskEvent {
+export interface TaskEvent {
   taskNames: string[];
   inParallel: boolean;
 }
@@ -9,7 +9,7 @@ interface TaskEvent {
 /**
  * A task is defined by the markdown and use of key words.
  */
-interface Task {
+export interface Task {
   name: string;
 
   script: string;
@@ -28,7 +28,7 @@ interface Task {
 /**
  * Options to pass to the task runner
  */
-interface TaskRunnerOptions {
+export interface TaskRunnerOptions {
   task: Task;
 
   resolve: Function;

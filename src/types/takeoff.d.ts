@@ -1,19 +1,16 @@
-
-
-
+import { Chalk } from 'chalk';
+import { Task } from './task';
 
 /**
  * Options to be passed to the Takeoff Parser
  */
-interface TakeoffParserOptions {
+export interface TakeoffParserOptions {
   cwd: string;
 
   section?: string;
 }
 
-
-
-interface TakeoffCmdParameters {
+export interface TakeoffCmdParameters {
   command?: string;
 
   args?: string[];
@@ -25,36 +22,37 @@ interface TakeoffCmdParameters {
   shell?: any;
 
   workingDir?: string;
+
+  printMessage: (message: string, stdout?: any) => void;
+
+  exitWithMessage: (message: string, code: number, stdout?: any) => void;
 }
 
-
-
-
-interface ReadFileOptions {
+export interface ReadFileOptions {
   cwd: string;
 
   section?: string;
 }
 
-type When = 'before' | 'after' | 'pre' | 'post';
+export type When = 'before' | 'after' | 'pre' | 'post';
 
-interface ParsedCommand {
+export interface ParsedCommand {
   taskNames: string[];
   when: When;
   inParallel: boolean;
 }
 
-interface TakeoffProject {
+export interface TakeoffProject {
   projectName: string;
 
   version: string;
 }
 
-interface TakeoffProjectApps {
+export interface TakeoffProjectApps {
   [key: string]: string[];
 }
 
-interface TakeoffFileData {
+export interface TakeoffFileData {
   filepath: string;
   tasks: Task[];
 }

@@ -1,6 +1,7 @@
 import { dirname } from 'path';
 import parseMarkdown from './parse-markdown';
 import JoyCon from 'joycon';
+import { ReadFileOptions, TakeoffFileData } from 'takeoff';
 
 export = ({ cwd }: ReadFileOptions): TakeoffFileData => {
   const loadTakeoffFile = new JoyCon({
