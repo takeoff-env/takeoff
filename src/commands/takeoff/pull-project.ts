@@ -7,7 +7,7 @@ import { TakeoffCommand } from 'commands';
 
 export = ({ shell, args, workingDir, opts, exitWithMessage, printMessage }: TakeoffCmdParameters): TakeoffCommand => ({
   command: 'pull',
-  description: 'Pulls any pre-build images',
+  description: 'Pulls any pre-build images within a project (such a database images).',
   args: '<name> [service]',
   group: 'takeoff',
   handler(): void {

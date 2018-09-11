@@ -10,7 +10,8 @@ import { TakeoffCommand } from 'commands';
  */
 export = ({ shell, args, workingDir, opts, printMessage, exitWithMessage }: TakeoffCmdParameters): TakeoffCommand => ({
   command: 'init',
-  description: 'Creates a new Takeoff Environment',
+  description:
+    'Creates a new Takeoff Environment. This will create a new folder that contains an initial blueprint and project based on that blueprint.',
   options: [
     {
       option: '-b, --blueprint-url',

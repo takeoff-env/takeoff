@@ -9,7 +9,8 @@ import { TakeoffCommand } from 'commands';
 
 export = ({ shell, args, workingDir, opts, printMessage, exitWithMessage }: TakeoffCmdParameters): TakeoffCommand => ({
   command: 'new',
-  description: 'Creates a new project within the current environment',
+  description:
+    'Creates a new project within the current environment. By default this will use the default blueprint unless you specify a different name or url.',
   args: '<name> [blueprint-name]',
   options: [
     {
