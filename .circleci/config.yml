@@ -83,11 +83,11 @@ workflows:
           filters:
             branches:
               only:
-                - release
+                - master
       - run_distribution_beta:
           requires:
             - build
           filters:
             branches:
               only:
-                - master
+                - beta
