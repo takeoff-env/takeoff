@@ -8,11 +8,11 @@
   },
   "license": "MIT",
   "scripts": {
-    "prepublishOnly": "npm run build",
+    "prepublishOnly": "sh .circleci/build-dist.sh",
     "build": "npm run clean && tsc -p tsconfig.json",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "tslint -p tsconfig.json",
-    "clean": "rm -rf dist"
+    "clean": "rimraf dist"
   },
   "types": "src/types/**/*.d.ts",
   "dependencies": {
@@ -41,6 +41,7 @@
     "@types/shelljs": "^0.8.0",
     "@types/update-notifier": "^2.2.0",
     "prettier": "^1.14.2",
+    "rimraf": "^2.6.2",
     "tslint": "^5.11.0",
     "tslint-config-prettier": "^1.15.0",
     "typescript": "^3.0.3"
