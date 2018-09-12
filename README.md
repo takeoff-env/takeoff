@@ -143,7 +143,7 @@ module.exports = ({
   handler() {
     printMessage(`My script does something`);
 
-    let cmd = 'echo "Hello"';
+    let cmd = 'echo Hello';
 
     const [word] = args.length > 0 ? args: [false];
 
