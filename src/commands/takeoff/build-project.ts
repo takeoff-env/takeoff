@@ -1,11 +1,11 @@
 import { TakeoffCommand } from 'commands';
-import { TakeoffCmdParameters } from 'takeoff';
+import { TakeoffCmdParameters, TakeoffRcFile } from 'takeoff';
 
 /**
  * Builds an project based on a docker-compose file
  */
 
-export = ({ shell, args, workingDir, opts, printMessage, exitWithMessage }: TakeoffCmdParameters): TakeoffCommand => ({
+export = ({ shell, args, opts, rcFile, printMessage, exitWithMessage }: TakeoffCmdParameters): TakeoffCommand => ({
   args: '<name>',
   command: 'build',
   description: 'Builds containers based on a docker-compose file',
@@ -15,7 +15,7 @@ export = ({ shell, args, workingDir, opts, printMessage, exitWithMessage }: Take
 
     printMessage(`Building project ${project}`);
 
-    const projectDir = `${workingDir}/projects/${project}`;
+    const projectDir = `${rcFile.rcRoot}/projects/${project}`;
 
     if (!shell.test('-e', projectDir)) {
       return exitWithMessage(`The project ${project} doesn't exist`, 1);

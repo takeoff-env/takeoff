@@ -1,11 +1,18 @@
 import { TakeoffCommand } from 'commands';
-import { TakeoffCmdParameters } from 'takeoff';
+import { TakeoffCmdParameters, TakeoffRcFile } from 'takeoff';
 
 /**
  * Command for starting a project
  */
 
-export = ({ shell, args, workingDir, opts, exitWithMessage, printMessage }: TakeoffCmdParameters): TakeoffCommand => ({
+export = ({
+  shell,
+  args,
+  opts,
+  exitWithMessage,
+  printMessage,
+  rcFile,
+}: TakeoffCmdParameters): TakeoffCommand => ({
   args: '<name> [service]',
   command: 'start',
   description:
@@ -16,7 +23,7 @@ export = ({ shell, args, workingDir, opts, exitWithMessage, printMessage }: Take
 
     printMessage(`Starting project ${project}`);
 
-    const projectDir = `${workingDir}/projects/${project}`;
+    const projectDir = `${rcFile.rcRoot}/projects/${project}`;
 
     if (!shell.test('-e', projectDir)) {
       return exitWithMessage(`The project ${project} doesn't exist`, 1);

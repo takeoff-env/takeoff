@@ -1,12 +1,20 @@
+import { ExitCode } from '@takeoff/takeoff/types/task';
 import { TakeoffCommand } from 'commands';
-import { TakeoffCmdParameters } from 'takeoff';
+import { TakeoffCmdParameters, TakeoffRcFile } from 'takeoff';
 import { DEFAULT_BLUEPRINT_NAME } from '../../lib/constants';
 
 /**
  * Command for pulling an environment
  */
 
-export = ({ shell, args, workingDir, opts, exitWithMessage, printMessage }: TakeoffCmdParameters): TakeoffCommand => ({
+export = ({
+  args,
+  exitWithMessage,
+  printMessage,
+  rcFile,
+  shell,
+  silent,
+}: TakeoffCmdParameters): TakeoffCommand => ({
   args: '<name> [remote] [branch]',
   command: 'update',
   description:
@@ -20,20 +28,23 @@ export = ({ shell, args, workingDir, opts, exitWithMessage, printMessage }: Take
 
     printMessage(`Updating Blueprint ${blueprint} on ${branch} from ${remote}`);
 
-    const envDir = `${workingDir}/blueprints/${blueprint}`;
+    const cwd = `${rcFile.rcRoot}/blueprints/${blueprint}`;
 
-    if (!shell.test('-e', envDir)) {
-      return exitWithMessage(`The blueprint ${blueprint} doesn't exist`, 1);
+    if (!shell.test('-e', cwd)) {
+      return exitWithMessage(`The blueprint ${blueprint} doesn't exist`, ExitCode.Error);
     }
 
     const runCmd = shell.exec(`git pull ${remote} ${branch}`, {
-      cwd: envDir,
-      slient: opts.v ? false : true,
+      cwd,
+      silent,
     });
 
-    if (runCmd.code !== 0) {
-      return exitWithMessage(`Error pulling in ${blueprint}.  Use -v to see verbose logs`, 1, runCmd.stdout);
-    }
-    return exitWithMessage(`Updated blueprint ${blueprint}`, 0);
+    return exitWithMessage(
+      runCmd.code !== 0
+        ? `Error pulling in ${blueprint}.  Use -v to see verbose logs`
+        : `Updated blueprint ${blueprint}`,
+      runCmd.code,
+      silent ? undefined : runCmd.code ? runCmd.stderr : runCmd.stdout,
+    );
   },
 });

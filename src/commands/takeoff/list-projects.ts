@@ -4,7 +4,7 @@ import fg from 'fast-glob';
 import Path from 'path';
 
 import { TakeoffCommand } from 'commands';
-import { TakeoffCmdParameters, TakeoffProject, TakeoffProjectApps } from 'takeoff';
+import { TakeoffCmdParameters, TakeoffProject, TakeoffProjectApps, TakeoffRcFile } from 'takeoff';
 
 import generateTable from '../../lib/generate-table';
 
@@ -28,7 +28,7 @@ const getProjects = async (baseDir: string) => {
   });
 };
 
-export = ({ shell, workingDir, exitWithMessage, printMessage }: TakeoffCmdParameters): TakeoffCommand => ({
+export = ({ shell, workingDir, exitWithMessage, printMessage, rcFile }: TakeoffCmdParameters): TakeoffCommand => ({
   command: 'list',
   description: 'List all the available projects and their apps',
   group: 'takeoff',
@@ -59,7 +59,7 @@ export = ({ shell, workingDir, exitWithMessage, printMessage }: TakeoffCmdParame
         try {
           split = pkg.split('/');
           [projectName] = split;
-          const pkgJson = require(`${workingDir}/projects/${pkg}`);
+          const pkgJson = require(`${rcFile.rcRoot}/projects/${pkg}`);
           const { version } = pkgJson;
           projects.push({ projectName, version });
           apps[projectName] = apps[projectName] || [];
@@ -70,7 +70,11 @@ export = ({ shell, workingDir, exitWithMessage, printMessage }: TakeoffCmdParame
     });
 
     projects.forEach((project: TakeoffProject) => {
-      tableValues.push([project.projectName, project.version, (apps[project.projectName] || []).join(', ')]);
+      tableValues.push([
+        project.projectName,
+        project.version,
+        ([...new Set([apps[project.projectName]])] || []).join(', '),
+      ]);
     });
 
     const commandsTable = generateTable(

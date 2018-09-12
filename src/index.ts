@@ -45,6 +45,10 @@ const run = async (workingDir: string, cliArgs: string[]) => {
 
   const { command, args, opts } = extractArguments(minimist(cliArgs));
 
+  const silent = opts['v'] || opts['--verbose'] ? false : true;
+
+  const rcFile = rcCheck(workingDir);
+
   let takeoffCommands;
   try {
     takeoffCommands = await loadCommands([`${__dirname}/commands`, `${workingDir}/commands`], {
@@ -53,7 +57,9 @@ const run = async (workingDir: string, cliArgs: string[]) => {
       exitWithMessage,
       opts,
       printMessage,
+      rcFile,
       shell,
+      silent,
       workingDir,
     });
   } catch (e) {
@@ -69,7 +75,7 @@ const run = async (workingDir: string, cliArgs: string[]) => {
       : { group: 'takeoff', cmd: commandParts[0] };
 
   if (!request.cmd || request.cmd === 'help') {
-    return renderHelp(takeoffCommands, shell);
+    return renderHelp(takeoffCommands, shell, request.cmd === 'help', args);
   }
 
   const plugin = takeoffCommands.get(`${request.group}:${request.cmd}`);
@@ -78,8 +84,13 @@ const run = async (workingDir: string, cliArgs: string[]) => {
     shell.exit(1);
   }
 
-  if (!plugin.skipRcCheck) {
-    rcCheck(workingDir);
+  if (!plugin.skipRcCheck && !rcFile.exists) {
+    shell.echo(
+      `${chalk.red('[Takeoff]')} .takeoffrc file not found, cannot run ${chalk.cyan(
+        `${request.group}:${request.cmd}`,
+      )}`,
+    );
+    shell.exit(1);
   }
 
   try {

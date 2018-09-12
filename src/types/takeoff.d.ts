@@ -1,6 +1,12 @@
 import { Chalk } from 'chalk';
 import { Task } from './task';
 
+export interface TakeoffRcFile {
+  exists: boolean;
+  properties: { [key: string]: any };
+  rcRoot: string;
+}
+
 /**
  * Options to be passed to the Takeoff Parser
  */
@@ -21,7 +27,11 @@ export interface TakeoffCmdParameters {
 
   shell?: any;
 
+  silent: boolean;
+
   workingDir?: string;
+
+  rcFile: TakeoffRcFile;
 
   printMessage: (message: string, stdout?: any) => void;
 

@@ -1,3 +1,5 @@
+import { TakeoffRcFile } from 'takeoff';
+
 /**
  * Plugin Options
  */

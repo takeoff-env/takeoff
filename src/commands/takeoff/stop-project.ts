@@ -1,11 +1,18 @@
 import { TakeoffCommand } from 'commands';
-import { TakeoffCmdParameters } from 'takeoff';
+import { TakeoffCmdParameters, TakeoffRcFile } from 'takeoff';
 
 /**
  * Command that handles the stopping of a project
  */
 
-export = ({ shell, args, workingDir, opts, printMessage, exitWithMessage }: TakeoffCmdParameters): TakeoffCommand => ({
+export = ({
+  shell,
+  args,
+  opts,
+  printMessage,
+  exitWithMessage,
+  rcFile,
+}: TakeoffCmdParameters): TakeoffCommand => ({
   args: '<name>',
   command: 'stop',
   description: 'Stops all services in a named project',
@@ -15,7 +22,7 @@ export = ({ shell, args, workingDir, opts, printMessage, exitWithMessage }: Take
 
     printMessage(`Stopping project ${project}`);
 
-    const projectDir = `${workingDir}/projects/${project}`;
+    const projectDir = `${rcFile.rcRoot}/projects/${project}`;
 
     if (!shell.test('-e', projectDir)) {
       return exitWithMessage(`The project ${project} doesn't exist`, 1);

@@ -1,10 +1,17 @@
 import { TakeoffCommand } from 'commands';
-import { TakeoffCmdParameters } from 'takeoff';
+import { TakeoffCmdParameters, TakeoffRcFile } from 'takeoff';
 
 /**
  * Destroys an project in a non-reversable way
  */
-export = ({ shell, args, workingDir, opts, printMessage, exitWithMessage }: TakeoffCmdParameters): TakeoffCommand => ({
+export = ({
+  shell,
+  args,
+  opts,
+  rcFile,
+  printMessage,
+  exitWithMessage,
+}: TakeoffCmdParameters): TakeoffCommand => ({
   args: '<name>',
   command: 'destroy',
   description:
@@ -21,7 +28,7 @@ export = ({ shell, args, workingDir, opts, printMessage, exitWithMessage }: Take
 
     printMessage(`Destroying project ${project}`);
 
-    const envDir = `${workingDir}/projects/${project}`;
+    const envDir = `${rcFile.rcRoot}/projects/${project}`;
 
     if (!shell.test('-e', envDir)) {
       return exitWithMessage(`The project ${project} doesn't exist`, 1);

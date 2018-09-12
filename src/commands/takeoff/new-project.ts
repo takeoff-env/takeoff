@@ -1,5 +1,5 @@
 import { TakeoffCommand } from 'commands';
-import { TakeoffCmdParameters } from 'takeoff';
+import { TakeoffCmdParameters, TakeoffRcFile } from 'takeoff';
 
 import { DEFAULT_BLUEPRINT_NAME } from '../../lib/constants';
 import taskRunner from '../../lib/init-env/task-runner';
@@ -8,7 +8,15 @@ import taskRunner from '../../lib/init-env/task-runner';
  * Command for creating a new project inside an environment
  */
 
-export = ({ shell, args, workingDir, opts, printMessage, exitWithMessage }: TakeoffCmdParameters): TakeoffCommand => ({
+export = ({
+  shell,
+  args,
+  workingDir,
+  opts,
+  printMessage,
+  exitWithMessage,
+  rcFile,
+}: TakeoffCmdParameters): TakeoffCommand => ({
   args: '<name> [blueprint-name]',
   command: 'new',
   description:
@@ -31,16 +39,16 @@ export = ({ shell, args, workingDir, opts, printMessage, exitWithMessage }: Take
 
     const blueprintName = userBlueprintName || DEFAULT_BLUEPRINT_NAME;
 
-    const cachedBlueprint = shell.test('-d', `${workingDir}/blueprints/${blueprintName}`);
+    const cachedBlueprint = shell.test('-d', `${rcFile.rcRoot}/blueprints/${blueprintName}`);
 
     const blueprint =
       opts['b'] ||
       opts['blueprint-url'] ||
       (cachedBlueprint
-        ? `file://${workingDir}/blueprints/${blueprintName}`
+        ? `file://${rcFile.rcRoot}/blueprints/${blueprintName}`
         : `https://github.com/takeoff-env/takeoff-blueprint-${blueprintName}.git`);
 
-    const projectDir = `${workingDir}/projects/${projectName}`;
+    const projectDir = `${rcFile.rcRoot}/projects/${projectName}`;
 
     shell.mkdir('-p', projectDir);
     const doClone = shell.exec(
@@ -58,7 +66,7 @@ export = ({ shell, args, workingDir, opts, printMessage, exitWithMessage }: Take
 
     printMessage(`Initilising Project`);
 
-    await taskRunner({ cwd: projectDir, }, shell)();
+    await taskRunner({ cwd: projectDir }, shell)();
 
     return exitWithMessage(`Project Ready`, 0);
   },
