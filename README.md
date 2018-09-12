@@ -27,35 +27,13 @@ Currently Takeoff only ships with the default blueprint (but it's relativly easy
 
 Configuring the setup of the blueprint application is done via a very easy `takeoff.md` file included in the root directory.
 
-```md
-    ## npm:install:api
-
-    Run task `npm:install:app` after this
-
-    ```bash
-    cd env/api && npm install --silent
-    ```
-
-    ## npm:install:app
-
-    Run task `docker:compose` after this
-
-    ```bash
-    cd env/frontend-app && npm install --silent
-    ```
-
-    ## docker:compose
-
-    ```bash
-    docker-compose -f docker/docker-compose.yml build --no-cache
-    ```
-```
-
-Each task is done in order, and you specify which task you run after, and is explicit to give full control over the commands. The format is inspired by the [Maid task runner](https://github.com/egoist/maid) and Takeoff uses some of it's code re-written in TypeScript.
+You can find an example file [here](docs/takeoff.md) with details on how it works.
 
 ### Default Blueprint
 
-- A [`node 8`](https://nodejs.org) API server powered by [Hapi](https://hapijs.com/). Using `node 8` allows the use of `async/await` to make code more readable. Included in the application is a User system for username/password login and basic user management, 2 levels (admin and user - and easily extendible). There is also a [JSON Web Token](https://jwt.io/) (JWT) authentication system that gives you control over access to your API endpoints.
+The default blueprint for API comes batteries included:
+
+- A [node](https://nodejs.org) API server powered by [Hapi](https://hapijs.com/) and written in TypeScript. Included in the application is a User system for username/password login and basic user management, 2 levels (admin and user - and easily extendible). There is also a [JSON Web Token](https://jwt.io/) (JWT) authentication system that gives you control over access to your API endpoints.
 
 - An [`Angular`](https://angular.io) Frontend with [Bootstrap 4](https://getbootstrap.com/). The frontend comes with a basic Dashboard layout and homepage. A login page with some basic validation allows you to log in (the default login is `admin/password`). There are some additional components in development, but this is enough to get started on a basic app. 
 
@@ -69,7 +47,7 @@ Under the hood it uses `docker` and `docker-compose` to minimise the hassle of s
 
 ### The best part though is of course kept till last.
 
-Using Docker volumes, the development files for the applications sit on your local computer file system, however the applications run within `docker` and reload on changes. This means you can switch between your code and browser in seconds and see the changes and not have to worry about manually compiling before seeing your changes. Node Modules have their own volume inside the container, so your local ones won't be affected.
+Using [Docker volumes](https://docs.docker.com/storage/volumes/), the development files for the applications sit on your local computer file system, however the applications run within `docker` and reload on changes. This means you can switch between your code and browser in seconds and see the changes and not have to worry about manually compiling before seeing your changes. Node Modules have their own volume inside the container, so your local ones won't be affected.
 
 On the server side this is accomplished with `nodemon` and on the clientside with `ng serve` using page reloading.
 
@@ -122,9 +100,9 @@ When you install a new blueprint, it is cached in the `blueprints` folder; this 
 When you want to create a new environment you can type:
 
 ```bash
-    takeoff new [environment] [blueprint-name] --blueprint-url
-    # Both blueprints here are optional, the first uses the local cache the second specifies a remote
-    takeoff start [environment]
+takeoff new [environment] [blueprint-name] --blueprint-url
+# Both blueprints here are optional, the first uses the local cache the second specifies a remote
+takeoff start [environment]
 ```
 
 This will start up your new named environment using the `default` blueprint if no name is specified. It's good to make sure you have stopped any other environments running unless you have changed ingress port assignments.
@@ -146,6 +124,7 @@ module.exports = ({
    * - 0 for a clean exit
    * - 1 for a error exit
    * You can also pass an optional third string such as runCmd.stdout
+   * e.g exitWithMessage('Error Happened`, 1, myCmd.stderr)
    */
   exitWithMessage, 
 }) => ({
@@ -157,14 +136,14 @@ module.exports = ({
   description: 'A custom greeting command',
   args: '[word]',
   options: [{
-    option: '-c, --world',
+    option: '-w, --world',
     description: 'Add world to the output'
   }],
   group: 'myapp',
   handler() {
     printMessage(`My script does something`);
 
-    let cmd = 'echo "Hello"';
+    let cmd = 'echo Hello';
 
     const [word] = args.length > 0 ? args: [false];
 
@@ -188,6 +167,8 @@ module.exports = ({
   }
 });
 ```
+
+This can now be run as `takeoff myapp:my-command dev -w` and will print `Hello dev world`
 
 ## Platform Support
 
