@@ -1,4 +1,5 @@
 import JoyCon from 'joycon';
+import jsonfile from 'jsonfile';
 import { dirname } from 'path';
 import { TakeoffRcFile } from 'takeoff';
 /**
@@ -7,12 +8,11 @@ import { TakeoffRcFile } from 'takeoff';
 
 export = (cwd: string): TakeoffRcFile => {
   const loadTakeoffRc = new JoyCon({
-    // Stop reading at parent dir
-    // i.e. Only read file from process.cwd()
     cwd,
   });
 
-  const { path: filepath, data } = loadTakeoffRc.loadSync(['.takeoffrc']);
+  const { path: filepath, data } = loadTakeoffRc.loadSync(['.takeoffrc', '.takeoffrc.json']);
+  const properties = typeof data === 'string' ? JSON.parse(data) : data || {};
 
   if (!filepath) {
     return { exists: false, properties: {}, rcRoot: '' };
@@ -22,14 +22,5 @@ export = (cwd: string): TakeoffRcFile => {
   const rcLocationParts = filepath.split('/');
   rcLocationParts.pop();
   const rcRoot = rcLocationParts.join('/');
-
-  let properties = {};
-  if (data) {
-    try {
-      properties = JSON.parse(data);
-    } catch (e) {
-      throw e;
-    }
-  }
   return { exists: true, properties, rcRoot };
 };
