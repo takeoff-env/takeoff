@@ -19,7 +19,6 @@
   "dependencies": {
     "fast-glob": "^2.2.2",
     "joycon": "^2.1.2",
-    "jsonfile": "^5.0.0",
     "markdown-it": "^8.4.2",
     "minimist": "^1.2.0",
     "pjson": "^1.0.9",
@@ -33,7 +32,6 @@
     "takeoff": "dist/index.js"
   },
   "devDependencies": {
-    "@types/jsonfile": "^4.0.1",
     "@types/markdown-it": "0.0.5",
     "@types/minimist": "^1.2.0",
     "@types/node": "^10.9.4",
