@@ -11,7 +11,17 @@ export = (cwd: string): TakeoffRcFile => {
   });
 
   const { path: filepath, data } = loadTakeoffRc.loadSync(['.takeoffrc', '.takeoffrc.json']);
-  const properties = typeof data === 'string' && data !== '' ? JSON.parse(data) : data || {};
+  
+  let properties;
+  if (typeof data === 'string' && (data.charAt(0) === '{' || data.charAt(0) === '[')) {
+    try {
+      properties = JSON.parse(data);
+    } catch (e) {
+      throw e;
+    }
+  } else {
+    properties = data || {};
+  }
 
   if (!filepath) {
     return { exists: false, properties: {}, rcRoot: '' };
