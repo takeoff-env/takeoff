@@ -1,35 +1,46 @@
-import { TakeoffCommand } from 'commands';
+import { CommandResult, TakeoffCommand } from 'commands';
 import { TakeoffCmdParameters } from 'takeoff';
+import { ExitCode } from 'task';
 
 /**
  * Command for pulling an environment
  */
 
-export = ({ shell, args, workingDir, opts, exitWithMessage, printMessage }: TakeoffCmdParameters): TakeoffCommand => ({
-  args: '<name> <blueprint-url>',
+export = ({ args, opts, pathExists, printMessage, rcFile, runCommand }: TakeoffCmdParameters): TakeoffCommand => ({
+  args: '<name>',
   command: 'add',
   description:
-    'Add a new blueprint. You need to provide the name of the folder and the location of the git repo you want to clone',
+    'Add a new blueprint. You provide the name of the folder and the location of the git repo you want to clone',
   group: 'blueprint',
-  handler(): void {
-    const [blueprint, newUrl]: string[] = args.length > 0 ? args : ['default'];
+  options: [
+    {
+      description: 'Provide a path to a git repo - one of [ git:// | https:// | file:// | ssh://]',
+      option: '-b, --blueprint',
+    },
+  ],
+  handler(): CommandResult {
+    const [blueprint]: string[] = args.length > 0 ? args : [];
+    const url = opts['b'] || opts['blueprint'];
+
+    if (!blueprint || !url) {
+      return { code: ExitCode.Error, fail: 'You must pass a blueprint name and path to clone' };
+    }
 
     printMessage(`Adding Blueprint ${blueprint}`);
 
-    const blueprintsPath = `${workingDir}/blueprints`;
+    const cwd = `${rcFile.rcRoot}/blueprints`;
 
-    if (shell.test('-e', `${blueprintsPath}/${blueprint}`)) {
-      return exitWithMessage(`The blueprint ${blueprint} already exists exist`, 1);
+    if (pathExists(`${cwd}/${blueprint}`)) {
+      return { code: ExitCode.Error, fail: `The blueprint ${blueprint} already exists exist` };
     }
 
-    const runCmd = shell.exec(`git clone ${newUrl} ${blueprint} --depth 1`, {
-      cwd: blueprintsPath,
-      slient: opts.v ? false : true,
-    });
+    const runCmd = runCommand(`git clone ${url} ${blueprint} --depth 1`, cwd);
 
-    if (runCmd.code !== 0) {
-      return exitWithMessage(`Error pulling in ${blueprint}.  Use -v to see verbose logs`, 1, runCmd.stdout);
-    }
-    return exitWithMessage(`Added blueprint ${blueprint}`, 0);
+    return {
+      cmd: runCmd,
+      code: runCmd.code,
+      fail: `Error adding ${blueprint}`,
+      success: `Successfully added blueprint ${blueprint}`,
+    };
   },
 });

@@ -1,18 +1,19 @@
-import { TakeoffCommand } from 'commands';
+import { CommandResult, TakeoffCommand } from 'commands';
 import { TakeoffCmdParameters } from 'takeoff';
+import { ExitCode } from 'task';
 import { DEFAULT_BLUEPRINT_NAME } from '../../lib/constants';
 
 /**
  * Command for pulling an environment
  */
 
-export = ({ shell, args, workingDir, opts, exitWithMessage, printMessage }: TakeoffCmdParameters): TakeoffCommand => ({
+export = ({ args, pathExists, printMessage, rcFile, runCommand }: TakeoffCmdParameters): TakeoffCommand => ({
   args: '<name> [remote] [branch]',
   command: 'update',
   description:
     'Updates a named blueprint. Can optionally pass a remote name and branch name, otherwise the default is "origin" and "master"',
   group: 'blueprint',
-  handler(): void {
+  handler(): CommandResult {
     const [blueprint, ...rest]: string[] = args.length > 0 ? args : [DEFAULT_BLUEPRINT_NAME];
 
     const remote = rest[0] ? rest[0] : 'origin';
@@ -20,20 +21,19 @@ export = ({ shell, args, workingDir, opts, exitWithMessage, printMessage }: Take
 
     printMessage(`Updating Blueprint ${blueprint} on ${branch} from ${remote}`);
 
-    const envDir = `${workingDir}/blueprints/${blueprint}`;
+    const cwd = `${rcFile.rcRoot}/blueprints/${blueprint}`;
 
-    if (!shell.test('-e', envDir)) {
-      return exitWithMessage(`The blueprint ${blueprint} doesn't exist`, 1);
+    if (!pathExists(cwd)) {
+      return { code: ExitCode.Error, fail: `The blueprint ${blueprint} does not exist` };
     }
 
-    const runCmd = shell.exec(`git pull ${remote} ${branch}`, {
-      cwd: envDir,
-      slient: opts.v ? false : true,
-    });
+    const runCmd = runCommand(`git pull ${remote} ${branch}`, cwd);
 
-    if (runCmd.code !== 0) {
-      return exitWithMessage(`Error pulling in ${blueprint}.  Use -v to see verbose logs`, 1, runCmd.stdout);
-    }
-    return exitWithMessage(`Updated blueprint ${blueprint}`, 0);
+    return {
+      cmd: runCmd,
+      code: runCmd.code,
+      fail: `Error updating ${blueprint}`,
+      success: `Successfully updated blueprint ${blueprint} (${remote} => ${branch})`,
+    };
   },
 });

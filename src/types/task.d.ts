@@ -1,3 +1,8 @@
+export const enum ExitCode {
+  Success,
+  Error,
+}
+
 /**
  * Internal task event
  */

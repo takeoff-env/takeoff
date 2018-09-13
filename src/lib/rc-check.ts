@@ -1,17 +1,24 @@
 import JoyCon from 'joycon';
-import { dirname } from 'path';
+import { sep } from 'path';
+import { TakeoffRcFile } from 'takeoff';
 /**
  * Check to see if there is a .takeoffrc file in the environment folder, if not then we exit
  */
 
-export = (cwd: string): boolean => {
+export = (cwd: string): TakeoffRcFile => {
   const loadTakeoffRc = new JoyCon({
-    // Stop reading at parent dir
-    // i.e. Only read file from process.cwd()
     cwd,
-    stopDir: dirname(process.cwd()),
   });
 
-  const { path: filepath } = loadTakeoffRc.loadSync(['.takeoffrc']);
-  return filepath ? true : false;
+  const { path: filepath, data } = loadTakeoffRc.loadSync(['.takeoffrc', '.takeoffrc.json']);
+  const properties = typeof data === 'string' && data !== '' ? JSON.parse(data) : data || {};
+
+  if (!filepath) {
+    return { exists: false, properties: {}, rcRoot: '' };
+  }
+
+  const rcLocationParts = filepath.split(sep);
+  rcLocationParts.pop();
+  const rcRoot = rcLocationParts.join(sep);
+  return { exists: true, properties, rcRoot };
 };

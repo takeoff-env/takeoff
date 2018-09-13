@@ -1,11 +1,11 @@
-import { TakeoffCommand } from 'commands';
+import { CommandResult, TakeoffCommand } from 'commands';
 import { TakeoffCmdParameters } from 'takeoff';
 
 /**
  * Command for pulling an environment
  */
 
-export = ({ shell, opts, exitWithMessage, printMessage }: TakeoffCmdParameters): TakeoffCommand => ({
+export = ({ opts, printMessage, runCommand }: TakeoffCmdParameters): TakeoffCommand => ({
   command: 'pv',
   description: 'Convenience method to prune all volumes',
   group: 'docker',
@@ -15,23 +15,23 @@ export = ({ shell, opts, exitWithMessage, printMessage }: TakeoffCmdParameters):
       option: '-f, --filter',
     },
   ],
-  handler(): void {
+  skipRcCheck: true,
+  handler(): CommandResult {
     printMessage(`Pruning Docker Volumes`);
 
+    // The -f here is to bypass confirmation in docker, the -f in the command itself is for filter
     let cmd = 'docker volume prune -f';
-
     if (opts['f'] || opts['filter']) {
       cmd = `${cmd} --filter ${opts['f'] || opts['filter']}`;
     }
 
-    const runCmd = shell.exec(cmd, {
-      slient: opts.v ? false : true,
-    });
+    const runCmd = runCommand(cmd);
 
-    if (runCmd.code !== 0) {
-      return exitWithMessage('Error pruning volumes.  Use -v to see verbose logs', 1, runCmd.stdout);
-    }
-
-    return exitWithMessage('Docker volumes pruned', 0);
+    return {
+      cmd: runCmd,
+      code: runCmd.code,
+      fail: `Error pruning Docker Volumes`,
+      success: `Successfully pruned Docker Volumes`,
+    };
   },
 });

@@ -1,15 +1,25 @@
-import { TakeoffCommand } from 'commands';
+import { CommandResult, TakeoffCommand } from 'commands';
 import { TakeoffCmdParameters } from 'takeoff';
+import { ExitCode } from 'task';
 
 import { DEFAULT_BLUEPRINT_NAME } from '../../lib/constants';
-import taskRunner from '../../lib/init-env/task-runner';
+import createTaskRunner from '../../lib/init-env/task-runner';
 
 /**
  * Initialises a new Takeoff Environment.  This will create a cache folder
  * for blueprints and a new projects folder. By default it will create a `default`
  * environment using the blueprint.
  */
-export = ({ shell, args, workingDir, opts, printMessage, exitWithMessage }: TakeoffCmdParameters): TakeoffCommand => ({
+export = ({
+  shell,
+  args,
+  workingDir,
+  opts,
+  pathExists,
+  printMessage,
+  silent,
+  runCommand,
+}: TakeoffCmdParameters): TakeoffCommand => ({
   args: '<name> [blueprint-name]',
   command: 'init',
   description:
@@ -30,7 +40,7 @@ export = ({ shell, args, workingDir, opts, printMessage, exitWithMessage }: Take
     },
   ],
   skipRcCheck: true,
-  async handler(): Promise<void> {
+  async handler(): Promise<CommandResult> {
     let [environmentName, blueprintName] = args;
     blueprintName = blueprintName || DEFAULT_BLUEPRINT_NAME;
 
@@ -41,8 +51,8 @@ export = ({ shell, args, workingDir, opts, printMessage, exitWithMessage }: Take
 
     printMessage(`Initialising environment ${environmentName}`);
 
-    if (shell.test('-e', environmentName)) {
-      return exitWithMessage(`Environment ${environmentName} already exists`, 1);
+    if (pathExists(environmentName)) {
+      return { code: ExitCode.Error, success: `Environment ${environmentName} already exists` };
     }
 
     const basePath = `${workingDir}/${environmentName}`;
@@ -52,7 +62,7 @@ export = ({ shell, args, workingDir, opts, printMessage, exitWithMessage }: Take
     shell.touch(`${basePath}/.takeoffrc`);
 
     if (opts['d'] || opts['no-default']) {
-      return exitWithMessage(`Skip creating default project. Done.`, 0);
+      return { code: ExitCode.Success, success: `Skip creating default project. Done.` };
     }
 
     const blueprint =
@@ -60,40 +70,46 @@ export = ({ shell, args, workingDir, opts, printMessage, exitWithMessage }: Take
 
     const projectName = opts['n'] || opts['name'] || 'default';
 
-    const blueprintPath = `${basePath}/blueprints/${blueprintName}`;
-    const projectDir = `${basePath}/projects/${projectName}`;
+    const blueprintPath = `blueprints/${blueprintName}`;
+    const projectDir = `projects/${projectName}`;
 
-    if (!shell.test('-d', blueprintPath)) {
-      shell.mkdir('-p', blueprintPath);
+    if (!pathExists(`${basePath}/${blueprintPath}`)) {
+      shell.mkdir('-p', `${basePath}/${blueprintPath}`);
 
-      const remoteClone = shell.exec(`git clone ${blueprint} ${blueprintPath} --depth 1`, {
-        slient: opts.v ? false : true,
-      });
-
-      if (remoteClone.code !== 0) {
-        return exitWithMessage(`Error cloning ${blueprint}`, 1, remoteClone.stdout);
+      const runClone = runCommand(`git clone ${blueprint} ${blueprintPath} --depth 1`, basePath);
+      if (runClone.code !== 0) {
+        return { cmd: runClone, code: runClone.code, fail: `Error cloning ${blueprint}` };
       }
     }
 
-    shell.mkdir('-p', projectDir);
-    const localClone = shell.exec(
-      `git clone file://${blueprintPath} ${projectDir} && rm -rf ${projectDir}/${blueprintName}/.git `,
-      { slient: opts.v ? false : true },
-    );
+    shell.mkdir('-p', `${basePath}/${projectDir}`);
 
-    if (localClone.code !== 0) {
-      return exitWithMessage(`Error cloning ${blueprint} to ${projectDir}`, 1, localClone.stdout);
+    const runLocalClone = runCommand(`git clone file://${basePath}/${blueprintPath} ${projectDir}`, basePath);
+    if (runLocalClone.code !== 0) {
+      return { cmd: runLocalClone, code: runLocalClone.code, fail: `Error cloning ${blueprintPath} to ${projectDir}` };
     }
 
     printMessage(`Initilising Project ${projectName}`);
 
-    await taskRunner(
-      {
-        cwd: projectDir,
-      },
+    const taskRunner = createTaskRunner({
+      opts,
+      printMessage,
       shell,
-    )();
+      silent,
+      workingDir,
+    });
 
-    return exitWithMessage(`Environment provisioned and Project Ready`, 0);
+    const result = { code: 0 };
+    try {
+      await taskRunner(null, `${basePath}/${projectDir}`);
+    } catch (e) {
+      result.code = 1;
+    }
+
+    return {
+      code: result.code,
+      fail: `Error creating new project ${projectName}`,
+      success: `Environment provisioned and Project Ready`,
+    };
   },
 });
