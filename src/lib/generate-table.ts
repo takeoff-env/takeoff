@@ -12,7 +12,7 @@ export = (tableValues: string[], headers: TableHeader[], options: TableOptions =
         if (rowText.includes('\n')) {
           checkText = rowText
             .split('\n')
-            .reduce((result: string, row: string) => (row.trim().length > result.length ? row : result), '');
+            .reduce((result: string, row: string) => (row.trim().length > result.length ? result : row), '');
         }
         return headers[index].width > checkText.length ? headers[index].width : checkText.length;
       }),

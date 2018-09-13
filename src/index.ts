@@ -14,44 +14,27 @@ import { CommandResult } from 'commands';
 import pjson from 'pjson';
 
 import { ExitCode } from 'task';
+import exitWithMessage from './lib/commands/exit-with-message';
+import printMessage from './lib/commands/print-message';
 import extractArguments from './lib/extract-arguments';
 import renderHelp from './lib/help/render-help';
-import rcCheck from './lib/rc-check';
+import loadRcFile from './lib/load-rc-file';
 
 const notifier = updateNotifier({
   pkg: pjson,
   updateCheckInterval: SEVEN_DAYS,
 });
 
-const printMessage = (message: string, stdout = '') => {
-  const takeoffHeader = chalk.yellow('[Takeoff]');
-  shell.echo(`${takeoffHeader} ${message}`, stdout);
-};
-
-const exitWithMessage = (message: string, code: number, stdout = '') => {
-  let takeoffHeader = chalk.magenta('[Takeoff]');
-  if (!Number.isNaN(code) && code > 0) {
-    takeoffHeader = chalk.red('[Takeoff]');
-  }
-  shell.echo(`${takeoffHeader} ${message}`, stdout);
-
-  if (!Number.isNaN(code) && code > -1) {
-    shell.exit(code);
-  }
-};
-
 const pathExists = (path: string) => shell.test('-e', path);
 
 const run = async (workingDir: string, cliArgs: string[]) => {
-  shell.echo(`${chalk.magenta('Takeoff')} v${chalk.blueBright(pjson.version)}`);
-
   notifier.notify();
 
   const { command, args, opts } = extractArguments(minimist(cliArgs));
 
   const silent = opts['v'] || opts['--verbose'] ? false : true;
 
-  const rcFile = rcCheck(workingDir);
+  const rcFile = loadRcFile(workingDir);
 
   const runCommand = (cmd: string, cwd: string = workingDir, disableSilent?: boolean) =>
     shell.exec(cmd, {
@@ -81,22 +64,22 @@ const run = async (workingDir: string, cliArgs: string[]) => {
   const request =
     commandParts.length > 1
       ? {
-          cmd: commandParts[1],
-          group: commandParts[0],
+          app: commandParts[1],
+          cmd: commandParts[0],
         }
-      : { group: 'takeoff', cmd: commandParts[0] };
+      : { app: commandParts[0], cmd: 'takeoff' };
 
-  if (!request.cmd || request.cmd === 'help') {
-    return renderHelp(takeoffCommands, shell, request.cmd === 'help', args);
+  if (!request.cmd || request.app === 'help') {
+    return renderHelp(takeoffCommands, shell, request.app === 'help', args, pjson.version);
   }
 
-  const plugin = takeoffCommands.get(`${request.group}:${request.cmd}`);
+  const plugin = takeoffCommands.get(`${request.cmd}:${request.app}`);
   if (!plugin) {
-    return exitWithMessage(`${request.group}:${request.cmd} not found`, ExitCode.Error);
+    return exitWithMessage(`${request.cmd}:${request.app} not found`, ExitCode.Error);
   }
 
   if (!plugin.skipRcCheck && !rcFile.exists) {
-    return exitWithMessage(`.takeoffrc file not found, cannot run ${request.group}:${request.cmd}`, ExitCode.Error);
+    return exitWithMessage(`.takeoffrc file not found, cannot run ${request.cmd}:${request.app}`, ExitCode.Error);
   }
 
   let result: CommandResult;

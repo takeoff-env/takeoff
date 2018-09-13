@@ -11,7 +11,7 @@ export = ({ opts, printMessage, runCommand }: TakeoffCmdParameters): TakeoffComm
   group: 'docker',
   options: [
     {
-      description: 'Filter the prune command with expressions (e.g "label=foo")',
+      description: `Filter the prune command with expressions (e.g "label=foo")`,
       option: '-f, --filter',
     },
   ],
