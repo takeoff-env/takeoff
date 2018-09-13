@@ -28,8 +28,9 @@
     "tty-table": "^2.6.8",
     "update-notifier": "^2.5.0"
   },
+  "main": "dist/index.js",
   "bin": {
-    "takeoff": "dist/index.js"
+    "takeoff": "dist/bin/index.js"
   },
   "devDependencies": {
     "@types/markdown-it": "0.0.5",

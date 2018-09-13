@@ -5,7 +5,7 @@ import generateTable from '../generate-table';
 
 /**
  * This renders the command table to the shell.
- * 
+ *
  */
 export = (group: string, command: string, groups: any, shell: any, headers = COMMAND_TABLE_HEADERS) => {
   let tableValues;

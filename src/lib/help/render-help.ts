@@ -4,7 +4,7 @@ import { CommandOption, TakeoffCommand } from 'commands';
 import { ExitCode } from 'task';
 import exitWithMessage from '../commands/exit-with-message';
 import printMessage from '../commands/print-message';
-import renderTable from './render-command-table';
+import renderTable from './render-table';
 
 export = (
   takeoffCommands: Map<string, TakeoffCommand>,
