@@ -1,42 +1,36 @@
-import { TakeoffCommand } from 'commands';
+import { CommandResult, TakeoffCommand } from 'commands';
 import { TakeoffCmdParameters, TakeoffRcFile } from 'takeoff';
+import { ExitCode } from 'task';
 
 /**
  * Command that handles the stopping of a project
  */
 
-export = ({
-  shell,
-  args,
-  opts,
-  printMessage,
-  pathExists,
-  exitWithMessage,
-  rcFile,
-}: TakeoffCmdParameters): TakeoffCommand => ({
+export = ({ args, printMessage, pathExists, rcFile, runCommand }: TakeoffCmdParameters): TakeoffCommand => ({
   args: '<name>',
   command: 'stop',
   description: 'Stops all services in a named project',
   group: 'takeoff',
-  handler(): void {
+  handler(): CommandResult {
     const [project]: string[] = args.length > 0 ? args : ['default'];
 
     printMessage(`Stopping project ${project}`);
 
-    const projectDir = `${rcFile.rcRoot}/projects/${project}`;
+    const envDir = `${rcFile.rcRoot}/projects/${project}`;
 
-    if (!pathExists(projectDir)) {
-      return exitWithMessage(`The project ${project} doesn't exist`, 1);
+    if (!pathExists(envDir)) {
+      return { code: ExitCode.Error, fail: `The project ${project} doesn't exist` };
     }
 
-    const runCmd = shell.exec(`docker-compose -f ${projectDir}/docker/docker-compose.yml stop`, {
-      slient: opts.v ? false : true,
-    });
+    const cmd = `docker-compose -f docker/docker-compose.yml stop`;
 
-    if (runCmd.code !== 0) {
-      return exitWithMessage(`The project ${project} doesn't exist`, 1, runCmd.stdout);
-    }
+    const runCmd = runCommand(cmd, envDir);
 
-    return exitWithMessage(`Successfully stopped ${project}`, 0);
+    return {
+      cmd: runCmd,
+      code: runCmd.code,
+      fail: `Unable to stop ${project}`,
+      success: `Successfully stopped ${project}`,
+    };
   },
 });

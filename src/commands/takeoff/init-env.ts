@@ -1,9 +1,9 @@
 import { ExitCode } from '@takeoff/takeoff/types/task';
-import { TakeoffCommand } from 'commands';
+import { CommandResult, TakeoffCommand } from 'commands';
 import { TakeoffCmdParameters } from 'takeoff';
 
 import { DEFAULT_BLUEPRINT_NAME } from '../../lib/constants';
-import createTaskRunner from './../../lib/init-env/task-runner';
+import createTaskRunner from '../../lib/init-env/task-runner';
 
 /**
  * Initialises a new Takeoff Environment.  This will create a cache folder
@@ -17,8 +17,8 @@ export = ({
   opts,
   pathExists,
   printMessage,
-  exitWithMessage,
   silent,
+  runCommand,
 }: TakeoffCmdParameters): TakeoffCommand => ({
   args: '<name> [blueprint-name]',
   command: 'init',
@@ -40,7 +40,7 @@ export = ({
     },
   ],
   skipRcCheck: true,
-  async handler(): Promise<void> {
+  async handler(): Promise<CommandResult> {
     let [environmentName, blueprintName] = args;
     blueprintName = blueprintName || DEFAULT_BLUEPRINT_NAME;
 
@@ -52,7 +52,7 @@ export = ({
     printMessage(`Initialising environment ${environmentName}`);
 
     if (pathExists(environmentName)) {
-      return exitWithMessage(`Environment ${environmentName} already exists`, 1);
+      return { code: ExitCode.Error, success: `Environment ${environmentName} already exists` };
     }
 
     const basePath = `${workingDir}/${environmentName}`;
@@ -62,7 +62,7 @@ export = ({
     shell.touch(`${basePath}/.takeoffrc`);
 
     if (opts['d'] || opts['no-default']) {
-      return exitWithMessage(`Skip creating default project. Done.`, 0);
+      return { code: ExitCode.Success, success: `Skip creating default project. Done.` };
     }
 
     const blueprint =
@@ -70,29 +70,23 @@ export = ({
 
     const projectName = opts['n'] || opts['name'] || 'default';
 
-    const blueprintPath = `${basePath}/blueprints/${blueprintName}`;
-    const projectDir = `${basePath}/projects/${projectName}`;
+    const blueprintPath = `blueprints/${blueprintName}`;
+    const projectDir = `projects/${projectName}`;
 
-    if (!pathExists(blueprintPath)) {
-      shell.mkdir('-p', blueprintPath);
+    if (!pathExists(`${basePath}/${blueprintPath}`)) {
+      shell.mkdir('-p', `${basePath}/${blueprintPath}`);
 
-      const remoteClone = shell.exec(`git clone ${blueprint} ${blueprintPath} --depth 1`, {
-        slient: opts.v ? false : true,
-      });
-
-      if (remoteClone.code !== 0) {
-        return exitWithMessage(`Error cloning ${blueprint}`, 1, remoteClone.stdout);
+      const runClone = runCommand(`git clone ${blueprint} ${blueprintPath} --depth 1`, basePath);
+      if (runClone.code !== 0) {
+        return { cmd: runClone, code: runClone.code, fail: `Error cloning ${blueprint}` };
       }
     }
 
-    shell.mkdir('-p', projectDir);
-    const localClone = shell.exec(
-      `git clone file://${blueprintPath} ${projectDir} && rm -rf ${projectDir}/${blueprintName}/.git `,
-      { slient: opts.v ? false : true },
-    );
+    shell.mkdir('-p', `${basePath}/${projectDir}`);
 
-    if (localClone.code !== 0) {
-      return exitWithMessage(`Error cloning ${blueprint} to ${projectDir}`, 1, localClone.stdout);
+    const runLocalClone = runCommand(`git clone file://${basePath}/${blueprintPath} ${projectDir}`, basePath);
+    if (runLocalClone.code !== 0) {
+      return { cmd: runLocalClone, code: runLocalClone.code, fail: `Error cloning ${blueprintPath} to ${projectDir}` };
     }
 
     printMessage(`Initilising Project ${projectName}`);
@@ -105,19 +99,17 @@ export = ({
       workingDir,
     });
 
+    const result = { code: 0 };
     try {
-      await taskRunner(null, projectDir);
-      return exitWithMessage(
-        `Environment provisioned and Project Ready`,
-        ExitCode.Error,
-        silent ? undefined : process.stdout,
-      );
+      await taskRunner(null, `${basePath}/${projectDir}`);
     } catch (e) {
-      return exitWithMessage(
-        `Error creating new project ${projectName}.  Use -v to see verbose logs`,
-        ExitCode.Error,
-        silent ? undefined : e,
-      );
+      result.code = 1;
     }
+
+    return {
+      code: result.code,
+      fail: `Error creating new project ${projectName}`,
+      success: `Environment provisioned and Project Ready`,
+    };
   },
 });

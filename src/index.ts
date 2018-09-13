@@ -10,6 +10,7 @@ import updateNotifier from 'update-notifier';
 import { SEVEN_DAYS } from './lib/constants';
 import loadCommands from './lib/load-commands';
 
+import { CommandResult } from 'commands';
 import pjson from 'pjson';
 
 import extractArguments from './lib/extract-arguments';
@@ -51,7 +52,7 @@ const run = async (workingDir: string, cliArgs: string[]) => {
 
   const rcFile = rcCheck(workingDir);
 
-  const runCommand = (cmd: string, cwd: string) =>
+  const runCommand = (cmd: string, cwd: string = workingDir) =>
     shell.exec(cmd, {
       cwd,
       silent,
@@ -103,11 +104,18 @@ const run = async (workingDir: string, cliArgs: string[]) => {
     shell.exit(1);
   }
 
+  let result: CommandResult;
   try {
-    await plugin.handler();
+    result = await plugin.handler();
   } catch (e) {
     throw e;
   }
+
+  return exitWithMessage(
+    result.code !== 0 ? result.fail : result.success || '',
+    result.code,
+    result.cmd ? (silent ? undefined : result.code ? result.cmd.stderr : result.cmd.stdout) : undefined,
+  );
 };
 
 run(process.cwd(), process.argv.slice(2));

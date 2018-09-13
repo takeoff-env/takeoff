@@ -10,7 +10,6 @@ export = (cwd: string): TakeoffFileData => {
     cwd,
     stopDir: dirname(process.cwd()),
   });
-  console.log(cwd);
 
   const { path: filepath, data } = loadTakeoffFile.loadSync(['takeoff.md']);
   if (!filepath) {

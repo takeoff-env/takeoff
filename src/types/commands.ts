@@ -15,6 +15,13 @@ export interface CommandOption {
   description: string;
 }
 
+export interface CommandResult {
+  cmd?: any;
+  code: number;
+  fail?: string;
+  success?: string;
+}
+
 /**
  * A takeoff command to be run
  */
@@ -31,5 +38,5 @@ export interface TakeoffCommand {
 
   skipRcCheck?: boolean;
 
-  handler: () => void | Promise<void>;
+  handler: () => CommandResult | Promise<CommandResult>;
 }

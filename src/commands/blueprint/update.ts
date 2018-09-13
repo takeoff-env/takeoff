@@ -1,27 +1,19 @@
 import { ExitCode } from '@takeoff/takeoff/types/task';
-import { TakeoffCommand } from 'commands';
-import { TakeoffCmdParameters, TakeoffRcFile } from 'takeoff';
+import { CommandResult, TakeoffCommand } from 'commands';
+import { TakeoffCmdParameters } from 'takeoff';
 import { DEFAULT_BLUEPRINT_NAME } from '../../lib/constants';
 
 /**
  * Command for pulling an environment
  */
 
-export = ({
-  args,
-  exitWithMessage,
-  pathExists,
-  printMessage,
-  rcFile,
-  shell,
-  silent,
-}: TakeoffCmdParameters): TakeoffCommand => ({
+export = ({ args, pathExists, printMessage, rcFile, runCommand }: TakeoffCmdParameters): TakeoffCommand => ({
   args: '<name> [remote] [branch]',
   command: 'update',
   description:
     'Updates a named blueprint. Can optionally pass a remote name and branch name, otherwise the default is "origin" and "master"',
   group: 'blueprint',
-  handler(): void {
+  handler(): CommandResult {
     const [blueprint, ...rest]: string[] = args.length > 0 ? args : [DEFAULT_BLUEPRINT_NAME];
 
     const remote = rest[0] ? rest[0] : 'origin';
@@ -32,20 +24,16 @@ export = ({
     const cwd = `${rcFile.rcRoot}/blueprints/${blueprint}`;
 
     if (!pathExists(cwd)) {
-      return exitWithMessage(`The blueprint ${blueprint} doesn't exist`, ExitCode.Error);
+      return { code: ExitCode.Error, fail: `The blueprint ${blueprint} does not exist` };
     }
 
-    const runCmd = shell.exec(`git pull ${remote} ${branch}`, {
-      cwd,
-      silent,
-    });
+    const runCmd = runCommand(`git pull ${remote} ${branch}`, cwd);
 
-    return exitWithMessage(
-      runCmd.code !== 0
-        ? `Error pulling in ${blueprint}.  Use -v to see verbose logs`
-        : `Updated blueprint ${blueprint}`,
-      runCmd.code,
-      silent ? undefined : runCmd.code ? runCmd.stderr : runCmd.stdout,
-    );
+    return {
+      cmd: runCmd,
+      code: runCmd.code,
+      fail: `Error updating ${blueprint}`,
+      success: `Successfully updated blueprint ${blueprint} (${remote} => ${branch})`,
+    };
   },
 });

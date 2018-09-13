@@ -1,25 +1,16 @@
 import { ExitCode } from '@takeoff/takeoff/types/task';
-import { TakeoffCommand } from 'commands';
-import { TakeoffCmdParameters, TakeoffRcFile } from 'takeoff';
+import { CommandResult, TakeoffCommand } from 'commands';
+import { TakeoffCmdParameters } from 'takeoff';
 
 /**
  * Command for pulling an environment
  */
 
-export = ({
-  args,
-  exitWithMessage,
-  opts,
-  pathExists,
-  printMessage,
-  rcFile,
-  shell,
-  silent,
-}: TakeoffCmdParameters): TakeoffCommand => ({
+export = ({ args, opts, pathExists, printMessage, rcFile, runCommand }: TakeoffCmdParameters): TakeoffCommand => ({
   args: '<name>',
   command: 'add',
   description:
-    'Add a new blueprint. You need to provide the name of the folder and the location of the git repo you want to clone',
+    'Add a new blueprint. You provide the name of the folder and the location of the git repo you want to clone',
   group: 'blueprint',
   options: [
     {
@@ -27,27 +18,28 @@ export = ({
       option: '-b, --blueprint',
     },
   ],
-  handler(): void {
-    const [blueprint]: string[] = args.length > 0 ? args : ['default'];
+  handler(): CommandResult {
+    const [blueprint]: string[] = args.length > 0 ? args : [];
     const url = opts['b'] || opts['blueprint'];
+    if (!blueprint || !url) {
+      return { code: ExitCode.Error, fail: 'You must pass a blueprint name and path to clone' };
+    }
 
     printMessage(`Adding Blueprint ${blueprint}`);
 
     const cwd = `${rcFile.rcRoot}/blueprints`;
 
-    if (pathExists(`${rcFile.rcRoot}/${blueprint}`)) {
-      return exitWithMessage(`The blueprint ${blueprint} already exists exist`, ExitCode.Error);
+    if (pathExists(`${cwd}/${blueprint}`)) {
+      return { code: ExitCode.Error, fail: `The blueprint ${blueprint} already exists exist` };
     }
 
-    const runCmd = shell.exec(`git clone ${url} ${blueprint} --depth 1`, {
-      cwd,
-      silent,
-    });
+    const runCmd = runCommand(`git clone ${url} ${blueprint} --depth 1`, cwd);
 
-    return exitWithMessage(
-      runCmd.code !== 0 ? `Error adding in ${blueprint}.  Use -v to see verbose logs` : `Added blueprint ${blueprint}`,
-      runCmd.code,
-      silent ? undefined : runCmd.code ? runCmd.stderr : runCmd.stdout,
-    );
+    return {
+      cmd: runCmd,
+      code: runCmd.code,
+      fail: `Error adding ${blueprint}`,
+      success: `Successfully added blueprint ${blueprint}`,
+    };
   },
 });
