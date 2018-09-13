@@ -19,7 +19,7 @@ git diff-index --quiet HEAD || git commit -m "Commit changes for $PACKAGE_VERSIO
 
 npm version ${VERSION_COMMAND:-patch} -m "$CIRCLE_BRANCH %s [ci skip]"
 
-npm publish --tag latest
+npm publish --tag latest --access public
 
 git push --tags
 git push --set-upstream origin $CIRCLE_BRANCH
