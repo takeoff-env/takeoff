@@ -10,6 +10,7 @@ import { DEFAULT_BLUEPRINT_NAME } from '../../lib/constants';
 export = ({
   args,
   exitWithMessage,
+  pathExists,
   printMessage,
   rcFile,
   shell,
@@ -30,7 +31,7 @@ export = ({
 
     const cwd = `${rcFile.rcRoot}/blueprints/${blueprint}`;
 
-    if (!shell.test('-e', cwd)) {
+    if (!pathExists(cwd)) {
       return exitWithMessage(`The blueprint ${blueprint} doesn't exist`, ExitCode.Error);
     }
 

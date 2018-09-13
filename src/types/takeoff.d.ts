@@ -33,6 +33,10 @@ export interface TakeoffCmdParameters {
 
   rcFile: TakeoffRcFile;
 
+  runCommand: (cmd: string, cwd: string) => any;
+
+  pathExists: (path: string) => boolean;
+
   printMessage: (message: string, stdout?: any) => void;
 
   exitWithMessage: (message: string, code: number, stdout?: any) => void;

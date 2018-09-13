@@ -1,6 +1,5 @@
 import JoyCon from 'joycon';
-import jsonfile from 'jsonfile';
-import { dirname } from 'path';
+import { sep } from 'path';
 import { TakeoffRcFile } from 'takeoff';
 /**
  * Check to see if there is a .takeoffrc file in the environment folder, if not then we exit
@@ -12,15 +11,14 @@ export = (cwd: string): TakeoffRcFile => {
   });
 
   const { path: filepath, data } = loadTakeoffRc.loadSync(['.takeoffrc', '.takeoffrc.json']);
-  const properties = typeof data === 'string' ? JSON.parse(data) : data || {};
+  const properties = typeof data === 'string' && data !== '' ? JSON.parse(data) : data || {};
 
   if (!filepath) {
     return { exists: false, properties: {}, rcRoot: '' };
   }
 
-  // TODO: Make this OS agnostic
-  const rcLocationParts = filepath.split('/');
+  const rcLocationParts = filepath.split(sep);
   rcLocationParts.pop();
-  const rcRoot = rcLocationParts.join('/');
+  const rcRoot = rcLocationParts.join(sep);
   return { exists: true, properties, rcRoot };
 };

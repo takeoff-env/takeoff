@@ -1,8 +1,9 @@
+import { ExitCode } from '@takeoff/takeoff/types/task';
 import { TakeoffCommand } from 'commands';
 import { TakeoffCmdParameters, TakeoffRcFile } from 'takeoff';
 
 import { DEFAULT_BLUEPRINT_NAME } from '../../lib/constants';
-import taskRunner from '../../lib/init-env/task-runner';
+import createTaskRunner from './../../lib/init-env/task-runner';
 
 /**
  * Command for creating a new project inside an environment
@@ -11,10 +12,13 @@ import taskRunner from '../../lib/init-env/task-runner';
 export = ({
   shell,
   args,
-  workingDir,
+  pathExists,
   opts,
   printMessage,
   exitWithMessage,
+  workingDir,
+  runCommand,
+  silent,
   rcFile,
 }: TakeoffCmdParameters): TakeoffCommand => ({
   args: '<name> [blueprint-name]',
@@ -32,7 +36,12 @@ export = ({
     const [projectName, userBlueprintName] = args;
 
     if (!projectName) {
-      return exitWithMessage(`You must pass a project name to create a new folder`, 1);
+      return exitWithMessage(`You must pass a project name to create a new folder`, ExitCode.Error);
+    }
+
+    const projectDir = `${rcFile.rcRoot}/projects/${projectName}`;
+    if (pathExists(projectDir)) {
+      return exitWithMessage(`The project ${projectName} already exists`, ExitCode.Error);
     }
 
     printMessage(`Creating new project ${projectName}`);
@@ -48,26 +57,42 @@ export = ({
         ? `file://${rcFile.rcRoot}/blueprints/${blueprintName}`
         : `https://github.com/takeoff-env/takeoff-blueprint-${blueprintName}.git`);
 
-    const projectDir = `${rcFile.rcRoot}/projects/${projectName}`;
-
     shell.mkdir('-p', projectDir);
-    const doClone = shell.exec(
-      `git clone ${blueprint} ${projectDir}${
-        cachedBlueprint ? '' : '--depth 1'
-      } && rm -rf ${projectDir}/${blueprintName}.git`,
-      {
-        slient: opts.v ? false : true,
-      },
+
+    const runCmd = runCommand(
+      `git clone ${blueprint} ${projectDir}${cachedBlueprint ? '' : '--depth 1'}`,
+      rcFile.rcRoot,
     );
 
-    if (doClone.code !== 0) {
-      return exitWithMessage(`You must pass a project name to create a new folder`, 1, doClone.stdout);
+    if (runCmd.code !== 0) {
+      return exitWithMessage(
+        `Error creating new project ${projectName}.  Use -v to see verbose logs`,
+        runCmd.code,
+        silent ? undefined : runCmd.code ? runCmd.stderr : runCmd.stdout,
+      );
     }
 
-    printMessage(`Initilising Project`);
+    const taskRunner = createTaskRunner({
+      opts,
+      printMessage,
+      shell,
+      silent,
+      workingDir,
+    });
 
-    await taskRunner({ cwd: projectDir }, shell)();
-
-    return exitWithMessage(`Project Ready`, 0);
+    try {
+      await taskRunner(null, projectDir);
+      return exitWithMessage(
+        `Successfully created project ${projectName}.`,
+        ExitCode.Error,
+        silent ? undefined : process.stdout,
+      );
+    } catch (e) {
+      return exitWithMessage(
+        `Error creating new project ${projectName}.  Use -v to see verbose logs`,
+        ExitCode.Error,
+        silent ? undefined : e,
+      );
+    }
   },
 });

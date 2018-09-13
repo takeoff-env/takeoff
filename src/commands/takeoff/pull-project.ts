@@ -5,7 +5,15 @@ import { TakeoffCmdParameters, TakeoffRcFile } from 'takeoff';
  * Command for pulling an project
  */
 
-export = ({ silent, shell, args, rcFile, exitWithMessage, printMessage }: TakeoffCmdParameters): TakeoffCommand => ({
+export = ({
+  silent,
+  shell,
+  args,
+  rcFile,
+  pathExists,
+  exitWithMessage,
+  printMessage,
+}: TakeoffCmdParameters): TakeoffCommand => ({
   args: '<name> [service]',
   command: 'pull',
   description: 'Pulls any pre-build images within a project (such a database images).',
@@ -17,7 +25,7 @@ export = ({ silent, shell, args, rcFile, exitWithMessage, printMessage }: Takeof
 
     const envDir = `${rcFile.rcRoot}/projects/${project}`;
 
-    if (!shell.test('-e', envDir)) {
+    if (!pathExists(envDir)) {
       return exitWithMessage(`The project ${project} doesn't exist`, 1);
     }
 

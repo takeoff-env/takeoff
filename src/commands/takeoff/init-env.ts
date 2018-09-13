@@ -1,15 +1,25 @@
+import { ExitCode } from '@takeoff/takeoff/types/task';
 import { TakeoffCommand } from 'commands';
 import { TakeoffCmdParameters } from 'takeoff';
 
 import { DEFAULT_BLUEPRINT_NAME } from '../../lib/constants';
-import taskRunner from '../../lib/init-env/task-runner';
+import createTaskRunner from './../../lib/init-env/task-runner';
 
 /**
  * Initialises a new Takeoff Environment.  This will create a cache folder
  * for blueprints and a new projects folder. By default it will create a `default`
  * environment using the blueprint.
  */
-export = ({ shell, args, workingDir, opts, printMessage, exitWithMessage }: TakeoffCmdParameters): TakeoffCommand => ({
+export = ({
+  shell,
+  args,
+  workingDir,
+  opts,
+  pathExists,
+  printMessage,
+  exitWithMessage,
+  silent,
+}: TakeoffCmdParameters): TakeoffCommand => ({
   args: '<name> [blueprint-name]',
   command: 'init',
   description:
@@ -41,7 +51,7 @@ export = ({ shell, args, workingDir, opts, printMessage, exitWithMessage }: Take
 
     printMessage(`Initialising environment ${environmentName}`);
 
-    if (shell.test('-e', environmentName)) {
+    if (pathExists(environmentName)) {
       return exitWithMessage(`Environment ${environmentName} already exists`, 1);
     }
 
@@ -63,7 +73,7 @@ export = ({ shell, args, workingDir, opts, printMessage, exitWithMessage }: Take
     const blueprintPath = `${basePath}/blueprints/${blueprintName}`;
     const projectDir = `${basePath}/projects/${projectName}`;
 
-    if (!shell.test('-d', blueprintPath)) {
+    if (!pathExists(blueprintPath)) {
       shell.mkdir('-p', blueprintPath);
 
       const remoteClone = shell.exec(`git clone ${blueprint} ${blueprintPath} --depth 1`, {
@@ -87,13 +97,27 @@ export = ({ shell, args, workingDir, opts, printMessage, exitWithMessage }: Take
 
     printMessage(`Initilising Project ${projectName}`);
 
-    await taskRunner(
-      {
-        cwd: projectDir,
-      },
+    const taskRunner = createTaskRunner({
+      opts,
+      printMessage,
       shell,
-    )();
+      silent,
+      workingDir,
+    });
 
-    return exitWithMessage(`Environment provisioned and Project Ready`, 0);
+    try {
+      await taskRunner(null, projectDir);
+      return exitWithMessage(
+        `Environment provisioned and Project Ready`,
+        ExitCode.Error,
+        silent ? undefined : process.stdout,
+      );
+    } catch (e) {
+      return exitWithMessage(
+        `Error creating new project ${projectName}.  Use -v to see verbose logs`,
+        ExitCode.Error,
+        silent ? undefined : e,
+      );
+    }
   },
 });

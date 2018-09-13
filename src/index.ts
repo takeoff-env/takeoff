@@ -13,8 +13,8 @@ import loadCommands from './lib/load-commands';
 import pjson from 'pjson';
 
 import extractArguments from './lib/extract-arguments';
+import renderHelp from './lib/help/render-help';
 import rcCheck from './lib/rc-check';
-import renderHelp from './lib/render-help';
 
 const notifier = updateNotifier({
   pkg: pjson,
@@ -38,6 +38,8 @@ const exitWithMessage = (message: string, code: number, stdout = '') => {
   }
 };
 
+const pathExists = (path: string) => shell.test('-e', path);
+
 const run = async (workingDir: string, cliArgs: string[]) => {
   shell.echo(`${chalk.magenta('Takeoff')} v${chalk.blueBright(pjson.version)}`);
 
@@ -49,6 +51,12 @@ const run = async (workingDir: string, cliArgs: string[]) => {
 
   const rcFile = rcCheck(workingDir);
 
+  const runCommand = (cmd: string, cwd: string) =>
+    shell.exec(cmd, {
+      cwd,
+      silent,
+    });
+
   let takeoffCommands;
   try {
     takeoffCommands = await loadCommands([`${__dirname}/commands`, `${workingDir}/commands`], {
@@ -56,8 +64,10 @@ const run = async (workingDir: string, cliArgs: string[]) => {
       command,
       exitWithMessage,
       opts,
+      pathExists,
       printMessage,
       rcFile,
+      runCommand,
       shell,
       silent,
       workingDir,

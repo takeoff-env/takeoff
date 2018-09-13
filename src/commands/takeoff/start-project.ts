@@ -10,6 +10,7 @@ export = ({
   args,
   opts,
   exitWithMessage,
+  pathExists,
   printMessage,
   rcFile,
 }: TakeoffCmdParameters): TakeoffCommand => ({
@@ -25,7 +26,7 @@ export = ({
 
     const projectDir = `${rcFile.rcRoot}/projects/${project}`;
 
-    if (!shell.test('-e', projectDir)) {
+    if (!pathExists(projectDir)) {
       return exitWithMessage(`The project ${project} doesn't exist`, 1);
     }
 

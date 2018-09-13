@@ -10,6 +10,7 @@ export = ({
   args,
   exitWithMessage,
   opts,
+  pathExists,
   printMessage,
   rcFile,
   shell,
@@ -34,7 +35,7 @@ export = ({
 
     const cwd = `${rcFile.rcRoot}/blueprints`;
 
-    if (shell.test('-e', `${rcFile.rcRoot}/${blueprint}`)) {
+    if (pathExists(`${rcFile.rcRoot}/${blueprint}`)) {
       return exitWithMessage(`The blueprint ${blueprint} already exists exist`, ExitCode.Error);
     }
 
