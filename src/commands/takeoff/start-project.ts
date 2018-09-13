@@ -6,12 +6,18 @@ import { ExitCode } from 'task';
  * Command for starting a project
  */
 
-export = ({ args, pathExists, printMessage, rcFile, runCommand }: TakeoffCmdParameters): TakeoffCommand => ({
+export = ({ opts, args, pathExists, printMessage, rcFile, runCommand }: TakeoffCmdParameters): TakeoffCommand => ({
   args: '<name> [service]',
   command: 'start',
   description:
     'Starts the named project. Optionally a docker app name can be passed to only start individual services.',
   group: 'takeoff',
+  options: [
+    {
+      description: 'Detach the docker containers',
+      option: '-d, --detach',
+    },
+  ],
   handler(): CommandResult {
     const [project, app]: string[] = args.length > 0 ? args : ['default'];
 
@@ -24,11 +30,15 @@ export = ({ args, pathExists, printMessage, rcFile, runCommand }: TakeoffCmdPara
     }
 
     let cmd = `docker-compose -f docker/docker-compose.yml up`;
+    if (opts['d'] || opts['deatch']) {
+      cmd = `${cmd} -d`;
+    }
     if (app) {
-      cmd = `${cmd} -d ${app}`;
+      cmd = `${cmd} ${app}`;
     }
 
-    const runCmd = runCommand(cmd, envDir);
+    // We want to see the docker output in this command
+    const runCmd = runCommand(cmd, envDir, true);
 
     return {
       cmd: runCmd,

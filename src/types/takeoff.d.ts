@@ -33,7 +33,7 @@ export interface TakeoffCmdParameters {
 
   rcFile: TakeoffRcFile;
 
-  runCommand: (cmd: string, cwd?: string) => any;
+  runCommand: (cmd: string, cwd?: string, disableSilent?: boolean) => any;
 
   pathExists: (path: string) => boolean;
 

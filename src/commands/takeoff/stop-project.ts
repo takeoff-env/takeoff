@@ -22,10 +22,8 @@ export = ({ args, printMessage, pathExists, rcFile, runCommand }: TakeoffCmdPara
       return { code: ExitCode.Error, fail: `The project ${project} doesn't exist` };
     }
 
-    const cmd = `docker-compose -f docker/docker-compose.yml stop`;
-
-    const runCmd = runCommand(cmd, envDir);
-
+    const runCmd = runCommand(`docker-compose -f docker/docker-compose.yml stop`, envDir);
+    
     return {
       cmd: runCmd,
       code: runCmd.code,
