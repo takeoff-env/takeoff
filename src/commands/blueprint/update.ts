@@ -1,6 +1,6 @@
-import { ExitCode } from '@takeoff/takeoff/types/task';
 import { CommandResult, TakeoffCommand } from 'commands';
 import { TakeoffCmdParameters } from 'takeoff';
+import { ExitCode } from 'task';
 import { DEFAULT_BLUEPRINT_NAME } from '../../lib/constants';
 
 /**

@@ -1,5 +1,5 @@
 import { CommandResult, TakeoffCommand } from 'commands';
-import { TakeoffCmdParameters, TakeoffRcFile } from 'takeoff';
+import { TakeoffCmdParameters } from 'takeoff';
 import { ExitCode } from 'task';
 
 /**
@@ -23,7 +23,7 @@ export = ({ args, printMessage, pathExists, rcFile, runCommand }: TakeoffCmdPara
     }
 
     const runCmd = runCommand(`docker-compose -f docker/docker-compose.yml stop`, envDir);
-    
+
     return {
       cmd: runCmd,
       code: runCmd.code,

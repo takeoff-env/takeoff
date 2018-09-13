@@ -12,7 +12,7 @@ export = (shell: any, opts: any, silent: boolean, { task, resolve, reject, cwd }
       ...process.env,
       PATH: `${path.resolve('node_modules/.bin')}:${process.env.PATH}`,
     },
-    silent
+    silent,
   });
   if (run.code !== 0) {
     return reject(new Error(`${chalk.red('[Takeoff]')} Task "${task.name}" exited with code ${run.code}`));
