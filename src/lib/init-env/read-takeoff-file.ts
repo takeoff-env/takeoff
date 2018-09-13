@@ -1,6 +1,6 @@
 import JoyCon from 'joycon';
 import { dirname } from 'path';
-import { ReadFileOptions, TakeoffFileData } from 'takeoff';
+import { TakeoffFileData } from 'takeoff';
 
 import parseMarkdown from './parse-markdown';
 export = (cwd: string): TakeoffFileData => {
