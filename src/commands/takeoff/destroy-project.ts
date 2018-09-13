@@ -1,10 +1,19 @@
-import { TakeoffCommand } from 'commands';
+import { CommandResult, TakeoffCommand } from 'commands';
 import { TakeoffCmdParameters } from 'takeoff';
+import { ExitCode } from 'task';
 
 /**
  * Destroys an project in a non-reversable way
  */
-export = ({ shell, args, workingDir, opts, printMessage, exitWithMessage }: TakeoffCmdParameters): TakeoffCommand => ({
+export = ({
+  shell,
+  args,
+  opts,
+  rcFile,
+  pathExists,
+  printMessage,
+  runCommand,
+}: TakeoffCmdParameters): TakeoffCommand => ({
   args: '<name>',
   command: 'destroy',
   description:
@@ -16,36 +25,32 @@ export = ({ shell, args, workingDir, opts, printMessage, exitWithMessage }: Take
       option: '-r, --remove-dir',
     },
   ],
-  handler(): void {
+  handler(): CommandResult {
     const [project]: string[] = args.length > 0 ? args : ['default'];
 
     printMessage(`Destroying project ${project}`);
 
-    const envDir = `${workingDir}/projects/${project}`;
+    const envDir = `${rcFile.rcRoot}/projects/${project}`;
 
-    if (!shell.test('-e', envDir)) {
-      return exitWithMessage(`The project ${project} doesn't exist`, 1);
+    if (!pathExists(envDir)) {
+      return { code: ExitCode.Error, fail: `The project ${project} doesn't exist` };
     }
 
-    const dockerDown = shell.exec(`docker-compose -f ${envDir}/docker/docker-compose.yml down --rmi all`, {
-      slient: opts.v ? false : true,
-    });
+    const runCmd = runCommand(`docker-compose -f docker/docker-compose.yml down --rmi all`, envDir);
 
-    if (dockerDown.code !== 0) {
-      return exitWithMessage(`Error stopping ${project}`, 1);
+    if (runCmd.code !== 0) {
+      return { cmd: runCmd, code: runCmd.code, fail: `Error destroying ${project}` };
     }
 
     if (opts['r'] || opts['remove-dir']) {
       printMessage(`Removing folder ${envDir}`);
-
       const removeFolder = shell.rm('-rf', `${envDir}`);
       if (removeFolder.code !== 0) {
-        return exitWithMessage(`Error deleting ${project}`, 1, removeFolder.stdout);
+        return { cmd: removeFolder, code: removeFolder.code, fail: `Error deleting ${project}` };
       }
-
       printMessage(`Folder ${envDir} removed`);
     }
 
-    return exitWithMessage(`Successfully destroyed ${project}`, 0);
+    return { code: ExitCode.Success, success: `Successfully destroyed ${project}` };
   },
 });

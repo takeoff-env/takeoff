@@ -10,11 +10,13 @@ import updateNotifier from 'update-notifier';
 import { SEVEN_DAYS } from './lib/constants';
 import loadCommands from './lib/load-commands';
 
+import { CommandResult } from 'commands';
 import pjson from 'pjson';
 
+import { ExitCode } from 'task';
 import extractArguments from './lib/extract-arguments';
+import renderHelp from './lib/help/render-help';
 import rcCheck from './lib/rc-check';
-import renderHelp from './lib/render-help';
 
 const notifier = updateNotifier({
   pkg: pjson,
@@ -38,12 +40,24 @@ const exitWithMessage = (message: string, code: number, stdout = '') => {
   }
 };
 
+const pathExists = (path: string) => shell.test('-e', path);
+
 const run = async (workingDir: string, cliArgs: string[]) => {
   shell.echo(`${chalk.magenta('Takeoff')} v${chalk.blueBright(pjson.version)}`);
 
   notifier.notify();
 
   const { command, args, opts } = extractArguments(minimist(cliArgs));
+
+  const silent = opts['v'] || opts['--verbose'] ? false : true;
+
+  const rcFile = rcCheck(workingDir);
+
+  const runCommand = (cmd: string, cwd: string = workingDir, disableSilent?: boolean) =>
+    shell.exec(cmd, {
+      cwd,
+      silent: !disableSilent ? silent : false,
+    });
 
   let takeoffCommands;
   try {
@@ -52,8 +66,12 @@ const run = async (workingDir: string, cliArgs: string[]) => {
       command,
       exitWithMessage,
       opts,
+      pathExists,
       printMessage,
+      rcFile,
+      runCommand,
       shell,
+      silent,
       workingDir,
     });
   } catch (e) {
@@ -69,24 +87,30 @@ const run = async (workingDir: string, cliArgs: string[]) => {
       : { group: 'takeoff', cmd: commandParts[0] };
 
   if (!request.cmd || request.cmd === 'help') {
-    return renderHelp(takeoffCommands, shell);
+    return renderHelp(takeoffCommands, shell, request.cmd === 'help', args);
   }
 
   const plugin = takeoffCommands.get(`${request.group}:${request.cmd}`);
   if (!plugin) {
-    shell.echo(`${chalk.red('[Takeoff]')} ${chalk.cyan(`${request.group}:${request.cmd}`)} not found`);
-    shell.exit(1);
+    return exitWithMessage(`${request.group}:${request.cmd} not found`, ExitCode.Error);
   }
 
-  if (!plugin.skipRcCheck) {
-    rcCheck(workingDir);
+  if (!plugin.skipRcCheck && !rcFile.exists) {
+    return exitWithMessage(`.takeoffrc file not found, cannot run ${request.group}:${request.cmd}`, ExitCode.Error);
   }
 
+  let result: CommandResult;
   try {
-    await plugin.handler();
+    result = await plugin.handler();
   } catch (e) {
     throw e;
   }
+
+  return exitWithMessage(
+    result.code !== 0 ? result.fail : result.success || '',
+    result.code,
+    result.cmd ? (silent ? undefined : result.code ? result.cmd.stderr : result.cmd.stdout) : undefined,
+  );
 };
 
 run(process.cwd(), process.argv.slice(2));

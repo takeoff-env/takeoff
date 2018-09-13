@@ -3,9 +3,10 @@
 import fg from 'fast-glob';
 import Path from 'path';
 
-import { TakeoffCommand } from 'commands';
+import { CommandResult, TakeoffCommand } from 'commands';
 import { TakeoffCmdParameters, TakeoffProject, TakeoffProjectApps } from 'takeoff';
 
+import { ExitCode } from 'task';
 import generateTable from '../../lib/generate-table';
 
 const getProjects = async (baseDir: string) => {
@@ -28,18 +29,19 @@ const getProjects = async (baseDir: string) => {
   });
 };
 
-export = ({ shell, workingDir, exitWithMessage, printMessage }: TakeoffCmdParameters): TakeoffCommand => ({
+export = ({ shell, workingDir, exitWithMessage, printMessage, rcFile }: TakeoffCmdParameters): TakeoffCommand => ({
   command: 'list',
   description: 'List all the available projects and their apps',
   group: 'takeoff',
-  async handler(): Promise<void> {
+  async handler(): Promise<CommandResult> {
     printMessage(`Listing all projects and application`);
 
     const packagePaths = await getProjects(workingDir);
 
     if (packagePaths.length === 0) {
-      return exitWithMessage('No projects found in this environment', 0);
+      return { code: ExitCode.Success, fail: `No projects found in this environment. Exiting.` };
     }
+
     const tableValues: Array<[string, string, string]> = [];
     const projects: TakeoffProject[] = [];
     const apps: TakeoffProjectApps = {};
@@ -59,7 +61,7 @@ export = ({ shell, workingDir, exitWithMessage, printMessage }: TakeoffCmdParame
         try {
           split = pkg.split('/');
           [projectName] = split;
-          const pkgJson = require(`${workingDir}/projects/${pkg}`);
+          const pkgJson = require(`${rcFile.rcRoot}/projects/${pkg}`);
           const { version } = pkgJson;
           projects.push({ projectName, version });
           apps[projectName] = apps[projectName] || [];
@@ -70,10 +72,14 @@ export = ({ shell, workingDir, exitWithMessage, printMessage }: TakeoffCmdParame
     });
 
     projects.forEach((project: TakeoffProject) => {
-      tableValues.push([project.projectName, project.version, (apps[project.projectName] || []).join(', ')]);
+      tableValues.push([
+        project.projectName,
+        project.version,
+        ([...new Set([...apps[project.projectName]])] || []).join(', '),
+      ]);
     });
 
-    const commandsTable = generateTable(
+    const table = generateTable(
       tableValues as any,
       [
         { value: 'Environment', align: 'left', width: 11 },
@@ -83,7 +89,8 @@ export = ({ shell, workingDir, exitWithMessage, printMessage }: TakeoffCmdParame
 
       { borderStyle: 0, compact: true, align: 'left', headerAlign: 'left' },
     );
-    shell.echo(commandsTable.render());
-    shell.exit(0);
+    shell.echo(table.render());
+
+    return { code: ExitCode.Success };
   },
 });

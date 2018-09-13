@@ -1,34 +1,44 @@
-import { TakeoffCommand } from 'commands';
+import { CommandResult, TakeoffCommand } from 'commands';
 import { TakeoffCmdParameters } from 'takeoff';
 
 /**
  * Builds an project based on a docker-compose file
  */
 
-export = ({ shell, args, workingDir, opts, printMessage, exitWithMessage }: TakeoffCmdParameters): TakeoffCommand => ({
+export = ({ args, opts, rcFile, pathExists, printMessage, runCommand }: TakeoffCmdParameters): TakeoffCommand => ({
   args: '<name>',
   command: 'build',
   description: 'Builds containers based on a docker-compose file',
   group: 'takeoff',
-  handler(): void {
+  options: [
+    {
+      description: `Build fresh and don't use the cache`,
+      option: '-n, --no-cache',
+    },
+  ],
+  handler(): CommandResult {
     const [project] = args.length > 0 ? args : ['default'];
 
     printMessage(`Building project ${project}`);
 
-    const projectDir = `${workingDir}/projects/${project}`;
+    const projectDir = `${rcFile.rcRoot}/projects/${project}`;
 
-    if (!shell.test('-e', projectDir)) {
-      return exitWithMessage(`The project ${project} doesn't exist`, 1);
+    if (!pathExists(projectDir)) {
+      return { code: 1, fail: `The project ${project} doesn't exist` };
     }
 
-    const runCmd = shell.exec(`docker-compose -f ${projectDir}/docker/docker-compose.yml build`, {
-      slient: opts.v ? false : true,
-    });
-
-    if (runCmd.code !== 0) {
-      return exitWithMessage(`Error starting project ${project}`, 1, runCmd.stdout);
+    let cmd = `docker-compose -f docker/docker-compose.yml build`;
+    if (opts['n'] || opts['no-cache']) {
+      cmd = `${cmd} --no-cache`;
     }
 
-    return exitWithMessage(`Successfully started ${project}`, 0);
+    const runCmd = runCommand(cmd, projectDir);
+
+    return {
+      cmd: runCmd,
+      code: runCmd.code,
+      fail: `Error building ${project}.`,
+      success: `Successfully built ${project}`,
+    };
   },
 });

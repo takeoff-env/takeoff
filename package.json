@@ -1,6 +1,6 @@
 {
   "name": "@takeoff/takeoff",
-  "version": "2.0.4",
+  "version": "2.0.6",
   "description": "A easy to use batteries-included development environment using containers and powered by node, npm and docker.",
   "author": {
     "name": "Tane Piper",
@@ -8,11 +8,12 @@
   },
   "license": "MIT",
   "scripts": {
-    "prepublishOnly": "npm run build",
-    "build": "npm run clean && tsc -p tsconfig.json",
+    "prepublishOnly": "bash .circleci/build-dist.sh",
+    "build": "tsc -p tsconfig.json",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "tslint -p tsconfig.json",
-    "clean": "rm -rf dist"
+    "clean": "rimraf build && rimraf dist",
+    "move-dist": "move-cli build/src/ dist"
   },
   "types": "src/types/**/*.d.ts",
   "dependencies": {
@@ -28,7 +29,7 @@
     "update-notifier": "^2.5.0"
   },
   "bin": {
-    "takeoff": "./dist/src/index.js"
+    "takeoff": "dist/index.js"
   },
   "devDependencies": {
     "@types/markdown-it": "0.0.5",
@@ -38,7 +39,9 @@
     "@types/require-from-string": "^1.2.0",
     "@types/shelljs": "^0.8.0",
     "@types/update-notifier": "^2.2.0",
+    "move-cli": "^1.2.0",
     "prettier": "^1.14.2",
+    "rimraf": "^2.6.2",
     "tslint": "^5.11.0",
     "tslint-config-prettier": "^1.15.0",
     "typescript": "^3.0.3"

@@ -1,9 +1,9 @@
 import JoyCon from 'joycon';
 import { dirname } from 'path';
-import { ReadFileOptions, TakeoffFileData } from 'takeoff';
+import { TakeoffFileData } from 'takeoff';
 
 import parseMarkdown from './parse-markdown';
-export = ({ cwd }: ReadFileOptions): TakeoffFileData => {
+export = (cwd: string): TakeoffFileData => {
   const loadTakeoffFile = new JoyCon({
     // Stop reading at parent dir
     // i.e. Only read file from process.cwd()

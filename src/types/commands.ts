@@ -1,3 +1,5 @@
+import { TakeoffRcFile } from 'takeoff';
+
 /**
  * Plugin Options
  */
@@ -11,6 +13,13 @@ export interface CommandOption {
    * The description of the option
    */
   description: string;
+}
+
+export interface CommandResult {
+  cmd?: any;
+  code: number;
+  fail?: string;
+  success?: string;
 }
 
 /**
@@ -29,5 +38,5 @@ export interface TakeoffCommand {
 
   skipRcCheck?: boolean;
 
-  handler: () => void | Promise<void>;
+  handler: () => CommandResult | Promise<CommandResult>;
 }
