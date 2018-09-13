@@ -115,18 +115,11 @@ In the Takeoff environment you can create a folder called `commands` and place J
 module.exports = ({
   command, // The command being run as a string
   workingDir, // The directory the command is being run in
-  shell,    // An instance of ShellJS
   args, // A object map of key/val args
   opts, // A object map of key/val options
-  printMessage, // A function to print to the console, takes a string
-  /**
-   * A function to print to the console but also exit the shell
-   * - 0 for a clean exit
-   * - 1 for a error exit
-   * You can also pass an optional third string such as runCmd.stdout
-   * e.g exitWithMessage('Error Happened`, 1, myCmd.stderr)
-   */
-  exitWithMessage, 
+  printMessage, // A function to print to the console, takes a string,
+  rcFile // Object with .takeoffrc file data
+  runCommand // Run a command in the shell and get back the result
 }) => ({
     /**
      * The below command is available via
@@ -155,15 +148,14 @@ module.exports = ({
       cmd = `${cmd} world`;
     }
 
-    const runCmd = shell.exec(cmd, {
-      slient: opts.v ? false : true
-    });
+    const runCmd = runCommand(cmd, workingDir);
 
-    if (runCmd.code !== 0) {
-      return exitWithMessage('Error running command.  Use -v to see verbose logs', 1, `${runCmd.stdout} ${runCmd.stderr}`);
-    }
-
-    return exitWithMessage('Script exited with no errors', 0);
+    return {
+      cmd: runCmd,
+      code: runCmd.code,
+      fail: 'Error running command',
+      success: 'Successfully ran command',
+    };
   }
 });
 ```
