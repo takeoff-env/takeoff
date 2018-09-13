@@ -13,6 +13,7 @@ import loadCommands from './lib/load-commands';
 import { CommandResult } from 'commands';
 import pjson from 'pjson';
 
+import { ExitCode } from 'task';
 import extractArguments from './lib/extract-arguments';
 import renderHelp from './lib/help/render-help';
 import rcCheck from './lib/rc-check';
@@ -52,10 +53,10 @@ const run = async (workingDir: string, cliArgs: string[]) => {
 
   const rcFile = rcCheck(workingDir);
 
-  const runCommand = (cmd: string, cwd: string = workingDir) =>
+  const runCommand = (cmd: string, cwd: string = workingDir, disableSilent?: boolean) =>
     shell.exec(cmd, {
       cwd,
-      silent,
+      silent: !disableSilent ? silent : false,
     });
 
   let takeoffCommands;
@@ -91,17 +92,11 @@ const run = async (workingDir: string, cliArgs: string[]) => {
 
   const plugin = takeoffCommands.get(`${request.group}:${request.cmd}`);
   if (!plugin) {
-    shell.echo(`${chalk.red('[Takeoff]')} ${chalk.cyan(`${request.group}:${request.cmd}`)} not found`);
-    shell.exit(1);
+    return exitWithMessage(`${request.group}:${request.cmd} not found`, ExitCode.Error);
   }
 
   if (!plugin.skipRcCheck && !rcFile.exists) {
-    shell.echo(
-      `${chalk.red('[Takeoff]')} .takeoffrc file not found, cannot run ${chalk.cyan(
-        `${request.group}:${request.cmd}`,
-      )}`,
-    );
-    shell.exit(1);
+    return exitWithMessage(`.takeoffrc file not found, cannot run ${request.group}:${request.cmd}`, ExitCode.Error);
   }
 
   let result: CommandResult;

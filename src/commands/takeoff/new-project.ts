@@ -77,7 +77,7 @@ export = ({
 
     const result = { code: 0 };
     try {
-      await taskRunner(null, projectDir);
+      await taskRunner(null, `${rcFile.rcRoot}/${projectDir}`);
     } catch (e) {
       result.code = 1;
     }

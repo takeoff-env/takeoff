@@ -21,6 +21,7 @@ export = ({ args, opts, pathExists, printMessage, rcFile, runCommand }: TakeoffC
   handler(): CommandResult {
     const [blueprint]: string[] = args.length > 0 ? args : [];
     const url = opts['b'] || opts['blueprint'];
+    
     if (!blueprint || !url) {
       return { code: ExitCode.Error, fail: 'You must pass a blueprint name and path to clone' };
     }

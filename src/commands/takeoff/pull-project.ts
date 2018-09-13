@@ -14,7 +14,7 @@ export = ({ args, rcFile, pathExists, printMessage, runCommand }: TakeoffCmdPara
   handler(): CommandResult {
     const [project, service]: string[] = args.length > 0 ? args : ['default'];
 
-    printMessage(`Pullng project ${project}`);
+    printMessage(`Pulling ${project} ${service || ''}`);
 
     const envDir = `${rcFile.rcRoot}/projects/${project}`;
 
