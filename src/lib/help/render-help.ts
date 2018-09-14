@@ -6,12 +6,7 @@ import exitWithMessage from '../commands/exit-with-message';
 import printMessage from '../commands/print-message';
 import renderTable from './render-table';
 
-export = (
-  takeoffCommands: Map<string, TakeoffCommand>,
-  shell: any,
-  cliArgs: any,
-  version: string,
-) => {
+export = (takeoffCommands: Map<string, TakeoffCommand>, shell: any, cliArgs: any, version: string) => {
   const [helpCommand]: string[] = cliArgs.length > 0 ? cliArgs : ['takeoff'];
   printMessage(`Version ${chalk.blueBright(version)}`);
 

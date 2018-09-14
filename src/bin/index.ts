@@ -51,16 +51,16 @@ const run = async (workingDir: string, cliArgs: string[]) => {
   } catch (e) {
     throw e;
   }
-  const commandParts = (command && command.split(':')) || ['help'];
+  const commandParts = (command && command.split(':')) || ['takeoff'];
   const request =
     commandParts.length > 1
       ? {
           app: commandParts[1],
           cmd: commandParts[0],
         }
-      : { app: 'help', cmd: commandParts[0] };
+      : { app: commandParts[0], cmd: 'takeoff' };
 
-  if (!request.cmd || request.app === 'help') {
+  if ((request.cmd === 'takeoff' && request.app === 'takeoff') || request.app === 'help') {
     return renderHelp(takeoffCommands, shell, args, pjson.version);
   }
 
