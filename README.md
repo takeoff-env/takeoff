@@ -2,7 +2,7 @@
 
 Takeoff is a toolkit for rapid development, allowing you to prototype web applications using it's command line tool.
 
-[Installed via `npm`](https://www.npmjs.com/package/@takeoff/takeoff) you can find a list of [commands](docs/command-line.md) for creating and managing Takeoff environments and projects. Projects are created based on [Blueprints](docs/blueprints.md).
+[Installed via `npm`](https://www.npmjs.com/package/@takeoff/takeoff) you can find a list of [commands](docs/command-line.md) via `takeoff help` for creating and managing Takeoff environments and projects. Projects are created based on [Blueprints](docs/blueprints.md).
 
 ### Install Takeoff
 
@@ -15,7 +15,8 @@ cd <myenv>
 takeoff start # This starts the project in `projects/default`
 ```
 
-To see how this all works, it's all explained below.
+This creates an initial "Environment" - folders containing blueprints, projects and commands, alongside a `.takeoffrc` file. Blueprints are the heart of Takeoff and allow a way to easily distribute projects for Proof of Concepts, Hackdays, Code Camps and many more uses.
+A blueprint is used to create projects, essentially a working environment that contains the project sources and docker file.  Commands are custom scripts you can add you any blueprint that are shipable.
 
 ## It starts with a blueprint
 
@@ -95,6 +96,10 @@ After installing, you will have this folder structure in your Takeoff environmen
 
 When you install a new blueprint, it is cached in the `blueprints` folder; this way when you create a new project below it uses your local copy. If you want to update a blueprint, you can type `takeoff blueprint:update [name]`.  The default one is installed as `basic` for now. You can also install new blueprints via `takeoff blueprint:add [name] [git-url]`.
 
+## `.takeoffrc`
+
+The `.takeoffrc` file is a JSON configuration file that is used to define the root folder of an environment.  When takeoff runs, it will parse this file and provide it as properties available to commands.  The file can also have the `.json` extension if you prefer.
+
 ## Creating new projects
 
 When you want to create a new environment you can type:
@@ -109,58 +114,11 @@ This will start up your new named environment using the `default` blueprint if n
 
 ## Custom Commands
 
-In the Takeoff environment you can create a folder called `commands` and place JavaScript and Typescript commands.  Here is a basic JavaScript example:
+Takeoff supports custom commands with it's drop-in and easy-to-use API.  These are JavaScript or TypeScript files that give you access to do tasks within a Takeoff project, such as custom installers or seeders.
 
-```js
-module.exports = ({
-  command, // The command being run as a string
-  workingDir, // The directory the command is being run in
-  args, // A object map of key/val args
-  opts, // A object map of key/val options
-  printMessage, // A function to print to the console, takes a string,
-  rcFile // Object with .takeoffrc file data
-  runCommand // Run a command in the shell and get back the result
-}) => ({
-    /**
-     * The below command is available via
-     * > takeoff myapp:my-command -w
-     */
-  command: 'my-command',
-  description: 'A custom greeting command',
-  args: '[word]',
-  options: [{
-    option: '-w, --world',
-    description: 'Add world to the output'
-  }],
-  group: 'myapp',
-  handler() {
-    printMessage(`My script does something`);
+By adding a command to the environments `command` folder with a group and command option, it becomes available to users of your blueprint, and can be run as part of your setup too.
 
-    let cmd = 'echo Hello';
-
-    const [word] = args.length > 0 ? args: [false];
-
-    if (word) {
-      cmd = `${cmd} ${word}`;
-    }
-
-    if (opts['w'] || opts['world']) {
-      cmd = `${cmd} world`;
-    }
-
-    const runCmd = runCommand(cmd, workingDir);
-
-    return {
-      cmd: runCmd,
-      code: runCmd.code,
-      fail: 'Error running command',
-      success: 'Successfully ran command',
-    };
-  }
-});
-```
-
-This can now be run as `takeoff myapp:my-command dev -w` and will print `Hello dev world`
+You can checkout the [Custom Commands Documentation](docs/custom-commands.md) for more details.
 
 ## Platform Support
 

@@ -4,6 +4,7 @@ import { normalize } from 'path';
 
 import { TakeoffCommand } from 'commands';
 import { TakeoffCmdParameters } from 'takeoff';
+import { ExitCode } from 'task';
 
 /**
  * Load plugins from the basePath. Will attempt to load both Typescript and JavaScript plugins
@@ -31,8 +32,7 @@ export = async (cwdList: string[], params: TakeoffCmdParameters): Promise<Map<st
         const plugin: TakeoffCommand = require(requirePath)(params);
         commandMap.set(`${plugin.group}:${plugin.command}`, plugin);
       } catch (e) {
-        console.error(e);
-        throw new Error(`${chalk.red('[Takeoff]')} Unable to load command ${chalk.cyan(`${requirePath}`)}`);
+        params.exitWithMessage(`Unable to load command ${chalk.cyan(`${requirePath}`)}`, ExitCode.Error, e);
       }
     });
   }

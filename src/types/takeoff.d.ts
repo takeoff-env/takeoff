@@ -7,6 +7,10 @@ export interface TakeoffRcFile {
   rcRoot: string;
 }
 
+export interface ChalkWithIndex extends Chalk {
+  [k: string]: any;
+}
+
 /**
  * Options to be passed to the Takeoff Parser
  */
@@ -14,6 +18,13 @@ export interface TakeoffParserOptions {
   cwd: string;
 
   section?: string;
+}
+
+export interface PrintMessageOptions {
+  header?: string;
+  spacer?: string;
+  headerColour?: string;
+  textColour?: string;
 }
 
 export interface TakeoffCmdParameters {
@@ -37,7 +48,16 @@ export interface TakeoffCmdParameters {
 
   pathExists: (path: string) => boolean;
 
-  printMessage: (message: string, stdout?: any) => void;
+  printMessage: (
+    message: string,
+    stdout?: any,
+    options?: {
+      headerColour?: string;
+      textColour?: string;
+    },
+    header?: string,
+    spacer?: string,
+  ) => void;
 
   exitWithMessage: (message: string, code: number, stdout?: any) => void;
 }

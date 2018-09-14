@@ -1,0 +1,42 @@
+import JoyCon from 'joycon';
+import { sep } from 'path';
+import { TakeoffRcFile } from 'takeoff';
+import { ExitCode } from 'task';
+import exitWithMessage from './commands/exit-with-message';
+
+/**
+ * Starting from the directory the *takeoff* command is run in, this method will then resolve up all the parent
+ * directories to find a `.takeoffrc` or `.takeoffrc.json` file.  Both are JSON format and must start with a `{`
+ * object.
+ * Some commands may want to skip this and be run anywhere, in this case (*e.g. takeoff init, takeoff docker:pv*)
+ * those commands can add the `{skipRcCheck: boolean}` value in their configuration
+ */
+function loadRcFile(cwd: string): TakeoffRcFile {
+  const loadTakeoffRc = new JoyCon({
+    cwd,
+  });
+
+  const { path: filepath, data } = loadTakeoffRc.loadSync(['.takeoffrc', '.takeoffrc.json']);
+
+  if (!filepath) {
+    return { exists: false, properties: {}, rcRoot: '' };
+  }
+
+  let properties;
+  if (filepath && typeof data === 'string' && data.charAt(0) === '{') {
+    try {
+      properties = JSON.parse(data);
+    } catch (e) {
+      exitWithMessage(`Unable to parse file contents: ${filepath}`, ExitCode.Error, e);
+    }
+  } else {
+    properties = data || {};
+  }
+  
+  const rcLocationParts = filepath.split(sep);
+  rcLocationParts.pop();
+  const rcRoot = rcLocationParts.join(sep);
+  return { exists: true, properties, rcRoot };
+}
+
+export = loadRcFile;

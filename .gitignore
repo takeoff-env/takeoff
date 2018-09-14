@@ -3,3 +3,4 @@ _site
 node_modules
 envs
 dist
+public
