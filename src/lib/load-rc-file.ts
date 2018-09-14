@@ -32,7 +32,6 @@ function loadRcFile(cwd: string): TakeoffRcFile {
   } else {
     properties = data || {};
   }
-  
   const rcLocationParts = filepath.split(sep);
   rcLocationParts.pop();
   const rcRoot = rcLocationParts.join(sep);
