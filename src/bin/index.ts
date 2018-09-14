@@ -3,34 +3,26 @@
 import '../lib/bootstrap';
 
 import minimist from 'minimist';
+import pjson from 'pjson';
 import shell from 'shelljs';
-import updateNotifier from 'update-notifier';
 
 import { CommandResult } from 'commands';
-import pjson from 'pjson';
-
 import { ExitCode } from 'task';
 
 import exitWithMessage from '../lib/commands/exit-with-message';
+import pathExists from '../lib/commands/path-exists';
 import printMessage from '../lib/commands/print-message';
-import { SEVEN_DAYS } from '../lib/constants';
 import extractArguments from '../lib/extract-arguments';
 import renderHelp from '../lib/help/render-help';
 import loadCommands from '../lib/load-commands';
 import loadRcFile from '../lib/load-rc-file';
 
-const notifier = updateNotifier({
-  pkg: pjson,
-  updateCheckInterval: SEVEN_DAYS,
-});
-
-const pathExists = (path: string) => shell.test('-e', path);
-
+/**
+ * Main function executed when the Takeoff commannd line is run
+ */
 const run = async (workingDir: string, cliArgs: string[]) => {
-  notifier.notify();
-
   const { command, args, opts } = extractArguments(minimist(cliArgs));
-  
+
   const silent = opts['v'] || opts['--verbose'] ? false : true;
 
   const rcFile = loadRcFile(workingDir);
@@ -66,10 +58,10 @@ const run = async (workingDir: string, cliArgs: string[]) => {
           app: commandParts[1],
           cmd: commandParts[0],
         }
-      : { app: commandParts[0], cmd: 'takeoff' };
+      : { app: 'help', cmd: commandParts[0] };
 
   if (!request.cmd || request.app === 'help') {
-    return renderHelp(takeoffCommands, shell, request.app === 'help', args, pjson.version);
+    return renderHelp(takeoffCommands, shell, args, pjson.version);
   }
 
   const plugin = takeoffCommands.get(`${request.cmd}:${request.app}`);
@@ -85,7 +77,10 @@ const run = async (workingDir: string, cliArgs: string[]) => {
   try {
     result = await plugin.handler();
   } catch (e) {
-    throw e;
+    result = {
+      code: ExitCode.Error,
+      fail: e,
+    };
   }
 
   return exitWithMessage(

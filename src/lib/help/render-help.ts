@@ -9,14 +9,13 @@ import renderTable from './render-table';
 export = (
   takeoffCommands: Map<string, TakeoffCommand>,
   shell: any,
-  isHelpCommand: boolean,
   cliArgs: any,
   version: string,
 ) => {
-  const [helpGroupCommand]: string[] = cliArgs.length > 0 ? cliArgs : ['default'];
+  const [helpCommand]: string[] = cliArgs.length > 0 ? cliArgs : ['takeoff'];
   printMessage(`Version ${chalk.blueBright(version)}`);
 
-  const helpGroupParts = helpGroupCommand.split(':');
+  const helpGroupParts = helpCommand.split(':');
   const helpGroup = helpGroupParts[0];
   const app = helpGroupParts.length > 1 ? helpGroupParts[1] : '';
 
@@ -36,7 +35,7 @@ export = (
 
   const groupKeys = Object.keys(groups);
 
-  if (['default', 'help', 'takeoff'].includes(helpGroup)) {
+  if (['takeoff'].includes(helpGroup)) {
     printMessage(
       `Welcome to Takeoff. Below is a list of commands you can run, and a list of groups which contain commands.`,
     );

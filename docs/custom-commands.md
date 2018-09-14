@@ -10,22 +10,14 @@ Below is an example of a "Hello World" command.  The available injected features
 module.exports = ({
   args,             // The arguments passed to the command line
   command,          // The command being executed
-  exitWithMessage,  // A function that can be called to exit the ap
-  opts,
-  pathExists,
-  printMessage,
-  rcFile,
-  runCommand,
-  shell,
-  silent,
-  workingDir,
-  command, // The command being run as a string
-  workingDir, // The directory the command is being run in
-  args, // A object map of key/val args
-  opts, // A object map of key/val options
-  printMessage, // A function to print to the console, takes a string,
-  rcFile // Object with .takeoffrc file data
-  runCommand // Run a command in the shell and get back the result
+  opts,             // A key/value of options
+  pathExists,       // A function to check if a path exists, returns true or false
+  printMessage,     // A Function to Print a message to the screen
+  rcFile,           // An object of the rcRoot location, if it exists and the parsed properties
+  runCommand,       // A function to run a command in the shell
+  shell,            // A instance of shelljs for low level operations
+  silent,           // If the takeoff command is being run as silent or verbose
+  workingDir,       // The directory the command is being run in
 }) => ({
     /**
      * The below command is available via
@@ -44,9 +36,9 @@ module.exports = ({
 
     let cmd = 'echo Hello';
 
-    const [word] = args.length > 0 ? args: [false];
+    const [word] = args.length > 0 ? args: [''];
 
-    if (word) {
+    if (word !== '') {
       cmd = `${cmd} ${word}`;
     }
 
@@ -54,6 +46,8 @@ module.exports = ({
       cmd = `${cmd} world`;
     }
 
+    // Pass rcFile.rcRoot instead of working dir
+    // to run from the environment folder
     const runCmd = runCommand(cmd, workingDir);
 
     return {
