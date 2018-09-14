@@ -3,6 +3,7 @@ import fg from 'fast-glob';
 import { normalize } from 'path';
 
 import { TakeoffCommand } from 'commands';
+import { EntryItem } from 'fast-glob/out/types/entries';
 import { TakeoffCmdParameters } from 'takeoff';
 import { ExitCode } from 'task';
 
@@ -16,7 +17,7 @@ export = async (cwdList: string[], params: TakeoffCmdParameters): Promise<Map<st
   for (const cwd of cwdList) {
     const commandPath = normalize(cwd);
 
-    let commandPaths = [];
+    let commandPaths: EntryItem[] = [];
     try {
       commandPaths = await fg([`**/*.js`, `**/*.ts`], {
         cwd,
@@ -32,7 +33,7 @@ export = async (cwdList: string[], params: TakeoffCmdParameters): Promise<Map<st
         const plugin: TakeoffCommand = require(requirePath)(params);
         commandMap.set(`${plugin.group}:${plugin.command}`, plugin);
       } catch (e) {
-        params.exitWithMessage(`Unable to load command ${chalk.cyan(`${requirePath}`)}`, ExitCode.Error, e);
+        throw e;
       }
     });
   }

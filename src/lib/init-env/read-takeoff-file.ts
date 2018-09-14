@@ -13,8 +13,8 @@ export = (cwd: string): TakeoffFileData => {
 
   const { path: filepath, data } = loadTakeoffFile.loadSync(['takeoff.md']);
   if (!filepath) {
-    return null;
+    return { exists: false, filepath: '', tasks: [] };
   }
 
-  return { filepath, tasks: parseMarkdown(data) };
+  return { exists: true, filepath, tasks: parseMarkdown(data) };
 };

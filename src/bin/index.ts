@@ -7,11 +7,15 @@ import pjson from 'pjson';
 import shell from 'shelljs';
 
 import { CommandResult } from 'commands';
+import { TakeoffCmdParameters, TakeoffCommandRequest } from 'takeoff';
 import { ExitCode } from 'task';
 
 import exitWithMessage from '../lib/commands/exit-with-message';
+import fileExists from '../lib/commands/file-exists';
+import getCommandFromString from '../lib/commands/get-command-from-string';
 import pathExists from '../lib/commands/path-exists';
 import printMessage from '../lib/commands/print-message';
+import createRunCommand from '../lib/commands/run-command';
 import extractArguments from '../lib/extract-arguments';
 import renderHelp from '../lib/help/render-help';
 import loadCommands from '../lib/load-commands';
@@ -25,54 +29,47 @@ const run = async (workingDir: string, cliArgs: string[]) => {
 
   const silent = opts['v'] || opts['--verbose'] ? false : true;
 
-  const rcFile = loadRcFile(workingDir);
-
-  const runCommand = (cmd: string, cwd: string = workingDir, disableSilent?: boolean) =>
-    shell.exec(cmd, {
-      cwd,
-      silent: !disableSilent ? silent : false,
-    });
+  // Create out Takeoff object that can be passed to commands
+  const takeoff: TakeoffCmdParameters = {
+    args,
+    command,
+    exitWithMessage,
+    fileExists,
+    opts,
+    pathExists,
+    printMessage,
+    rcFile: loadRcFile(workingDir),
+    runCommand: createRunCommand(silent, workingDir),
+    shell,
+    silent,
+    workingDir,
+  };
 
   let takeoffCommands;
   try {
-    takeoffCommands = await loadCommands([`${__dirname}/../commands`, `${workingDir}/commands`], {
-      args,
-      command,
-      exitWithMessage,
-      opts,
-      pathExists,
-      printMessage,
-      rcFile,
-      runCommand,
-      shell,
-      silent,
-      workingDir,
-    });
+    takeoffCommands = await loadCommands([`${__dirname}/../commands`, `${workingDir}/commands`], takeoff);
   } catch (e) {
-    throw e;
+    throw exitWithMessage('Unable to load commands', ExitCode.Error, e);
   }
-  const commandParts = (command && command.split(':')) || ['takeoff'];
-  const request =
-    commandParts.length > 1
-      ? {
-          app: commandParts[1],
-          cmd: commandParts[0],
-        }
-      : { app: commandParts[0], cmd: 'takeoff' };
 
+  // Parse the request
+  const request: TakeoffCommandRequest = getCommandFromString(command);
   if ((request.cmd === 'takeoff' && request.app === 'takeoff') || request.app === 'help') {
     return renderHelp(takeoffCommands, shell, args, pjson.version);
   }
 
+  // Check if the command exists in the plugins
   const plugin = takeoffCommands.get(`${request.cmd}:${request.app}`);
   if (!plugin) {
-    return exitWithMessage(`${request.cmd}:${request.app} not found`, ExitCode.Error);
+    throw exitWithMessage(`${request.cmd}:${request.app} not found`, ExitCode.Error);
   }
 
-  if (!plugin.skipRcCheck && !rcFile.exists) {
-    return exitWithMessage(`.takeoffrc file not found, cannot run ${request.cmd}:${request.app}`, ExitCode.Error);
+  // Check if there is an RC file if the command doesn't allow it to be skipped
+  if (!plugin.skipRcCheck && !takeoff.rcFile.exists) {
+    throw exitWithMessage(`.takeoffrc file not found, cannot run ${request.cmd}:${request.app}`, ExitCode.Error);
   }
 
+  // Run the command and exit
   let result: CommandResult;
   try {
     result = await plugin.handler();

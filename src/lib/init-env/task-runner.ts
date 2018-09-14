@@ -1,6 +1,6 @@
 import requireFromString from 'require-from-string';
 import { TakeoffCmdParameters, TakeoffFileData, When } from 'takeoff';
-import { Task } from 'task';
+import { ExitCode, Task } from 'task';
 
 import readFile from './read-takeoff-file';
 import executeTask from './run-task';
@@ -17,6 +17,7 @@ export = ({
   silent,
   shell,
   printMessage,
+  exitWithMessage,
   opts,
   workingDir,
 }: Partial<TakeoffCmdParameters>): ((taskName?: string, projectDirectory?: string) => Promise<void>) => {
@@ -35,8 +36,8 @@ export = ({
         let res;
         try {
           res = requireFromString(task.script, takeoffFile.filepath);
-        } catch (err) {
-          return handleError(task, err);
+        } catch (e) {
+          throw exitWithMessage(`Task '${task.name}' failed.`, ExitCode.Error, e);
         }
         res = res.default || res;
         return resolve(typeof res === 'function' ? Promise.resolve(res()).catch(e => handleError(task, e)) : res);
@@ -94,7 +95,7 @@ export = ({
 
     if (!task) {
       if (throwWhenNoMatchedTask) {
-        throw new Error(`No task called "${taskName}" was found. Stopping.`);
+        throw exitWithMessage(`No task called "${taskName}" was found. Stopping.`, ExitCode.Error);
       } else {
         return;
       }
@@ -111,8 +112,8 @@ export = ({
   return async (taskName?: string, projectDirectory?: string): Promise<void> => {
     const takeoffFile = readFile(projectDirectory || workingDir);
 
-    if (!takeoffFile) {
-      throw new Error('No takeoff.md file was found.');
+    if (!takeoffFile.exists) {
+      throw exitWithMessage('No takeoff.md file was found. Stopping.', ExitCode.Error);
     }
 
     await runTask('beforeAll', takeoffFile, projectDirectory, false);

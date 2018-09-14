@@ -46,6 +46,8 @@ export interface TakeoffCmdParameters {
 
   runCommand: (cmd: string, cwd?: string, disableSilent?: boolean) => any;
 
+  fileExists: (path: string) => boolean;
+
   pathExists: (path: string) => boolean;
 
   printMessage: (
@@ -87,6 +89,12 @@ export interface TakeoffProjectApps {
 }
 
 export interface TakeoffFileData {
+  exists: boolean;
   filepath: string;
   tasks: Task[];
+}
+
+export interface TakeoffCommandRequest {
+  app: string;
+  cmd: string;
 }

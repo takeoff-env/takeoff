@@ -19,9 +19,9 @@ export = ({ opts, args, pathExists, printMessage, rcFile, runCommand }: TakeoffC
     },
   ],
   handler(): CommandResult {
-    const [project, app]: string[] = args.length > 0 ? args : ['default'];
+    const [project, ...apps]: string[] = args.length > 0 ? args : ['default'];
 
-    printMessage(`Starting project ${project}`);
+    printMessage(`Starting project ${project} ${apps && apps.join(' ') || ''}`);
 
     const envDir = `${rcFile.rcRoot}/projects/${project}`;
 
@@ -33,8 +33,8 @@ export = ({ opts, args, pathExists, printMessage, rcFile, runCommand }: TakeoffC
     if (opts['d'] || opts['deatch']) {
       cmd = `${cmd} -d`;
     }
-    if (app) {
-      cmd = `${cmd} ${app}`;
+    if (apps) {
+      cmd = `${cmd} ${apps.join(' ')}`;
     }
 
     // We want to see the docker output in this command
@@ -43,8 +43,8 @@ export = ({ opts, args, pathExists, printMessage, rcFile, runCommand }: TakeoffC
     return {
       cmd: runCmd,
       code: runCmd.code,
-      fail: `Unable to start ${project} ${app || ''}`,
-      success: `Successfully started ${project} ${app || ''}`,
+      fail: `Unable to start ${project} ${apps && apps.join(' ') || ''}`,
+      success: `Successfully started ${project} ${apps.join(' ') || ''}`,
     };
   },
 });

@@ -1,11 +1,20 @@
 import { CommandResult, TakeoffCommand } from 'commands';
+import { sep } from 'path';
 import { TakeoffCmdParameters } from 'takeoff';
 
 /**
  * Builds an project based on a docker-compose file
  */
 
-export = ({ args, opts, rcFile, pathExists, printMessage, runCommand }: TakeoffCmdParameters): TakeoffCommand => ({
+export = ({
+  args,
+  opts,
+  rcFile,
+  pathExists,
+  printMessage,
+  workingDir,
+  runCommand,
+}: TakeoffCmdParameters): TakeoffCommand => ({
   args: '<name>',
   command: 'build',
   description: 'Builds containers based on a docker-compose file',
@@ -17,15 +26,25 @@ export = ({ args, opts, rcFile, pathExists, printMessage, runCommand }: TakeoffC
     },
   ],
   handler(): CommandResult {
-    const [project] = args.length > 0 ? args : ['default'];
+    let [project] = args.length > 0 ? args : [''];
 
-    printMessage(`Building project ${project}`);
-
-    const projectDir = `${rcFile.rcRoot}/projects/${project}`;
+    // If the command is run within a project then we want to actually run it there
+    let projectDir;
+    if (!project && pathExists(`${workingDir}/docker/docker-compose.yml`)) {
+      projectDir = workingDir;
+      project = workingDir.split(sep).pop();
+    } else if (!project) {
+      project = 'default';
+      projectDir = `${rcFile.rcRoot}/projects/default`;
+    } else {
+      projectDir = `${rcFile.rcRoot}/projects/${project}`;
+    }
 
     if (!pathExists(projectDir)) {
       return { code: 1, fail: `The project ${project} doesn't exist` };
     }
+
+    printMessage(`Building project ${project}`);
 
     let cmd = `docker-compose -f docker/docker-compose.yml build`;
     if (opts['n'] || opts['no-cache']) {
