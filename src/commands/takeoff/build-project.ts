@@ -8,6 +8,7 @@ import { TakeoffCmdParameters } from 'takeoff';
 
 export = ({
   args,
+  getProjectDetails,
   opts,
   rcFile,
   pathExists,
@@ -26,19 +27,8 @@ export = ({
     },
   ],
   handler(): CommandResult {
-    let [project] = args.length > 0 ? args : [''];
 
-    // If the command is run within a project then we want to actually run it there
-    let projectDir;
-    if (!project && pathExists(`${workingDir}/docker/docker-compose.yml`)) {
-      projectDir = workingDir;
-      project = workingDir.split(sep).pop();
-    } else if (!project) {
-      project = 'default';
-      projectDir = `${rcFile.rcRoot}/projects/default`;
-    } else {
-      projectDir = `${rcFile.rcRoot}/projects/${project}`;
-    }
+    const {project, projectDir} = getProjectDetails(args, workingDir, rcFile);
 
     if (!pathExists(projectDir)) {
       return { code: 1, fail: `The project ${project} doesn't exist` };

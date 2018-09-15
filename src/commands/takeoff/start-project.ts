@@ -2,11 +2,22 @@ import { CommandResult, TakeoffCommand } from 'commands';
 import { TakeoffCmdParameters } from 'takeoff';
 import { ExitCode } from 'task';
 
+import { sep } from 'path';
+
 /**
  * Command for starting a project
  */
 
-export = ({ opts, args, pathExists, printMessage, rcFile, runCommand }: TakeoffCmdParameters): TakeoffCommand => ({
+export = ({
+  opts,
+  args,
+  pathExists,
+  printMessage,
+  rcFile,
+  workingDir,
+  runCommand,
+  getProjectDetails,
+}: TakeoffCmdParameters): TakeoffCommand => ({
   args: '<name> [service]',
   command: 'start',
   description:
@@ -19,15 +30,13 @@ export = ({ opts, args, pathExists, printMessage, rcFile, runCommand }: TakeoffC
     },
   ],
   handler(): CommandResult {
-    const [project, ...apps]: string[] = args.length > 0 ? args : ['default'];
+    const { project, projectDir, apps } = getProjectDetails(args, workingDir, rcFile);
 
-    printMessage(`Starting project ${project} ${apps && apps.join(' ') || ''}`);
-
-    const envDir = `${rcFile.rcRoot}/projects/${project}`;
-
-    if (!pathExists(envDir)) {
+    if (!pathExists(projectDir)) {
       return { code: ExitCode.Error, fail: `The project ${project} doesn't exist` };
     }
+
+    printMessage(`Starting project ${project} ${(apps && apps.join(' ')) || ''}`);
 
     let cmd = `docker-compose -f docker/docker-compose.yml up`;
     if (opts['d'] || opts['deatch']) {
@@ -38,12 +47,12 @@ export = ({ opts, args, pathExists, printMessage, rcFile, runCommand }: TakeoffC
     }
 
     // We want to see the docker output in this command
-    const runCmd = runCommand(cmd, envDir, true);
+    const runCmd = runCommand(cmd, projectDir, true);
 
     return {
       cmd: runCmd,
       code: runCmd.code,
-      fail: `Unable to start ${project} ${apps && apps.join(' ') || ''}`,
+      fail: `Unable to start ${project} ${(apps && apps.join(' ')) || ''}`,
       success: `Successfully started ${project} ${apps.join(' ') || ''}`,
     };
   },

@@ -44,6 +44,12 @@ export interface TakeoffCmdParameters {
 
   rcFile: TakeoffRcFile;
 
+  getProjectDetails: (
+    args: string[],
+    workingDir: string,
+    rcFile: TakeoffRcFile,
+  ) => { apps: string[]; project: string; projectDir: string };
+
   runCommand: (cmd: string, cwd?: string, disableSilent?: boolean) => any;
 
   fileExists: (path: string) => boolean;

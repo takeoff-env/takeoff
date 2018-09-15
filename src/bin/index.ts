@@ -13,6 +13,7 @@ import { ExitCode } from 'task';
 import exitWithMessage from '../lib/commands/exit-with-message';
 import fileExists from '../lib/commands/file-exists';
 import getCommandFromString from '../lib/commands/get-command-from-string';
+import getProjectDetails from '../lib/commands/get-project-details';
 import pathExists from '../lib/commands/path-exists';
 import printMessage from '../lib/commands/print-message';
 import createRunCommand from '../lib/commands/run-command';
@@ -35,6 +36,7 @@ const run = async (workingDir: string, cliArgs: string[]) => {
     command,
     exitWithMessage,
     fileExists,
+    getProjectDetails,
     opts,
     pathExists,
     printMessage,
