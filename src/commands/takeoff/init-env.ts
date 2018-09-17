@@ -57,7 +57,7 @@ export = ({
 
     const basePath = `${workingDir}/${environmentName}`;
 
-    shell.mkdir('-p', [basePath, `${basePath}/blueprints`, `${basePath}/projects`, `${basePath}/commands}`]);
+    shell.mkdir('-p', [basePath, `${basePath}/blueprints`, `${basePath}/projects`, `${basePath}/commands`]);
 
     shell.touch(`${basePath}/.takeoffrc`);
 
