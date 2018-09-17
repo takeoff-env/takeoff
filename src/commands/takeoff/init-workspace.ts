@@ -2,7 +2,7 @@ import { CommandResult, TakeoffCommand } from 'commands';
 import { TakeoffCmdParameters } from 'takeoff';
 import { ExitCode } from 'task';
 
-import { DEFAULT_BLUEPRINT_NAME } from '../../lib/constants';
+import { DEFAULT_BLUEPRINT_NAME, DEFAULT_PROJECT_NAME } from '../../lib/constants';
 import createTaskRunner from '../../lib/init-env/task-runner';
 
 /**
@@ -68,7 +68,7 @@ export = ({
     const blueprint =
       opts['b'] || opts['blueprint-url'] || `https://github.com/takeoff-env/takeoff-blueprint-${blueprintName}.git`;
 
-    const projectName = opts['n'] || opts['name'] || 'default';
+    const projectName = opts['n'] || opts['name'] || DEFAULT_PROJECT_NAME;
 
     const blueprintPath = `blueprints/${blueprintName}`;
     const projectDir = `projects/${projectName}`;
