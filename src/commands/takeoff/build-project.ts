@@ -1,5 +1,4 @@
 import { CommandResult, TakeoffCommand } from 'commands';
-import { sep } from 'path';
 import { TakeoffCmdParameters } from 'takeoff';
 
 /**

@@ -1,7 +1,7 @@
 {
   "name": "@takeoff/takeoff",
   "version": "2.0.8",
-  "description": "A easy to use batteries-included development environment using containers and powered by node, npm and docker.",
+  "description": "A easy to use batteries-included project using containers and powered by node, npm and docker.",
   "author": {
     "name": "Tane Piper",
     "url": "https://github.com.tanepiper"

@@ -1,5 +1,5 @@
-name: Takeoff Environment
-description: A rapid development environment using docker for convenience
+name: Takeoff Rapid Development Tookit
+description: A rapid development toolkit using docker for convenience
 author: Tane Piper
 url: https://takeoff.sh/
 theme: jekyll-theme-minimal
