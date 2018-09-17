@@ -9,6 +9,7 @@ import shell from 'shelljs';
 import { CommandResult } from 'commands';
 import { ExitCode } from 'task';
 
+import checkDependencies from '../lib/check-dependencies';
 import exitWithMessage from '../lib/commands/exit-with-message';
 import pathExists from '../lib/commands/path-exists';
 import printMessage from '../lib/commands/print-message';
@@ -21,6 +22,13 @@ import loadRcFile from '../lib/load-rc-file';
  * Main function executed when the Takeoff commannd line is run
  */
 const run = async (workingDir: string, cliArgs: string[]) => {
+
+  const { code, fail } = checkDependencies();
+
+  if (code !== 0) {
+    return exitWithMessage(fail, code);
+  }
+
   const { command, args, opts } = extractArguments(minimist(cliArgs));
 
   const silent = opts['v'] || opts['--verbose'] ? false : true;
