@@ -39,7 +39,7 @@ export = ({ shell, workingDir, exitWithMessage, printMessage, rcFile }: TakeoffC
     const packagePaths = await getProjects(workingDir);
 
     if (packagePaths.length === 0) {
-      return { code: ExitCode.Success, fail: `No projects found in this environment. Exiting.` };
+      return { code: ExitCode.Success, fail: `No projects found in this workspace. Exiting.` };
     }
 
     const tableValues: Array<[string, string, string]> = [];
@@ -82,7 +82,7 @@ export = ({ shell, workingDir, exitWithMessage, printMessage, rcFile }: TakeoffC
     const table = generateTable(
       tableValues as any,
       [
-        { value: 'Environment', align: 'left', width: 11 },
+        { value: 'Workspace', align: 'left', width: 11 },
         { value: 'Version', align: 'left', width: 10 },
         { value: 'Apps', align: 'left', width: 10 },
       ],

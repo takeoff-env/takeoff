@@ -1,6 +1,6 @@
 # Takeoff Custom Commands
 
-Adding custom commands to Takeoff is easy via the commands API. Inside the environment folder is a `commands` folders and in here you can drop in a TypeScript or JavaScript file that exports a `TakeoffCommand`
+Adding custom commands to Takeoff is easy via the commands API. Inside the workspace folder is a `commands` folders and in here you can drop in a TypeScript or JavaScript file that exports a `TakeoffCommand`
 
 ## Example Takeoff Command
 
@@ -47,7 +47,7 @@ module.exports = ({
     }
 
     // Pass rcFile.rcRoot instead of working dir
-    // to run from the environment folder
+    // to run from the workspace folder
     const runCmd = runCommand(cmd, workingDir);
 
     return {

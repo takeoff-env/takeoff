@@ -6,9 +6,9 @@ import { DEFAULT_BLUEPRINT_NAME } from '../../lib/constants';
 import createTaskRunner from '../../lib/init-env/task-runner';
 
 /**
- * Initialises a new Takeoff Environment.  This will create a cache folder
+ * Initialises a new Takeoff workspace.  This will create a cache folder
  * for blueprints and a new projects folder. By default it will create a `default`
- * environment using the blueprint.
+ * workspace using the blueprint.
  */
 export = ({
   shell,
@@ -23,7 +23,7 @@ export = ({
   args: '<name> [blueprint-name]',
   command: 'init',
   description:
-    'Creates a new Takeoff Environment. This will create a new folder that contains an initial blueprint and project based on that blueprint.',
+    'Creates a new Takeoff Workspace. This will create a new folder that contains an initial blueprint and project based on that blueprint.',
   group: 'takeoff',
   options: [
     {
@@ -46,13 +46,13 @@ export = ({
 
     if (!environmentName) {
       environmentName = 'takeoff';
-      printMessage(`No environment folder name passed, setting to "takeoff"`);
+      printMessage(`No workspace folder name passed, setting to "takeoff"`);
     }
 
-    printMessage(`Initialising environment ${environmentName}`);
+    printMessage(`Initialising Workspace ${environmentName}`);
 
     if (pathExists(environmentName)) {
-      return { code: ExitCode.Error, success: `Environment ${environmentName} already exists` };
+      return { code: ExitCode.Error, success: `Workspace ${environmentName} already exists` };
     }
 
     const basePath = `${workingDir}/${environmentName}`;
@@ -109,7 +109,7 @@ export = ({
     return {
       code: result.code,
       fail: `Error creating new project ${projectName}`,
-      success: `Environment provisioned and Project Ready`,
+      success: `Workspace provisioned and Project Ready`,
     };
   },
 });

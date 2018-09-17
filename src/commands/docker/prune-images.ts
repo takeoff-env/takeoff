@@ -2,7 +2,7 @@ import { CommandResult, TakeoffCommand } from 'commands';
 import { TakeoffCmdParameters } from 'takeoff';
 
 /**
- * Command for pulling an environment
+ * Command for pulling an workspace
  */
 
 export = ({ opts, printMessage, runCommand }: TakeoffCmdParameters): TakeoffCommand => ({
