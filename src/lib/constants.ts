@@ -24,5 +24,6 @@ export const COMMAND_TABLE_HEADERS: TableHeader[] = [
 ];
 
 export const DEFAULT_BLUEPRINT_NAME = 'default';
+export const DEFAULT_PROJECT_NAME = 'default';
 
 export const SEVEN_DAYS = 60 * 60 * 24 * 7;

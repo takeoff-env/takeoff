@@ -35,7 +35,7 @@
   "devDependencies": {
     "@types/markdown-it": "0.0.5",
     "@types/minimist": "^1.2.0",
-    "@types/node": "^10.9.4",
+    "@types/node": "^10.10.0",
     "@types/package-json": "^4.0.1",
     "@types/require-from-string": "^1.2.0",
     "@types/shelljs": "^0.8.0",

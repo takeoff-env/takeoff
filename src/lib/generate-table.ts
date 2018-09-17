@@ -4,7 +4,7 @@ import table from 'tty-table';
 const DEFAULT_WIDTH = 10;
 const PADDING = 2;
 
-export = (tableValues: string[], headers: TableHeader[], options: TableOptions = {}) => {
+export = (tableValues: string[][], headers: TableHeader[], options: TableOptions = {}) => {
   const colWidths = (tableValues || [])
     .map(([...text]) =>
       text.map((rowText: string, index: number) => {

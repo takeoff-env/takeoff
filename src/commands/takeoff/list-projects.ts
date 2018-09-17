@@ -42,7 +42,7 @@ export = ({ shell, workingDir, exitWithMessage, printMessage, rcFile }: TakeoffC
       return { code: ExitCode.Success, fail: `No projects found in this workspace. Exiting.` };
     }
 
-    const tableValues: Array<[string, string, string]> = [];
+    const tableValues: string[][] = [];
     const projects: TakeoffProject[] = [];
     const apps: TakeoffProjectApps = {};
 
@@ -89,8 +89,13 @@ export = ({ shell, workingDir, exitWithMessage, printMessage, rcFile }: TakeoffC
 
       { borderStyle: 0, compact: true, align: 'left', headerAlign: 'left' },
     );
-    shell.echo(table.render());
 
-    return { code: ExitCode.Success };
+    const result = generateTable(tableValues, [
+        { value: 'Workspace', align: 'left', width: 11 },
+        { value: 'Version', align: 'left', width: 10 },
+        { value: 'Apps', align: 'left', width: 10 },
+      ]).render();
+
+    return { code: ExitCode.Success, success: result };
   },
 });

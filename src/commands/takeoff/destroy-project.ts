@@ -2,8 +2,6 @@ import { CommandResult, TakeoffCommand } from 'commands';
 import { TakeoffCmdParameters } from 'takeoff';
 import { ExitCode } from 'task';
 
-import { sep } from 'path';
-
 /**
  * Destroys an project in a non-reversable way
  */
