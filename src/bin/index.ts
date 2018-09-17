@@ -10,6 +10,7 @@ import { CommandResult } from 'commands';
 import { TakeoffCmdParameters, TakeoffCommandRequest } from 'takeoff';
 import { ExitCode } from 'task';
 
+import checkDependencies from '../lib/check-dependencies';
 import exitWithMessage from '../lib/commands/exit-with-message';
 import fileExists from '../lib/commands/file-exists';
 import getCommandFromString from '../lib/commands/get-command-from-string';
@@ -26,6 +27,13 @@ import loadRcFile from '../lib/load-rc-file';
  * Main function executed when the Takeoff commannd line is run
  */
 const run = async (workingDir: string, cliArgs: string[]) => {
+
+  const { code, fail } = checkDependencies();
+
+  if (code !== 0) {
+    return exitWithMessage(fail, code);
+  }
+
   const { command, args, opts } = extractArguments(minimist(cliArgs));
 
   const silent = opts['v'] || opts['--verbose'] ? false : true;

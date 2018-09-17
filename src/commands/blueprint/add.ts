@@ -3,7 +3,7 @@ import { TakeoffCmdParameters } from 'takeoff';
 import { ExitCode } from 'task';
 
 /**
- * Command for pulling an environment
+ * Command for pulling an workspace
  */
 
 export = ({ args, opts, pathExists, printMessage, rcFile, runCommand }: TakeoffCmdParameters): TakeoffCommand => ({

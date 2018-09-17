@@ -4,7 +4,7 @@ import { ExitCode } from 'task';
 import { DEFAULT_BLUEPRINT_NAME } from '../../lib/constants';
 
 /**
- * Command for pulling an environment
+ * Command for pulling an workspace
  */
 
 export = ({ args, pathExists, printMessage, rcFile, runCommand }: TakeoffCmdParameters): TakeoffCommand => ({
