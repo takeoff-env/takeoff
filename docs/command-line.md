@@ -1,27 +1,54 @@
 # Takeoff Command Line
 
-Once installed you can type `takeoff` to see a full list of commands.
+# How Takeoff Command Line works
+Takeoff has various commands for creating and managing workspaces and projects. The default commands available are in the following groups:
 
-The first command you will likely use is the `init` command.
+- Takeoff
+- Blueprints
+- Docker
+
+By default you do not need to add a group to Takeoff commands (e.g. `takeoff init`), but all other groups are called via a `takeoff group:command` format.
+
+If you are in a workspace it will also load all `.js` and `.ts` files in the `<workspace>/commands` folder.  By creating [custom commands](./custom-commands.md) a developer can add their own workspace commands that are available via `takeoff help` (typing `takeoff` with no command also shows the help).
+
+Most commands need to be run within a workspace where a `.takeoffrc`/`.takeoffrc.json` file exists, but some can be run in any location.
+
+## Initialising a Workspace and Project
+
+### `takeoff init`
+Available: Any Folder <br>
+Required Arguments: [folder-name]<br>
+Optional Arguments: \<blueprint-name>
+```bash
+takeoff init <folder-name> [blueprint-name] {-b <url> --blueprint-url=<url>} {-d --no-default} {-n "foo" --name="foo"}
+```
+Command Structure
+
+### Description
+
+This is the initial command to use to create a takeoff workspace.  A workspace consists of blueprints, projects and commands.
+
+It will run the commands in the blueprint `takeoff.md` file, in order.
+
+When creating an workspace you must pass a folder name that can't currently exist, and you can also specify a blueprint name which will fetch from the cache (e.g. `basic`, `my-cool-blueprint`), or get from a known remote blueprint (such as `takeoff-blueprint-default`).
+
+### Options
+
+- `--blueprint-url` a url to a git repository or local folder containing a blueprint.
+
+- `--no-default` stops the creation of the default workspace and just makes the required folder structure.
+
+- `--name=<name>` changes the name of the project folder. If not passed it will be called `default`
+
+### Example
 
 ```bash
-takeoff init <folder-name> [blueprint-name] --blueprint-url=<url> --no-default
+takeoff init my-workspace --blueprint-url=https://github.com/takeoff-env/takeoff-blueprint-default
+--name=my-cool-project
+
+takeoff init my-workspace --blueprint-url=file://blueprints/my-cool-blueprint
+--name=my-cool-project
 ```
-
-The `init` command creates a Takeoff workspace, which is essentially a folder.  Inside itself it contains two folders, `blueprints` and `envs`.
-
-You run Takeoff commands from the root folder.
-
-When creating an workspace you must pass a folder name that can't currently exist, and you can also specify a blueprint name which will fetch from the cache (e.g. `basic`, `my-cool-blueprint`), or get from a known remote blueprint (such as `takeoff-blueprint-basic`).
-
-You can also pass `--blueprint-url` a url to a git repository or local folder containing a blueprint. For example:
-
-```bash
-takeoff init myenv --blueprint-url=https://github.com/takeoff-env/takeoff-blueprint-basic
-takeoff init myenv --blueprint-url=file://blueprints/my-cool-blueprint
-```
-
-`--no-default` stops the creation of the default workspace and just makes the required folder structure.
 
 ## Folder Commands
 
