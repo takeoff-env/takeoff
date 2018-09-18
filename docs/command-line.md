@@ -50,9 +50,27 @@ takeoff init my-workspace --blueprint-url=file://blueprints/my-cool-blueprint
 --name=my-cool-project
 ```
 
-## Folder Commands
+## Workspace Commands
 
-These are the commands you can run in the workspace folder.
+Workspace commands must be run within the folder structure of a workspace.  At the root of the workspace there is a `.takeoffrc` file that defines where blueprints and projects exist.  The format is JSON (and the file can have a `json` extention). From here most commands without arguments or options will run against the `default` project.
+
+### Project Commands
+
+These commands can be run in the root directory with arguments, or within a project directory without arguments (detected by the `takeoff.md`) and are mostly `docker-compose` commands.
+
+#### `takeoff start`
+
+This command starts a docker-compose setup after it has been built (which is done as part of the `default` configutation) and makes the app available on `http://localhost`. If run in a project it will start that project. If a name is specified it starts that project.  If no name is passed it starts `default`. 
+
+You can pass optional services to the `docker-compose` command (e.g. `docker-compose start db`) but you *must* pass the name of the project, even if in the current project folder.
+
+
+
+```bash
+takeoff start <workspace> [app]
+```
+
+Starts an `workspace`. If you don't pass a name it will start the default workspace. If you pass `app` it will only start that app (e.g. `takeoff start default db`).
 
 ```bash
 takeoff list
@@ -60,11 +78,7 @@ takeoff list
 
 Lists the workspaces, versions and apps. More information to be added soon.
 
-```bash
-takeoff start <workspace> [app]
-```
 
-Starts an `workspace`. If you don't pass a name it will start the default workspace. If you pass `app` it will only start that app (e.g. `takeoff start default db`).
 
 ```bash
 takeoff stop <workspace>
