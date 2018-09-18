@@ -11,7 +11,7 @@ export = (group: string, command: string, groups: any, shell: any, headers = COM
   let tableValues;
   if (command && command !== '') {
     if (!groups[group][command]) {
-      return exitWithMessage(`Unable to find command ${group}:${command}`, ExitCode.Error);
+      return exitWithMessage({ code: ExitCode.Error, fail: `Unable to find command ${group}:${command}` });
     }
     const item = groups[group][command] || groups['takeoff'][group];
     tableValues = [[command, item.arguments, item.options, item.description]];

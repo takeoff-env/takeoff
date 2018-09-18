@@ -3,7 +3,7 @@ import { TakeoffCmdParameters } from 'takeoff';
 import { ExitCode } from 'task';
 
 /**
- * Command for pulling an environment
+ * Command for pulling an workspace
  */
 
 export = ({ args, opts, pathExists, printMessage, rcFile, runCommand }: TakeoffCmdParameters): TakeoffCommand => ({
@@ -37,8 +37,8 @@ export = ({ args, opts, pathExists, printMessage, rcFile, runCommand }: TakeoffC
     const runCmd = runCommand(`git clone ${url} ${blueprint} --depth 1`, cwd);
 
     return {
-      cmd: runCmd,
       code: runCmd.code,
+      extra: runCmd.code === 0 ? runCmd.stdout : runCmd.stderr,
       fail: `Error adding ${blueprint}`,
       success: `Successfully added blueprint ${blueprint}`,
     };

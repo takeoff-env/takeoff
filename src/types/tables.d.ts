@@ -9,6 +9,9 @@ export interface TableHeader {
   align: string;
 }
 
+/**
+ * Table options that can be passed to the table generator
+ */
 export interface TableOptions {
   borderStyle?: number;
   compact?: boolean;

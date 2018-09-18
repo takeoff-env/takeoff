@@ -6,7 +6,7 @@ import { DEFAULT_BLUEPRINT_NAME } from '../../lib/constants';
 import createTaskRunner from './../../lib/init-env/task-runner';
 
 /**
- * Command for creating a new project inside an environment
+ * Command for creating a new project inside an workspace
  */
 
 export = ({
@@ -23,7 +23,7 @@ export = ({
   args: '<name> [blueprint-name]',
   command: 'new',
   description:
-    'Creates a new project within the current environment. By default this will use the default blueprint unless you specify a different name or url.',
+    'Creates a new project within the current workspace. By default this will use the default blueprint unless you specify a different name or url.',
   group: 'takeoff',
   options: [
     {
@@ -64,7 +64,7 @@ export = ({
     );
 
     if (runCmd.code !== 0) {
-      return { cmd: runCmd, code: runCmd.code, fail: `Error creating new project ${projectName}` };
+      return { extra: runCmd.stderr, code: runCmd.code, fail: `Error creating new project ${projectName}` };
     }
 
     const taskRunner = createTaskRunner({

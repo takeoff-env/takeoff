@@ -3,6 +3,9 @@
  */
 export type IntermediateArgs = [string, string];
 
+/**
+ * A dictionary of arguments
+ */
 export interface ArgumentOptions {
   [key: string]: string;
 }

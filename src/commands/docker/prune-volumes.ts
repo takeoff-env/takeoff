@@ -2,7 +2,7 @@ import { CommandResult, TakeoffCommand } from 'commands';
 import { TakeoffCmdParameters } from 'takeoff';
 
 /**
- * Command for pulling an environment
+ * Command for pulling an workspace
  */
 
 export = ({ opts, printMessage, runCommand }: TakeoffCmdParameters): TakeoffCommand => ({
@@ -28,8 +28,8 @@ export = ({ opts, printMessage, runCommand }: TakeoffCmdParameters): TakeoffComm
     const runCmd = runCommand(cmd);
 
     return {
-      cmd: runCmd,
       code: runCmd.code,
+      extra: runCmd.code === 0 ? runCmd.stdout : runCmd.stderr,
       fail: `Error pruning Docker Volumes`,
       success: `Successfully pruned Docker Volumes`,
     };

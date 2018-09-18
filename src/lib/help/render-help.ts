@@ -39,23 +39,19 @@ export = (takeoffCommands: Map<string, TakeoffCommand>, shell: any, cliArgs: any
         'takeoff [group:command]',
       )}`,
     );
-    printMessage(
-      `${groupKeys.reduce((result: string, key: string) => `${result} - ${key}\n`, '')}`,
-      null,
-      {
-        headerColour: 'blue',
-        textColour: 'white',
-      },
-      '',
-      '',
-    );
+    printMessage(`${groupKeys.reduce((result: string, key: string) => `${result} - ${key}\n`, '')}`, null, {
+      header: '',
+      headerColour: 'blue',
+      spacer: '',
+      textColour: 'white',
+    });
     printMessage('Showing default Takeoff Basic CLI Commands', null, {
       headerColour: 'blue',
       textColour: 'white',
     });
     renderTable('takeoff', app, groups, shell);
   } else if (!groups[helpGroup]) {
-    exitWithMessage(`No help found for command ${helpGroup}`, ExitCode.Error);
+    exitWithMessage({ code: ExitCode.Error, fail: `No help found for command ${helpGroup}` });
   } else {
     printMessage(`Showing CLI Commands for ${helpGroup}`, null, {
       headerColour: 'blue',
