@@ -1,3 +1,6 @@
+/**
+ * Available exit codes for an application.
+ */
 export const enum ExitCode {
   Success,
   Error,
