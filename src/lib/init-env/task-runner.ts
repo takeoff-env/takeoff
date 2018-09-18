@@ -2,8 +2,8 @@ import requireFromString from 'require-from-string';
 import { TakeoffCmdParameters, TakeoffFileData, When } from 'takeoff';
 import { ExitCode, Task } from 'task';
 
-import readFile from './read-takeoff-file';
-import executeTask from './run-task';
+import exec from './exec-task';
+import readTakeoffFile from './read-takeoff-file';
 
 function checkTypes(task: any, types: string[]) {
   return types.some(type => type === task.type);
@@ -18,13 +18,12 @@ export = ({
   shell,
   printMessage,
   exitWithMessage,
-  opts,
   workingDir,
 }: Partial<TakeoffCmdParameters>): ((taskName?: string, projectDirectory?: string) => Promise<void>) => {
   const createTaskPromise = async (task: Task, takeoffFile: TakeoffFileData, cwd: string) => {
     return new Promise((resolve, reject) => {
       if (checkTypes(task, ['sh', 'bash'])) {
-        return executeTask(shell, opts, silent, {
+        return exec(shell, silent, {
           cwd,
           reject,
           resolve,
@@ -110,7 +109,7 @@ export = ({
   };
 
   return async (taskName?: string, projectDirectory?: string): Promise<void> => {
-    const takeoffFile = readFile(projectDirectory || workingDir);
+    const takeoffFile = readTakeoffFile(projectDirectory || workingDir);
 
     if (!takeoffFile.exists) {
       throw exitWithMessage({ fail: 'No takeoff.md file was found. Stopping.', code: ExitCode.Error });

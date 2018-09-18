@@ -5,7 +5,14 @@ import chalk from 'chalk';
 import path from 'path';
 import { TaskRunnerOptions } from 'task';
 
-export = (shell: any, opts: any, silent: boolean, { task, resolve, reject, cwd }: TaskRunnerOptions): void => {
+/**
+ * Method called with a script from a task.  Triggers the task and waits for the result to come back
+ */
+export = (
+  shell: any,
+  silent: boolean,
+  { task, resolve, reject, cwd }: TaskRunnerOptions,
+): Promise<void | Error> => {
   const run = shell.exec(`${task.script}`, {
     cwd,
     env: {
