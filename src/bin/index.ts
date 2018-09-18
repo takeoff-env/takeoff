@@ -22,7 +22,14 @@ import loadRcFile from '../lib/load-rc-file';
  * Main function executed when the Takeoff commannd line is run
  */
 const run = async (workingDir: string, cliArgs: string[]) => {
-  const { code, fail } = checkDependencies();
+
+  const rcFile = loadRcFile(workingDir);
+  let customDependencies = [];
+  if (rcFile.exists && rcFile.properties.has('dependencies')) {
+    customDependencies = rcFile.properties.get('dependencies');
+  }
+
+  const { code, fail } = checkDependencies(customDependencies);
 
   if (code !== 0) {
     return exitWithMessage({ code, fail });
@@ -32,7 +39,7 @@ const run = async (workingDir: string, cliArgs: string[]) => {
 
   const silent = opts['v'] || opts['--verbose'] ? false : true;
 
-  const rcFile = loadRcFile(workingDir);
+  
 
   const runCommand = (cmd: string, cwd: string = workingDir, disableSilent?: boolean) =>
     shell.exec(cmd, {
