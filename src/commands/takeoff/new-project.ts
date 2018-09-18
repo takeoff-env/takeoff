@@ -64,7 +64,7 @@ export = ({
     );
 
     if (runCmd.code !== 0) {
-      return { cmd: runCmd, code: runCmd.code, fail: `Error creating new project ${projectName}` };
+      return { extra: runCmd.stderr, code: runCmd.code, fail: `Error creating new project ${projectName}` };
     }
 
     const taskRunner = createTaskRunner({

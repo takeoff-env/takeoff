@@ -30,8 +30,8 @@ export = ({ args, pathExists, printMessage, rcFile, runCommand }: TakeoffCmdPara
     const runCmd = runCommand(`git pull ${remote} ${branch}`, cwd);
 
     return {
-      cmd: runCmd,
       code: runCmd.code,
+      extra: runCmd.code === 0 ? runCmd.stdout : runCmd.stderr,
       fail: `Error updating ${blueprint}`,
       success: `Successfully updated blueprint ${blueprint} (${remote} => ${branch})`,
     };

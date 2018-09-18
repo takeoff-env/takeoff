@@ -39,14 +39,14 @@ export = ({
     const runCmd = runCommand(`docker-compose -f docker/docker-compose.yml down --rmi all`, envDir);
 
     if (runCmd.code !== 0) {
-      return { cmd: runCmd, code: runCmd.code, fail: `Error destroying ${project}` };
+      return { extra: runCmd.stderr, code: runCmd.code, fail: `Error destroying ${project}` };
     }
 
     if (opts['r'] || opts['remove-dir']) {
       printMessage(`Removing folder ${envDir}`);
       const removeFolder = shell.rm('-rf', `${envDir}`);
       if (removeFolder.code !== 0) {
-        return { cmd: removeFolder, code: removeFolder.code, fail: `Error deleting ${project}` };
+        return { extra: removeFolder.stderr, code: removeFolder.code, fail: `Error deleting ${project}` };
       }
       printMessage(`Folder ${envDir} removed`);
     }

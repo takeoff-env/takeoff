@@ -78,7 +78,7 @@ export = ({
 
       const runClone = runCommand(`git clone ${blueprint} ${blueprintPath} --depth 1`, basePath);
       if (runClone.code !== 0) {
-        return { cmd: runClone, code: runClone.code, fail: `Error cloning ${blueprint}` };
+        return { extra: runClone.stderr, code: runClone.code, fail: `Error cloning ${blueprint}` };
       }
     }
 
@@ -86,7 +86,7 @@ export = ({
 
     const runLocalClone = runCommand(`git clone file://${basePath}/${blueprintPath} ${projectDir}`, basePath);
     if (runLocalClone.code !== 0) {
-      return { cmd: runLocalClone, code: runLocalClone.code, fail: `Error cloning ${blueprintPath} to ${projectDir}` };
+      return { extra: runLocalClone.stderr, code: runLocalClone.code, fail: `Error cloning ${blueprintPath} to ${projectDir}` };
     }
 
     printMessage(`Initilising Project ${projectName}`);

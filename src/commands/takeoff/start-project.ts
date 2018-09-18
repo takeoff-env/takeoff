@@ -41,8 +41,8 @@ export = ({ opts, args, pathExists, printMessage, rcFile, runCommand }: TakeoffC
     const runCmd = runCommand(cmd, envDir, true);
 
     return {
-      cmd: runCmd,
       code: runCmd.code,
+      extra: runCmd.code === 0 ? runCmd.stdout : runCmd.stderr,
       fail: `Unable to start ${project} ${app || ''}`,
       success: `Successfully started ${project} ${app || ''}`,
     };

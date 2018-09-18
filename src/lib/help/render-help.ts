@@ -55,7 +55,7 @@ export = (takeoffCommands: Map<string, TakeoffCommand>, shell: any, cliArgs: any
     });
     renderTable('takeoff', app, groups, shell);
   } else if (!groups[helpGroup]) {
-    exitWithMessage(`No help found for command ${helpGroup}`, ExitCode.Error);
+    exitWithMessage({ code: ExitCode.Error, fail: `No help found for command ${helpGroup}` });
   } else {
     printMessage(`Showing CLI Commands for ${helpGroup}`, null, {
       headerColour: 'blue',

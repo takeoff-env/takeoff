@@ -1,5 +1,6 @@
 import { Chalk } from 'chalk';
 import { Task } from './task';
+import { CommandResult } from '@takeoff/takeoff/types/commands';
 
 export interface TakeoffRcFile {
   exists: boolean;
@@ -59,7 +60,7 @@ export interface TakeoffCmdParameters {
     spacer?: string,
   ) => void;
 
-  exitWithMessage: (message: string, code: number, stdout?: any) => void;
+  exitWithMessage: (commandResult: CommandResult) => void;
 }
 
 export interface ReadFileOptions {

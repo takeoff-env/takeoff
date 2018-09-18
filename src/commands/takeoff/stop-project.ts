@@ -25,8 +25,8 @@ export = ({ args, printMessage, pathExists, rcFile, runCommand }: TakeoffCmdPara
     const runCmd = runCommand(`docker-compose -f docker/docker-compose.yml stop`, envDir);
 
     return {
-      cmd: runCmd,
       code: runCmd.code,
+      extra: runCmd.code === 0 ? runCmd.stdout : runCmd.stderr,
       fail: `Unable to stop ${project}`,
       success: `Successfully stopped ${project}`,
     };

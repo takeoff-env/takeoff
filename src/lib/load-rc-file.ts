@@ -27,7 +27,7 @@ function loadRcFile(cwd: string): TakeoffRcFile {
     try {
       properties = JSON.parse(data);
     } catch (e) {
-      exitWithMessage(`Unable to parse file contents: ${filepath}`, ExitCode.Error, e);
+      exitWithMessage({ code: ExitCode.Error, fail: `Unable to parse file contents: ${filepath}`, extra: e });
     }
   } else {
     properties = data || {};

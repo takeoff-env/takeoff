@@ -22,11 +22,10 @@ import loadRcFile from '../lib/load-rc-file';
  * Main function executed when the Takeoff commannd line is run
  */
 const run = async (workingDir: string, cliArgs: string[]) => {
-
   const { code, fail } = checkDependencies();
 
   if (code !== 0) {
-    return exitWithMessage(fail, code);
+    return exitWithMessage({ code, fail });
   }
 
   const { command, args, opts } = extractArguments(minimist(cliArgs));
@@ -74,11 +73,14 @@ const run = async (workingDir: string, cliArgs: string[]) => {
 
   const plugin = takeoffCommands.get(`${request.cmd}:${request.app}`);
   if (!plugin) {
-    return exitWithMessage(`${request.cmd}:${request.app} not found`, ExitCode.Error);
+    return exitWithMessage({ code: ExitCode.Error, fail: `${request.cmd}:${request.app} not found` });
   }
 
   if (!plugin.skipRcCheck && !rcFile.exists) {
-    return exitWithMessage(`.takeoffrc file not found, cannot run ${request.cmd}:${request.app}`, ExitCode.Error);
+    return exitWithMessage({
+      code: ExitCode.Error,
+      fail: `.takeoffrc file not found, cannot run ${request.cmd}:${request.app}`,
+    });
   }
 
   let result: CommandResult;
@@ -91,11 +93,7 @@ const run = async (workingDir: string, cliArgs: string[]) => {
     };
   }
 
-  return exitWithMessage(
-    result.code !== 0 ? result.fail : result.success || '',
-    result.code,
-    result.cmd ? (silent ? undefined : result.code ? result.cmd.stderr : result.cmd.stdout) : undefined,
-  );
+  return exitWithMessage(result);
 };
 
 run(process.cwd(), process.argv.slice(2));
