@@ -1,11 +1,11 @@
-import { CommandResult } from 'commands';
+import { TakeoffResult } from 'commands';
 import shell from 'shelljs';
 import { ExitCode } from 'task';
 
 const REQUIRED_APPS = ['git', 'npm', 'docker', 'docker-compose'];
 
-export = (customDependencies: string[]): CommandResult => {
-  const result: CommandResult = {
+export = (customDependencies: string[]): TakeoffResult => {
+  const result: TakeoffResult = {
     code: 0,
   };
 

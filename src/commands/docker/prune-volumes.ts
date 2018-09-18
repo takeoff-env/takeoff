@@ -1,11 +1,11 @@
-import { CommandResult, TakeoffCommand } from 'commands';
-import { TakeoffCmdParameters } from 'takeoff';
+import { TakeoffResult, TakeoffCommand } from 'commands';
+import { TakeoffHelpers } from 'takeoff';
 
 /**
  * Command for pulling an workspace
  */
 
-export = ({ opts, printMessage, runCommand }: TakeoffCmdParameters): TakeoffCommand => ({
+export = ({ opts, printMessage, runCommand }: TakeoffHelpers): TakeoffCommand => ({
   command: 'pv',
   description: 'Convenience method to prune all volumes',
   group: 'docker',
@@ -16,7 +16,7 @@ export = ({ opts, printMessage, runCommand }: TakeoffCmdParameters): TakeoffComm
     },
   ],
   skipRcCheck: true,
-  handler(): CommandResult {
+  handler(): TakeoffResult {
     printMessage(`Pruning Docker Volumes`);
 
     // The -f here is to bypass confirmation in docker, the -f in the command itself is for filter

@@ -3,7 +3,7 @@
     "module": "commonjs",
     "declaration": false,
     "esModuleInterop": true,
-    "target": "es6",
+    "target": "es2018",
     "noImplicitAny": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
@@ -11,6 +11,7 @@
     "outDir": "build",
     "rootDir": ".",
     "baseUrl": ".",
+    "experimentalDecorators": true,
     "lib": [
       "esnext"
     ],

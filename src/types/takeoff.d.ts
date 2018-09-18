@@ -1,6 +1,7 @@
 import { Chalk } from 'chalk';
-import { Task } from './task';
-import { CommandResult } from './commands';
+import { Task, TaskRunnerOptions } from './task';
+import { TakeoffResult } from './commands';
+import { ExecOutputReturnValue } from 'shelljs';
 
 /**
  * A Object containing the results of a `.takeoffrc` file
@@ -66,7 +67,7 @@ export interface PrintMessageOptions {
 /**
  * These are the parameters injected into a Takeoff command.
  */
-export interface TakeoffCmdParameters {
+export interface TakeoffHelpers {
   /**
    * The current command being run
    */
@@ -116,6 +117,8 @@ export interface TakeoffCmdParameters {
     projectDir: string;
   };
 
+  execCommand: (options: TaskRunnerOptions) => Promise<TakeoffResult>;
+
   /**
    * Helper method to run a command
    */
@@ -134,7 +137,7 @@ export interface TakeoffCmdParameters {
   /**
    * Helper method to exit the application
    */
-  exitWithMessage: (commandResult: CommandResult) => void;
+  exitWithMessage: (TakeoffResult: TakeoffResult) => void;
 }
 
 /**

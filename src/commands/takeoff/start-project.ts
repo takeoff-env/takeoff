@@ -1,21 +1,11 @@
-import { CommandResult, TakeoffCommand } from 'commands';
-import { TakeoffCmdParameters } from 'takeoff';
+import { TakeoffResult } from 'commands';
+import { TakeoffHelpers } from 'takeoff';
 import { ExitCode } from 'task';
 
 /**
  * Command for starting a project
  */
-
-export = ({
-  opts,
-  args,
-  pathExists,
-  printMessage,
-  rcFile,
-  workingDir,
-  runCommand,
-  getProjectDetails,
-}: TakeoffCmdParameters): TakeoffCommand => ({
+export = {
   args: '<name> [service]',
   command: 'start',
   description:
@@ -27,7 +17,16 @@ export = ({
       option: '-d, --detach',
     },
   ],
-  handler(): CommandResult {
+  handler({
+    opts,
+    args,
+    pathExists,
+    printMessage,
+    rcFile,
+    workingDir,
+    runCommand,
+    getProjectDetails,
+  }: TakeoffHelpers): TakeoffResult {
     const { project, projectDir, apps } = getProjectDetails(args, workingDir, rcFile);
 
     if (!pathExists(projectDir)) {
@@ -54,4 +53,4 @@ export = ({
       success: `Successfully started ${project} ${apps && apps.join(' ')}`,
     };
   },
-});
+};

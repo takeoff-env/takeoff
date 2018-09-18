@@ -1,5 +1,5 @@
-import { CommandResult, TakeoffCommand } from 'commands';
-import { TakeoffCmdParameters } from 'takeoff';
+import { TakeoffResult, TakeoffCommand } from 'commands';
+import { TakeoffHelpers } from 'takeoff';
 import { ExitCode } from 'task';
 
 /**
@@ -14,12 +14,12 @@ export = ({
   workingDir,
   runCommand,
   getProjectDetails,
-}: TakeoffCmdParameters): TakeoffCommand => ({
+}: TakeoffHelpers): TakeoffCommand => ({
   args: '<name> [service]',
   command: 'pull',
   description: 'Pulls any pre-build images within a project (such a database images).',
   group: 'takeoff',
-  handler(): CommandResult {
+  handler(): TakeoffResult {
     const { project, projectDir, apps } = getProjectDetails(args, workingDir, rcFile);
 
     if (!pathExists(projectDir)) {

@@ -3,8 +3,8 @@
 import fg from 'fast-glob';
 import Path from 'path';
 
-import { CommandResult, TakeoffCommand } from 'commands';
-import { TakeoffCmdParameters, TakeoffProject, TakeoffProjectApps } from 'takeoff';
+import { TakeoffResult, TakeoffCommand } from 'commands';
+import { TakeoffHelpers, TakeoffProject, TakeoffProjectApps } from 'takeoff';
 
 import { ExitCode } from 'task';
 import generateTable from '../../lib/helpers/generate-table';
@@ -29,11 +29,11 @@ const getProjects = async (baseDir: string) => {
   });
 };
 
-export = ({ shell, workingDir, exitWithMessage, printMessage, rcFile }: TakeoffCmdParameters): TakeoffCommand => ({
+export = ({ shell, workingDir, exitWithMessage, printMessage, rcFile }: TakeoffHelpers): TakeoffCommand => ({
   command: 'list',
   description: 'List all the available projects and their apps',
   group: 'takeoff',
-  async handler(): Promise<CommandResult> {
+  async handler(): Promise<TakeoffResult> {
     printMessage(`Listing all projects and application`);
 
     const packagePaths = await getProjects(workingDir);

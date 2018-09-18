@@ -6,25 +6,20 @@ import minimist from 'minimist';
 import pjson from 'pjson';
 import shell from 'shelljs';
 
-import { CommandResult } from 'commands';
-import { TakeoffCmdParameters, TakeoffCommandRequest } from 'takeoff';
+import { TakeoffResult } from 'commands';
+import { TakeoffCommandRequest } from 'takeoff';
 import { ExitCode } from 'task';
 
 // Dependencies for CLI
 import checkDependencies from '../lib/bin/check-dependencies';
 import extractArguments from '../lib/bin/extract-arguments';
 import loadCommands from '../lib/bin/load-commands';
-import loadRcFile from '../lib/bin/load-rc-file';
-
-// Depndencies for Tasks
 import renderHelp from '../lib/help/render-help';
-import exitWithMessage from '../lib/helpers/exit-with-message';
-import fileExists from '../lib/helpers/file-exists';
 import getCommandFromString from '../lib/helpers/get-command-from-string';
-import getProjectDetails from '../lib/helpers/get-project-details';
-import pathExists from '../lib/helpers/path-exists';
-import printMessage from '../lib/helpers/print-message';
-import createRunCommand from '../lib/helpers/run-command';
+import exitWithMessage from '../lib/helpers/exit-with-message';
+import createHelpers from '../lib/bin/create-helpers';
+import loadRcFile from '../lib/bin/load-rc-file';
+import { TakeoffHelpers } from 'helpers';
 
 /**
  * Main function executed when the Takeoff commannd line is run
@@ -46,25 +41,17 @@ async function run(workingDir: string, cliArgs: string[]): Promise<void> {
 
   const silent = opts['v'] || opts['--verbose'] ? false : true;
 
-  const takeoff: TakeoffCmdParameters = {
+  const takeoff: TakeoffHelpers = createHelpers({
     args,
     command,
-    exitWithMessage,
-    fileExists,
-    getProjectDetails,
     opts,
-    pathExists,
-    printMessage,
-    rcFile: loadRcFile(workingDir),
-    runCommand: createRunCommand(silent, workingDir),
-    shell,
     silent,
     workingDir,
-  };
+  });
 
   let takeoffCommands;
   try {
-    takeoffCommands = await loadCommands([`${__dirname}/../commands`, `${workingDir}/commands`], takeoff);
+    takeoffCommands = await loadCommands([`${__dirname}/../commands`, `${workingDir}/commands`]);
   } catch (e) {
     throw exitWithMessage({ code: ExitCode.Error, fail: 'Unable to load commands', extra: e });
   }
@@ -89,12 +76,12 @@ async function run(workingDir: string, cliArgs: string[]): Promise<void> {
   }
 
   // Set a default exit, and run the plugin to get the correct result
-  let result: CommandResult = {
+  let result: TakeoffResult = {
     code: 0,
     success: `${plugin.group}:${plugin.command} done`,
   };
   try {
-    result = await plugin.handler();
+    result = await plugin.handler(takeoff);
   } catch (e) {
     result = {
       code: ExitCode.Error,

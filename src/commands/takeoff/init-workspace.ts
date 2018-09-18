@@ -1,5 +1,5 @@
-import { CommandResult, TakeoffCommand } from 'commands';
-import { TakeoffCmdParameters } from 'takeoff';
+import { TakeoffResult, TakeoffCommand } from 'commands';
+import { TakeoffHelpers } from 'takeoff';
 import { ExitCode } from 'task';
 
 import { DEFAULT_BLUEPRINT_NAME, DEFAULT_PROJECT_NAME } from '../../lib/constants';
@@ -19,7 +19,7 @@ export = ({
   printMessage,
   silent,
   runCommand,
-}: TakeoffCmdParameters): TakeoffCommand => ({
+}: TakeoffHelpers): TakeoffCommand => ({
   args: '<name> [blueprint-name]',
   command: 'init',
   description:
@@ -40,7 +40,7 @@ export = ({
     },
   ],
   skipRcCheck: true,
-  async handler(): Promise<CommandResult> {
+  async handler(): Promise<TakeoffResult> {
     let [environmentName, blueprintName] = args;
     blueprintName = blueprintName || DEFAULT_BLUEPRINT_NAME;
 

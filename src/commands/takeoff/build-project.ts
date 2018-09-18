@@ -1,52 +1,63 @@
-import { CommandResult, TakeoffCommand } from 'commands';
-import { TakeoffCmdParameters } from 'takeoff';
+import { TakeoffResult, TakeoffCommand } from 'commands';
+import { Task, TaskRunnerOptions } from 'task';
+import { TakeoffHelpers } from 'helpers';
 
 /**
- * Builds an project based on a docker-compose file
+ * Handler for building projects
  */
-
-export = ({
+async function handler({
   args,
+  execCommand,
   getProjectDetails,
   opts,
   rcFile,
   pathExists,
   printMessage,
   workingDir,
-  runCommand,
-}: TakeoffCmdParameters): TakeoffCommand => ({
+  silent,
+}: TakeoffHelpers): Promise<TakeoffResult> {
+  const { project, projectDir } = getProjectDetails(args, workingDir, rcFile);
+
+  if (!pathExists(projectDir)) {
+    return { code: 1, fail: `The project ${project} doesn't exist in ${projectDir}` };
+  }
+
+  printMessage(`Building project ${project}`);
+
+  let cmd = `docker-compose -f docker/docker-compose.yml build`;
+  if (opts['n'] || opts['no-cache']) {
+    cmd = `${cmd} --no-cache`;
+  }
+
+  const cmdOptions: TaskRunnerOptions = {
+    cwd: projectDir,
+    fail: `Error building ${project}.`,
+    silent,
+    success: `Successfully built ${project}`,
+    task: {
+      script: cmd,
+    },
+  };
+
+  return await execCommand(cmdOptions);
+}
+
+/**
+ * Builds an project based on a docker-compose file
+ */
+
+const command: TakeoffCommand = {
   args: '<name>',
   command: 'build',
   description: 'Builds containers based on a docker-compose file',
   group: 'takeoff',
+  handler,
   options: [
     {
       description: `Build fresh and don't use the cache`,
       option: '-n, --no-cache',
     },
   ],
-  handler(): CommandResult {
+};
 
-    const {project, projectDir} = getProjectDetails(args, workingDir, rcFile);
-
-    if (!pathExists(projectDir)) {
-      return { code: 1, fail: `The project ${project} doesn't exist` };
-    }
-
-    printMessage(`Building project ${project}`);
-
-    let cmd = `docker-compose -f docker/docker-compose.yml build`;
-    if (opts['n'] || opts['no-cache']) {
-      cmd = `${cmd} --no-cache`;
-    }
-
-    const runCmd = runCommand(cmd, projectDir);
-
-    return {
-      code: runCmd.code,
-      extra: runCmd.code === 0 ? runCmd.stdout : runCmd.stderr,
-      fail: `Error building ${project}.`,
-      success: `Successfully built ${project}`,
-    };
-  },
-});
+export = command;

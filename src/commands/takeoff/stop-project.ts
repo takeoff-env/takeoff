@@ -1,5 +1,5 @@
-import { CommandResult, TakeoffCommand } from 'commands';
-import { TakeoffCmdParameters } from 'takeoff';
+import { TakeoffResult, TakeoffCommand } from 'commands';
+import { TakeoffHelpers } from 'takeoff';
 import { ExitCode } from 'task';
 /**
  * Command that handles the stopping of a project
@@ -14,7 +14,7 @@ export = ({
   runCommand,
   getProjectDetails,
   opts,
-}: TakeoffCmdParameters): TakeoffCommand => ({
+}: TakeoffHelpers): TakeoffCommand => ({
   args: '<name> [...services]',
   command: 'stop',
   description: 'Stops all services in a named project',
@@ -25,7 +25,7 @@ export = ({
       option: '-t, --timeout',
     },
   ],
-  handler(): CommandResult {
+  handler(): TakeoffResult {
     const { project, projectDir, apps } = getProjectDetails(args, workingDir, rcFile);
 
     if (!pathExists(projectDir)) {

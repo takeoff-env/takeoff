@@ -4,6 +4,6 @@
     "interface-name": false,
     "no-console": false,
     "no-string-literal": false,
-    "no-reference": false
+    "no-reference": false,
   }
 }
