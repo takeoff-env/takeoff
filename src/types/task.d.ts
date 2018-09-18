@@ -37,6 +37,8 @@ export interface Task {
  * Options to pass to the task runner
  */
 export interface TaskRunnerOptions {
+  silent: boolean;
+  
   task: Task;
 
   resolve: Function;

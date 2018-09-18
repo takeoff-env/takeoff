@@ -1,50 +1,15 @@
-import requireFromString from 'require-from-string';
 import { TakeoffCmdParameters, TakeoffFileData, When } from 'takeoff';
 import { ExitCode, Task } from 'task';
 
-import exec from './exec-task';
 import readTakeoffFile from './read-takeoff-file';
-
-function checkTypes(task: any, types: string[]) {
-  return types.some(type => type === task.type);
-}
-
-const handleError = (task: Task, err: Error) => {
-  throw new Error(`Task '${task.name}' failed.\n${err.stack}`);
-};
+import createTaskPromise from './task-runner/create-task-promise';
 
 export = ({
   silent,
-  shell,
   printMessage,
   exitWithMessage,
   workingDir,
 }: Partial<TakeoffCmdParameters>): ((taskName?: string, projectDirectory?: string) => Promise<void>) => {
-  const createTaskPromise = async (task: Task, takeoffFile: TakeoffFileData, cwd: string) => {
-    return new Promise((resolve, reject) => {
-      if (checkTypes(task, ['sh', 'bash'])) {
-        return exec(shell, silent, {
-          cwd,
-          reject,
-          resolve,
-          task,
-        });
-      }
-
-      if (checkTypes(task, ['js', 'javascript'])) {
-        let res;
-        try {
-          res = requireFromString(task.script, takeoffFile.filepath);
-        } catch (e) {
-          throw exitWithMessage({ fail: `Task '${task.name}' failed.`, code: ExitCode.Error, extra: e });
-        }
-        res = res.default || res;
-        return resolve(typeof res === 'function' ? Promise.resolve(res()).catch(e => handleError(task, e)) : res);
-      }
-
-      return resolve();
-    });
-  };
 
   const runTasks = async (
     taskNames: string[],
@@ -104,7 +69,7 @@ export = ({
 
     // Start running task
     await runTaskHooks(task, 'before', takeoffFile, projectDirectory);
-    await createTaskPromise(task, takeoffFile, projectDirectory);
+    await createTaskPromise(task, takeoffFile, projectDirectory, silent);
     await runTaskHooks(task, 'after', takeoffFile, projectDirectory);
   };
 

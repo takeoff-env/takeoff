@@ -2,8 +2,8 @@ import chalk from 'chalk';
 import { CommandOption, TakeoffCommand } from 'commands';
 
 import { ExitCode } from 'task';
-import exitWithMessage from '../commands/exit-with-message';
-import printMessage from '../commands/print-message';
+import exitWithMessage from '../helpers/exit-with-message';
+import printMessage from '../helpers/print-message';
 import renderTable from './render-table';
 
 export = (takeoffCommands: Map<string, TakeoffCommand>, shell: any, cliArgs: any, version: string) => {

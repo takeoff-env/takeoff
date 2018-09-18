@@ -3,16 +3,13 @@
  */
 import chalk from 'chalk';
 import path from 'path';
+import shell, { ExecOutputReturnValue } from 'shelljs';
 import { TaskRunnerOptions } from 'task';
 
 /**
  * Method called with a script from a task.  Triggers the task and waits for the result to come back
  */
-export = (
-  shell: any,
-  silent: boolean,
-  { task, resolve, reject, cwd }: TaskRunnerOptions,
-): Promise<void | Error> => {
+function execTask({ silent, task, resolve, reject, cwd }: TaskRunnerOptions): Promise<void | Error> {
   const run = shell.exec(`${task.script}`, {
     cwd,
     env: {
@@ -20,9 +17,11 @@ export = (
       PATH: `${path.resolve('node_modules/.bin')}:${process.env.PATH}`,
     },
     silent,
-  });
+  }) as ExecOutputReturnValue;
   if (run.code !== 0) {
     return reject(new Error(`${chalk.red('[Takeoff]')} Task "${task.name}" exited with code ${run.code}`));
   }
   return resolve();
-};
+}
+
+export = execTask;

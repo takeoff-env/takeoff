@@ -2,7 +2,7 @@ import JoyCon from 'joycon';
 import { sep } from 'path';
 import { TakeoffRcFile } from 'takeoff';
 import { ExitCode } from 'task';
-import exitWithMessage from './commands/exit-with-message';
+import exitWithMessage from '../helpers/exit-with-message';
 
 /**
  * Starting from the directory the *takeoff* command is run in, this method will then resolve up all the parent

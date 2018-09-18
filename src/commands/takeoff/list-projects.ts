@@ -7,7 +7,7 @@ import { CommandResult, TakeoffCommand } from 'commands';
 import { TakeoffCmdParameters, TakeoffProject, TakeoffProjectApps } from 'takeoff';
 
 import { ExitCode } from 'task';
-import generateTable from '../../lib/generate-table';
+import generateTable from '../../lib/helpers/generate-table';
 
 const getProjects = async (baseDir: string) => {
   // Do all the pre-plugin loading

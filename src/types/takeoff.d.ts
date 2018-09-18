@@ -1,6 +1,6 @@
 import { Chalk } from 'chalk';
 import { Task } from './task';
-import { CommandResult } from '@takeoff/takeoff/types/commands';
+import { CommandResult } from './commands';
 
 /**
  * A Object containing the results of a `.takeoffrc` file
