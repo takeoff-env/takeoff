@@ -1,6 +1,6 @@
 {
   "name": "@takeoff/takeoff",
-  "version": "2.0.8",
+  "version": "2.0.9",
   "description": "A easy to use batteries-included development environment using containers and powered by node, npm and docker.",
   "author": {
     "name": "Tane Piper",
