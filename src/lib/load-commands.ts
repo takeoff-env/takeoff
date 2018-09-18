@@ -33,7 +33,11 @@ export = async (cwdList: string[], params: TakeoffCmdParameters): Promise<Map<st
         const plugin: TakeoffCommand = require(requirePath)(params);
         commandMap.set(`${plugin.group}:${plugin.command}`, plugin);
       } catch (e) {
-        throw e;
+        params.exitWithMessage({
+          code: ExitCode.Error,
+          extra: e,
+          fail: `Unable to load command ${chalk.cyan(`${requirePath}`)}`,
+        });
       }
     });
   }

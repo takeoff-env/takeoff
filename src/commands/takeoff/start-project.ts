@@ -48,10 +48,10 @@ export = ({
     const runCmd = runCommand(cmd, projectDir, true);
 
     return {
-      cmd: runCmd,
       code: runCmd.code,
-      fail: `Unable to start ${project} ${(apps && apps.join(' ')) || ''}`,
-      success: `Successfully started ${project} ${apps.join(' ') || ''}`,
+      extra: runCmd.code === 0 ? runCmd.stdout : runCmd.stderr,
+      fail: `Unable to start ${project} ${apps && apps.join(' ')}`,
+      success: `Successfully started ${project} ${apps && apps.join(' ')}`,
     };
   },
 });

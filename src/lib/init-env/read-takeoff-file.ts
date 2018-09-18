@@ -3,6 +3,7 @@ import { dirname } from 'path';
 import { TakeoffFileData } from 'takeoff';
 
 import parseMarkdown from './parse-markdown';
+
 export = (cwd: string): TakeoffFileData => {
   const loadTakeoffFile = new JoyCon({
     // Stop reading at parent dir

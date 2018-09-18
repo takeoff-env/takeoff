@@ -16,7 +16,7 @@ export interface CommandOption {
 }
 
 export interface CommandResult {
-  cmd?: any;
+  extra?: any;
   code: number;
   fail?: string;
   success?: string;

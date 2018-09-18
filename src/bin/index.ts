@@ -28,17 +28,22 @@ import loadRcFile from '../lib/load-rc-file';
  */
 const run = async (workingDir: string, cliArgs: string[]) => {
 
-  const { code, fail } = checkDependencies();
+  const rcFile = loadRcFile(workingDir);
+  let customDependencies = [];
+  if (rcFile.exists && rcFile.properties.has('dependencies')) {
+    customDependencies = rcFile.properties.get('dependencies');
+  }
+
+  const { code, fail } = checkDependencies(customDependencies);
 
   if (code !== 0) {
-    return exitWithMessage(fail, code);
+    return exitWithMessage({ code, fail });
   }
 
   const { command, args, opts } = extractArguments(minimist(cliArgs));
 
   const silent = opts['v'] || opts['--verbose'] ? false : true;
 
-  // Create out Takeoff object that can be passed to commands
   const takeoff: TakeoffCmdParameters = {
     args,
     command,
@@ -59,7 +64,7 @@ const run = async (workingDir: string, cliArgs: string[]) => {
   try {
     takeoffCommands = await loadCommands([`${__dirname}/../commands`, `${workingDir}/commands`], takeoff);
   } catch (e) {
-    throw exitWithMessage('Unable to load commands', ExitCode.Error, e);
+    throw exitWithMessage({code: ExitCode.Error, fail: 'Unable to load commands', extra: e});
   }
 
   // Parse the request
@@ -71,12 +76,14 @@ const run = async (workingDir: string, cliArgs: string[]) => {
   // Check if the command exists in the plugins
   const plugin = takeoffCommands.get(`${request.cmd}:${request.app}`);
   if (!plugin) {
-    throw exitWithMessage(`${request.cmd}:${request.app} not found`, ExitCode.Error);
+    return exitWithMessage({ code: ExitCode.Error, fail: `${request.cmd}:${request.app} not found` });
   }
 
-  // Check if there is an RC file if the command doesn't allow it to be skipped
-  if (!plugin.skipRcCheck && !takeoff.rcFile.exists) {
-    throw exitWithMessage(`.takeoffrc file not found, cannot run ${request.cmd}:${request.app}`, ExitCode.Error);
+  if (!plugin.skipRcCheck && !rcFile.exists) {
+    return exitWithMessage({
+      code: ExitCode.Error,
+      fail: `.takeoffrc file not found, cannot run ${request.cmd}:${request.app}`,
+    });
   }
 
   // Run the command and exit
@@ -90,11 +97,7 @@ const run = async (workingDir: string, cliArgs: string[]) => {
     };
   }
 
-  return exitWithMessage(
-    result.code !== 0 ? result.fail : result.success || '',
-    result.code,
-    result.cmd ? (silent ? undefined : result.code ? result.cmd.stderr : result.cmd.stdout) : undefined,
-  );
+  return exitWithMessage(result);
 };
 
 run(process.cwd(), process.argv.slice(2));

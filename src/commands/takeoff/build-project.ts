@@ -43,8 +43,8 @@ export = ({
     const runCmd = runCommand(cmd, projectDir);
 
     return {
-      cmd: runCmd,
       code: runCmd.code,
+      extra: runCmd.code === 0 ? runCmd.stdout : runCmd.stderr,
       fail: `Error building ${project}.`,
       success: `Successfully built ${project}`,
     };

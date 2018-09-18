@@ -37,7 +37,7 @@ export = ({
         try {
           res = requireFromString(task.script, takeoffFile.filepath);
         } catch (e) {
-          throw exitWithMessage(`Task '${task.name}' failed.`, ExitCode.Error, e);
+          throw exitWithMessage({ fail: `Task '${task.name}' failed.`, code: ExitCode.Error, extra: e });
         }
         res = res.default || res;
         return resolve(typeof res === 'function' ? Promise.resolve(res()).catch(e => handleError(task, e)) : res);
@@ -95,7 +95,7 @@ export = ({
 
     if (!task) {
       if (throwWhenNoMatchedTask) {
-        throw exitWithMessage(`No task called "${taskName}" was found. Stopping.`, ExitCode.Error);
+        throw exitWithMessage({ fail: `No task called "${taskName}" was found. Stopping.`, code: ExitCode.Error });
       } else {
         return;
       }
@@ -113,7 +113,7 @@ export = ({
     const takeoffFile = readFile(projectDirectory || workingDir);
 
     if (!takeoffFile.exists) {
-      throw exitWithMessage('No takeoff.md file was found. Stopping.', ExitCode.Error);
+      throw exitWithMessage({ fail: 'No takeoff.md file was found. Stopping.', code: ExitCode.Error });
     }
 
     await runTask('beforeAll', takeoffFile, projectDirectory, false);

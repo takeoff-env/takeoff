@@ -28,8 +28,8 @@ export = ({ opts, printMessage, runCommand }: TakeoffCmdParameters): TakeoffComm
     const runCmd = runCommand(cmd);
 
     return {
-      cmd: runCmd,
       code: runCmd.code,
+      extra: runCmd.code === 0 ? runCmd.stdout : runCmd.stderr,
       fail: `Error pruning Docker Volumes`,
       success: `Successfully pruned Docker Volumes`,
     };

@@ -36,8 +36,8 @@ export = ({
     const runCmd = runCommand(cmd, projectDir);
 
     return {
-      cmd: runCmd,
       code: runCmd.code,
+      extra: runCmd.code === 0 ? runCmd.stdout : runCmd.stderr,
       fail: `Unable to pull ${project}`,
       success: `Pulled pre-built images for ${project} ${(apps && apps.join(' ')) || ''}`,
     };

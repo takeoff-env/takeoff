@@ -1,17 +1,12 @@
+import { CommandResult } from 'commands';
 import shell from 'shelljs';
 import printMessage from './print-message';
 
-export = (message: string, code: number, stdout = '') => {
+export = ({ code = 0, success = 'Exited Takeoff', fail = '', extra = '' }: CommandResult) => {
   if (!Number.isNaN(code) && code > 0) {
-    printMessage(message, stdout, {
-      headerColour: 'red',
-      textColour: 'white',
-    });
+    printMessage(fail, extra, { headerColour: 'red', textColour: 'white' });
   } else {
-    printMessage(message, stdout, {
-      headerColour: 'green',
-      textColour: 'white',
-    });
+    printMessage(success, extra, { headerColour: 'green', textColour: 'white' });
   }
 
   if (!Number.isNaN(code) && code > -1) {
