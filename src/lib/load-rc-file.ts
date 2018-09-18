@@ -16,7 +16,7 @@ function loadRcFile(cwd: string): TakeoffRcFile {
     cwd,
   });
 
-  let properties = new Map<string, any>();
+  let properties: Map<string, any> = new Map<string, any>();
 
   const { path: filepath, data } = loadTakeoffRc.loadSync(['.takeoffrc', '.takeoffrc.json']);
 
@@ -27,12 +27,12 @@ function loadRcFile(cwd: string): TakeoffRcFile {
   if (filepath && typeof data === 'string' && data.charAt(0) === '{') {
     try {
       const result = JSON.parse(data);
-      Object.keys(result).forEach((key: string) => properties.set(key, result));
+      Object.keys(result).forEach((key: string) => properties.set(key, result[key]));
     } catch (e) {
       exitWithMessage({ code: ExitCode.Error, fail: `Unable to parse file contents: ${filepath}`, extra: e });
     }
   } else {
-    properties = data || {};
+    Object.keys(data || {}).forEach((key: string) => properties.set(key, data[key]));
   }
   const rcLocationParts = filepath.split(sep);
   rcLocationParts.pop();
