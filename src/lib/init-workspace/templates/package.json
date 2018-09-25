@@ -1,0 +1,9 @@
+{
+  "name": "takeoff-workspace",
+  "version": "1.0.0",
+  "description": "A basic Takeoff workspace",
+  "dependencies": {
+    "@takeoff/takeoff": "^2.1.0"
+  },
+  "types": "@types/*.d.ts"
+}

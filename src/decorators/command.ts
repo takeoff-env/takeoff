@@ -1,18 +1,22 @@
 export interface CommandDecoratorOptions {
-  command: string;
-  group: string;
-  description: string;
   args?: string;
+  command: string;
+  description: string;
+  global?: boolean;
+  group: string;
   options?: any;
 }
 
-// export function TakeoffCommand(options: CommandDecoratorOptions) {
-//   console.log(options);
-//   return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
-//     console.log(target, propertyKey, descriptor);
-//   };
-// }
+export function TakeoffCommandDecorator(options: CommandDecoratorOptions) {
+  return <T extends { new (...args: any[]): {} }>(constructor: T) => {
+    Object.keys(options).forEach((key: keyof CommandDecoratorOptions) => {
+      constructor.prototype[key] = options[key];
+    });
 
-export function TakeoffCommand<T extends { new (...args: any[]): {} }>(constructor: T) {
-  return class extends constructor {};
+    return class extends constructor {};
+  };
 }
+
+// export function TakeoffCommand<T extends { new (...args: any[]): {} }>(constructor: T) {
+//   return class extends constructor {};
+// }

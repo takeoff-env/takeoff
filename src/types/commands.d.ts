@@ -37,7 +37,14 @@ export interface TakeoffCommand {
 
   group?: string;
 
-  skipRcCheck?: boolean;
+  global?: boolean;
 
-  handler: (options: TakeoffHelpers) => TakeoffResult | Promise<TakeoffResult>;
+  handler: (options: TakeoffHelpers) => Promise<TakeoffResult>;
+}
+
+/**
+ * A takeoff command to be run
+ */
+export interface TakeoffHandler {
+  handler: (options: TakeoffHelpers) => Promise<TakeoffResult>;
 }

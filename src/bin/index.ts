@@ -68,7 +68,7 @@ async function run(workingDir: string, cliArgs: string[]): Promise<void> {
     return exitWithMessage({ code: ExitCode.Error, fail: `${request.cmd}:${request.app} not found` });
   }
 
-  if (!plugin.skipRcCheck && !rcFile.exists) {
+  if (!plugin.global && !rcFile.exists) {
     return exitWithMessage({
       code: ExitCode.Error,
       fail: `.takeoffrc file not found, cannot run ${request.cmd}:${request.app}`,

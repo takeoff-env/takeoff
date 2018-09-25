@@ -1,0 +1,8 @@
+{
+  "takeoff": {
+    "blueprints": "blueprints",
+    "projects": "projects",
+    "commands": "commands",
+    "defaultBlueprint": "default"
+  }
+}

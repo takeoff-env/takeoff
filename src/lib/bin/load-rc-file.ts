@@ -9,7 +9,7 @@ import exitWithMessage from '../helpers/exit-with-message';
  * directories to find a `.takeoffrc` or `.takeoffrc.json` file.  Both are JSON format and must start with a `{`
  * object.
  * Some commands may want to skip this and be run anywhere, in this case (*e.g. takeoff init, takeoff docker:pv*)
- * those commands can add the `{skipRcCheck: boolean}` value in their configuration
+ * those commands can add the `{global: boolean}` value in their configuration
  */
 function loadRcFile(cwd: string): TakeoffRcFile {
   const loadTakeoffRc = new JoyCon({

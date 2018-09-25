@@ -32,7 +32,8 @@ export = async (cwdList: string[]): Promise<Map<string, TakeoffCommand>> => {
     commandPaths.forEach((path: string) => {
       const requirePath = `${commandPath}/${path}`;
       try {
-        const plugin: TakeoffCommand = require(requirePath);
+        const PluginClass = require(requirePath);
+        const plugin: TakeoffCommand = new PluginClass();
         commandMap.set(`${plugin.group}:${plugin.command}`, plugin);
       } catch (e) {
         exitWithMessage({
