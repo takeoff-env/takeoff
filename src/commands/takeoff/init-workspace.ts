@@ -1,29 +1,18 @@
-import { CommandResult, TakeoffCommand } from 'commands';
-import { TakeoffCmdParameters } from 'takeoff';
+import { TakeoffResult, TakeoffCommand, TakeoffHandler } from 'commands';
+import { TakeoffHelpers } from 'helpers';
 import { ExitCode } from 'task';
 
-import { DEFAULT_BLUEPRINT_NAME } from '../../lib/constants';
-import createTaskRunner from '../../lib/init-env/task-runner';
+import { DEFAULT_BLUEPRINT_NAME, DEFAULT_PROJECT_NAME } from '../../lib/constants';
+import createTaskRunner from '../../lib/init-workspace/task-runner';
+import createStructure from '../../lib/init-workspace/create-structure';
+import { TakeoffCommandDecorator } from '../../decorators/command';
 
-/**
- * Initialises a new Takeoff workspace.  This will create a cache folder
- * for blueprints and a new projects folder. By default it will create a `default`
- * workspace using the blueprint.
- */
-export = ({
-  shell,
-  args,
-  workingDir,
-  opts,
-  pathExists,
-  printMessage,
-  silent,
-  runCommand,
-}: TakeoffCmdParameters): TakeoffCommand => ({
+@TakeoffCommandDecorator({
   args: '<name> [blueprint-name]',
   command: 'init',
   description:
     'Creates a new Takeoff Workspace. This will create a new folder that contains an initial blueprint and project based on that blueprint.',
+  global: true,
   group: 'takeoff',
   options: [
     {
@@ -39,8 +28,21 @@ export = ({
       option: '-n, --name',
     },
   ],
-  skipRcCheck: true,
-  async handler(): Promise<CommandResult> {
+})
+class Command implements TakeoffHandler {
+  async handler({
+    args,
+    execCommand,
+    getProjectDetails,
+    opts,
+    rcFile,
+    pathExists,
+    printMessage,
+    workingDir,
+    shell,
+    runCommand,
+    silent,
+  }: TakeoffHelpers): Promise<TakeoffResult> {
     let [environmentName, blueprintName] = args;
     blueprintName = blueprintName || DEFAULT_BLUEPRINT_NAME;
 
@@ -49,17 +51,22 @@ export = ({
       printMessage(`No workspace folder name passed, setting to "takeoff"`);
     }
 
-    printMessage(`Initialising Workspace ${environmentName}`);
-
     if (pathExists(environmentName)) {
-      return { code: ExitCode.Error, success: `Workspace ${environmentName} already exists` };
+      return { code: ExitCode.Error, fail: `Workspace ${environmentName} already exists` };
     }
 
     const basePath = `${workingDir}/${environmentName}`;
 
-    shell.mkdir('-p', [basePath, `${basePath}/blueprints`, `${basePath}/projects`, `${basePath}/commands`]);
-
-    shell.touch(`${basePath}/.takeoffrc`);
+    try {
+      printMessage(`Initialising Workspace ${environmentName}`);
+      await createStructure(basePath);
+    } catch (e) {
+      return {
+        code: ExitCode.Error,
+        fail: `Unable to create takeoff workspace folder ${basePath}`,
+        extra: e,
+      };
+    }
 
     if (opts['d'] || opts['no-default']) {
       return { code: ExitCode.Success, success: `Skip creating default project. Done.` };
@@ -68,7 +75,7 @@ export = ({
     const blueprint =
       opts['b'] || opts['blueprint-url'] || `https://github.com/takeoff-env/takeoff-blueprint-${blueprintName}.git`;
 
-    const projectName = opts['n'] || opts['name'] || 'default';
+    const projectName = opts['n'] || opts['name'] || DEFAULT_PROJECT_NAME;
 
     const blueprintPath = `blueprints/${blueprintName}`;
     const projectDir = `projects/${projectName}`;
@@ -86,7 +93,11 @@ export = ({
 
     const runLocalClone = runCommand(`git clone file://${basePath}/${blueprintPath} ${projectDir}`, basePath);
     if (runLocalClone.code !== 0) {
-      return { extra: runLocalClone.stderr, code: runLocalClone.code, fail: `Error cloning ${blueprintPath} to ${projectDir}` };
+      return {
+        extra: runLocalClone.stderr,
+        code: runLocalClone.code,
+        fail: `Error cloning ${blueprintPath} to ${projectDir}`,
+      };
     }
 
     printMessage(`Initilising Project ${projectName}`);
@@ -111,5 +122,7 @@ export = ({
       fail: `Error creating new project ${projectName}`,
       success: `Workspace provisioned and Project Ready`,
     };
-  },
-});
+  }
+}
+
+export = Command;

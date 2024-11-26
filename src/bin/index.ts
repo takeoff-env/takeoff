@@ -1,28 +1,30 @@
 #!/usr/bin/env node
 
-import '../lib/bootstrap';
+import '../lib/bin/bootstrap';
 
 import minimist from 'minimist';
 import pjson from 'pjson';
 import shell from 'shelljs';
 
-import { CommandResult } from 'commands';
+import { TakeoffResult } from 'commands';
+import { TakeoffCommandRequest } from 'takeoff';
 import { ExitCode } from 'task';
 
-import checkDependencies from '../lib/check-dependencies';
-import exitWithMessage from '../lib/commands/exit-with-message';
-import pathExists from '../lib/commands/path-exists';
-import printMessage from '../lib/commands/print-message';
-import extractArguments from '../lib/extract-arguments';
+// Dependencies for CLI
+import checkDependencies from '../lib/bin/check-dependencies';
+import extractArguments from '../lib/bin/extract-arguments';
+import loadCommands from '../lib/bin/load-commands';
 import renderHelp from '../lib/help/render-help';
-import loadCommands from '../lib/load-commands';
-import loadRcFile from '../lib/load-rc-file';
+import getCommandFromString from '../lib/helpers/get-command-from-string';
+import exitWithMessage from '../lib/helpers/exit-with-message';
+import createHelpers from '../lib/bin/create-helpers';
+import loadRcFile from '../lib/bin/load-rc-file';
+import { TakeoffHelpers } from 'helpers';
 
 /**
  * Main function executed when the Takeoff commannd line is run
  */
-const run = async (workingDir: string, cliArgs: string[]) => {
-
+async function run(workingDir: string, cliArgs: string[]): Promise<void> {
   const rcFile = loadRcFile(workingDir);
   let customDependencies = [];
   if (rcFile.exists && rcFile.properties.has('dependencies')) {
@@ -39,68 +41,57 @@ const run = async (workingDir: string, cliArgs: string[]) => {
 
   const silent = opts['v'] || opts['--verbose'] ? false : true;
 
-  
-
-  const runCommand = (cmd: string, cwd: string = workingDir, disableSilent?: boolean) =>
-    shell.exec(cmd, {
-      cwd,
-      silent: !disableSilent ? silent : false,
-    });
+  const takeoff: TakeoffHelpers = createHelpers({
+    args,
+    command,
+    opts,
+    silent,
+    workingDir,
+  });
 
   let takeoffCommands;
   try {
-    takeoffCommands = await loadCommands([`${__dirname}/../commands`, `${workingDir}/commands`], {
-      args,
-      command,
-      exitWithMessage,
-      opts,
-      pathExists,
-      printMessage,
-      rcFile,
-      runCommand,
-      shell,
-      silent,
-      workingDir,
-    });
+    takeoffCommands = await loadCommands([`${__dirname}/../commands`, `${workingDir}/commands`]);
   } catch (e) {
-    throw e;
+    throw exitWithMessage({ code: ExitCode.Error, fail: 'Unable to load commands', extra: e });
   }
-  const commandParts = (command && command.split(':')) || ['takeoff'];
-  const request =
-    commandParts.length > 1
-      ? {
-          app: commandParts[1],
-          cmd: commandParts[0],
-        }
-      : { app: commandParts[0], cmd: 'takeoff' };
 
+  // Parse the request
+  const request: TakeoffCommandRequest = getCommandFromString(command);
   if ((request.cmd === 'takeoff' && request.app === 'takeoff') || request.app === 'help') {
     return renderHelp(takeoffCommands, shell, args, pjson.version);
   }
 
+  // Check if the command exists in the plugins
   const plugin = takeoffCommands.get(`${request.cmd}:${request.app}`);
   if (!plugin) {
     return exitWithMessage({ code: ExitCode.Error, fail: `${request.cmd}:${request.app} not found` });
   }
 
-  if (!plugin.skipRcCheck && !rcFile.exists) {
+  if (!plugin.global && !rcFile.exists) {
     return exitWithMessage({
       code: ExitCode.Error,
       fail: `.takeoffrc file not found, cannot run ${request.cmd}:${request.app}`,
     });
   }
 
-  let result: CommandResult;
+  // Set a default exit, and run the plugin to get the correct result
+  let result: TakeoffResult = {
+    code: 0,
+    success: `${plugin.group}:${plugin.command} done`,
+  };
   try {
-    result = await plugin.handler();
+    result = await plugin.handler(takeoff);
   } catch (e) {
     result = {
       code: ExitCode.Error,
-      fail: e,
+      extra: e,
+      fail: `Unable to run handler for plugin ${plugin.group}:${plugin.command}`,
     };
   }
 
   return exitWithMessage(result);
-};
+}
 
+// Run the CLI tool
 run(process.cwd(), process.argv.slice(2));

@@ -1,6 +1,7 @@
 import { Chalk } from 'chalk';
-import { Task } from './task';
-import { CommandResult } from '@takeoff/takeoff/types/commands';
+import { Task, TaskRunnerOptions } from './task';
+import { TakeoffResult } from './commands';
+import { ExecOutputReturnValue } from 'shelljs';
 
 /**
  * A Object containing the results of a `.takeoffrc` file
@@ -64,68 +65,6 @@ export interface PrintMessageOptions {
 }
 
 /**
- * These are the parameters injected into a Takeoff command.
- */
-export interface TakeoffCmdParameters {
-  /**
-   * The current command being run
-   */
-  command?: string;
-
-  /**
-   * Any arguments passed to the command
-   */
-  args?: string[];
-
-  /**
-   * Any options passed to the command
-   */
-  opts?: {
-    [key: string]: string;
-  };
-
-  /**
-   * An instance of `shelljs` as a helper
-   */
-  shell?: any;
-
-  /**
-   * If the command is silence or verbose, default is true
-   */
-  silent: boolean;
-
-  /**
-   * The directory the command was run in
-   */
-  workingDir?: string;
-
-  /**
-   * The RC file for the workspace
-   */
-  rcFile: TakeoffRcFile;
-
-  /**
-   * Helper method to run a command
-   */
-  runCommand: (cmd: string, cwd?: string, disableSilent?: boolean) => any;
-
-  /**
-   * Helper method to check if a path exists
-   */
-  pathExists: (path: string) => boolean;
-
-  /**
-   * Helper Method to print a message to the console
-   */
-  printMessage: (message: string, stdout?: any, options?: PrintMessageOptions) => void;
-
-  /**
-   * Helper method to exit the application
-   */
-  exitWithMessage: (commandResult: CommandResult) => void;
-}
-
-/**
  * Options passed to read file
  */
 export interface ReadFileOptions {
@@ -144,7 +83,7 @@ export type When = 'before' | 'after' | 'pre' | 'post';
  */
 export interface ParsedCommand {
   /**
-   * Names of the tasks 
+   * Names of the tasks
    */
   taskNames: string[];
 
@@ -163,7 +102,6 @@ export interface ParsedCommand {
  * A takeoff project
  */
 export interface TakeoffProject {
-
   /**
    * Name of the project from the package.json
    */
@@ -186,6 +124,7 @@ export interface TakeoffProjectApps {
  * The details of a `takeoff.md` file
  */
 export interface TakeoffFileData {
+  exists: boolean;
   /**
    * Path to the file
    */
@@ -195,4 +134,9 @@ export interface TakeoffFileData {
    * The tasks contained within the file
    */
   tasks: Task[];
+}
+
+export interface TakeoffCommandRequest {
+  app: string;
+  cmd: string;
 }

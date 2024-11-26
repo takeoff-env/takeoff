@@ -3,11 +3,11 @@
 import fg from 'fast-glob';
 import Path from 'path';
 
-import { CommandResult, TakeoffCommand } from 'commands';
-import { TakeoffCmdParameters, TakeoffProject, TakeoffProjectApps } from 'takeoff';
+import { TakeoffResult, TakeoffCommand } from 'commands';
+import { TakeoffHelpers, TakeoffProject, TakeoffProjectApps } from 'takeoff';
 
 import { ExitCode } from 'task';
-import generateTable from '../../lib/generate-table';
+import generateTable from '../../lib/helpers/generate-table';
 
 const getProjects = async (baseDir: string) => {
   // Do all the pre-plugin loading
@@ -29,11 +29,11 @@ const getProjects = async (baseDir: string) => {
   });
 };
 
-export = ({ shell, workingDir, exitWithMessage, printMessage, rcFile }: TakeoffCmdParameters): TakeoffCommand => ({
+export = ({ shell, workingDir, exitWithMessage, printMessage, rcFile }: TakeoffHelpers): TakeoffCommand => ({
   command: 'list',
   description: 'List all the available projects and their apps',
   group: 'takeoff',
-  async handler(): Promise<CommandResult> {
+  async handler(): Promise<TakeoffResult> {
     printMessage(`Listing all projects and application`);
 
     const packagePaths = await getProjects(workingDir);
@@ -42,7 +42,7 @@ export = ({ shell, workingDir, exitWithMessage, printMessage, rcFile }: TakeoffC
       return { code: ExitCode.Success, fail: `No projects found in this workspace. Exiting.` };
     }
 
-    const tableValues: Array<[string, string, string]> = [];
+    const tableValues: string[][] = [];
     const projects: TakeoffProject[] = [];
     const apps: TakeoffProjectApps = {};
 
@@ -89,8 +89,13 @@ export = ({ shell, workingDir, exitWithMessage, printMessage, rcFile }: TakeoffC
 
       { borderStyle: 0, compact: true, align: 'left', headerAlign: 'left' },
     );
-    shell.echo(table.render());
 
-    return { code: ExitCode.Success };
+    const result = generateTable(tableValues, [
+        { value: 'Workspace', align: 'left', width: 11 },
+        { value: 'Version', align: 'left', width: 10 },
+        { value: 'Apps', align: 'left', width: 10 },
+      ]).render();
+
+    return { code: ExitCode.Success, success: result };
   },
 });

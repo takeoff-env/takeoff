@@ -1,7 +1,7 @@
 import { ExitCode } from 'task';
-import exitWithMessage from '../commands/exit-with-message';
 import { COMMAND_TABLE_HEADERS } from '../constants';
-import generateTable from '../generate-table';
+import exitWithMessage from '../helpers/exit-with-message';
+import generateTable from '../helpers/generate-table';
 
 /**
  * This renders the command table to the shell.

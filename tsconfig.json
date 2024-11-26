@@ -3,7 +3,7 @@
     "module": "commonjs",
     "declaration": false,
     "esModuleInterop": true,
-    "target": "es6",
+    "target": "es2018",
     "noImplicitAny": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
@@ -11,14 +11,11 @@
     "outDir": "build",
     "rootDir": ".",
     "baseUrl": ".",
+    "experimentalDecorators": true,
     "lib": [
       "esnext"
     ],
     "paths": {
-      "@takeoff/takeoff/types/arguments": ["src/types/arguments.d.ts"],
-      "@takeoff/takeoff/types/tables": ["src/types/tables.d.ts"],
-      "@takeoff/takeoff/types/task": ["src/types/task.d.ts"],
-      "@takeoff/takeoff/types/commands": ["src/types/commands.d.ts"],
       "*": ["node_modules/*", "src/types/*"]
     }
   },

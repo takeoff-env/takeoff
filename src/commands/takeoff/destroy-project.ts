@@ -1,56 +1,73 @@
-import { CommandResult, TakeoffCommand } from 'commands';
-import { TakeoffCmdParameters } from 'takeoff';
-import { ExitCode } from 'task';
+import { TakeoffResult, TakeoffCommand } from 'commands';
+import { ExitCode, TaskRunnerOptions } from 'task';
+import { TakeoffHelpers } from 'helpers';
 
-/**
- * Destroys an project in a non-reversable way
- */
-export = ({
-  shell,
-  args,
-  opts,
-  rcFile,
-  pathExists,
-  printMessage,
-  runCommand,
-}: TakeoffCmdParameters): TakeoffCommand => ({
-  args: '<name>',
-  command: 'destroy',
-  description:
-    'Destroys the docker containers for a project. Can also optionally remove the folder, this operation cannot be reversed.',
-  group: 'takeoff',
-  options: [
+export class Command implements TakeoffCommand {
+  args = '<name>';
+  command = 'destroy';
+  description =
+    'Destroys the docker containers for a project. Can also optionally remove the folder, this operation cannot be reversed.';
+  group = 'takeoff';
+  options = [
     {
       description: 'Also removes the directory, otherwise only docker images and volumes are destroyed',
       option: '-r, --remove-dir',
     },
-  ],
-  handler(): CommandResult {
-    const [project]: string[] = args.length > 0 ? args : ['default'];
+  ];
 
-    printMessage(`Destroying project ${project}`);
+  async handler({
+    shell,
+    getProjectDetails,
+    args,
+    opts,
+    rcFile,
+    pathExists,
+    printMessage,
+    execCommand,
+    workingDir,
+    silent,
+  }: TakeoffHelpers): Promise<TakeoffResult> {
+    const { project, projectDir } = getProjectDetails(args, workingDir, rcFile);
 
-    const envDir = `${rcFile.rcRoot}/projects/${project}`;
-
-    if (!pathExists(envDir)) {
+    if (!pathExists(projectDir)) {
       return { code: ExitCode.Error, fail: `The project ${project} doesn't exist` };
     }
 
-    const runCmd = runCommand(`docker-compose -f docker/docker-compose.yml down --rmi all`, envDir);
+    printMessage(`Destroying project ${project}`);
 
-    if (runCmd.code !== 0) {
-      return { extra: runCmd.stderr, code: runCmd.code, fail: `Error destroying ${project}` };
+    const cmdOptions: TaskRunnerOptions = {
+      cwd: projectDir,
+      fail: `Error destroying ${project}.`,
+      silent,
+      success: `Successfully destroyed ${project}`,
+      task: {
+        script: `docker-compose -f docker/docker-compose.yml down --rmi all`,
+      },
+    };
+
+    const result = await execCommand(cmdOptions);
+
+    if (result.code !== 0) {
+      return result;
     }
 
     if (opts['r'] || opts['remove-dir']) {
-      printMessage(`Removing folder ${envDir}`);
-      const removeFolder = shell.rm('-rf', `${envDir}`);
+      printMessage(`Removing folder ${projectDir}`);
+      const removeFolder = shell.rm('-rf', `${projectDir}`);
       if (removeFolder.code !== 0) {
-        return { extra: removeFolder.stderr, code: removeFolder.code, fail: `Error deleting ${project}` };
+        printMessage(
+          `Docker images have been destroyed but unable to remove folder ${projectDir}`,
+          removeFolder.stderr,
+          {
+            headerColour: 'red',
+            textColour: 'red',
+          },
+        );
+      } else {
+        printMessage(`Folder ${projectDir} removed`);
       }
-      printMessage(`Folder ${envDir} removed`);
     }
 
-    return { code: ExitCode.Success, success: `Successfully destroyed ${project}` };
-  },
-});
+    return result;
+  }
+}

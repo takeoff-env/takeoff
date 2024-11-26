@@ -2,21 +2,21 @@ import JoyCon from 'joycon';
 import { sep } from 'path';
 import { TakeoffRcFile } from 'takeoff';
 import { ExitCode } from 'task';
-import exitWithMessage from './commands/exit-with-message';
+import exitWithMessage from '../helpers/exit-with-message';
 
 /**
  * Starting from the directory the *takeoff* command is run in, this method will then resolve up all the parent
  * directories to find a `.takeoffrc` or `.takeoffrc.json` file.  Both are JSON format and must start with a `{`
  * object.
  * Some commands may want to skip this and be run anywhere, in this case (*e.g. takeoff init, takeoff docker:pv*)
- * those commands can add the `{skipRcCheck: boolean}` value in their configuration
+ * those commands can add the `{global: boolean}` value in their configuration
  */
 function loadRcFile(cwd: string): TakeoffRcFile {
   const loadTakeoffRc = new JoyCon({
     cwd,
   });
 
-  let properties: Map<string, any> = new Map<string, any>();
+  const properties: Map<string, any> = new Map<string, any>();
 
   const { path: filepath, data } = loadTakeoffRc.loadSync(['.takeoffrc', '.takeoffrc.json']);
 

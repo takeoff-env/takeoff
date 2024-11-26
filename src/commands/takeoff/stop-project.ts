@@ -1,28 +1,48 @@
-import { CommandResult, TakeoffCommand } from 'commands';
-import { TakeoffCmdParameters } from 'takeoff';
+import { TakeoffResult, TakeoffCommand } from 'commands';
+import { TakeoffHelpers } from 'takeoff';
 import { ExitCode } from 'task';
-
 /**
  * Command that handles the stopping of a project
  */
 
-export = ({ args, printMessage, pathExists, rcFile, runCommand }: TakeoffCmdParameters): TakeoffCommand => ({
-  args: '<name>',
+export = ({
+  args,
+  printMessage,
+  pathExists,
+  rcFile,
+  workingDir,
+  runCommand,
+  getProjectDetails,
+  opts,
+}: TakeoffHelpers): TakeoffCommand => ({
+  args: '<name> [...services]',
   command: 'stop',
   description: 'Stops all services in a named project',
   group: 'takeoff',
-  handler(): CommandResult {
-    const [project]: string[] = args.length > 0 ? args : ['default'];
+  options: [
+    {
+      description: 'Set a shutdown timeout in seconds',
+      option: '-t, --timeout',
+    },
+  ],
+  handler(): TakeoffResult {
+    const { project, projectDir, apps } = getProjectDetails(args, workingDir, rcFile);
 
-    printMessage(`Stopping project ${project}`);
-
-    const envDir = `${rcFile.rcRoot}/projects/${project}`;
-
-    if (!pathExists(envDir)) {
+    if (!pathExists(projectDir)) {
       return { code: ExitCode.Error, fail: `The project ${project} doesn't exist` };
     }
 
-    const runCmd = runCommand(`docker-compose -f docker/docker-compose.yml stop`, envDir);
+    printMessage(`Stopping project ${project}`);
+
+    let cmd = `docker-compose -f docker/docker-compose.yml stop`;
+    if (opts['t'] || opts['timeout']) {
+      cmd = `${cmd} -t ${opts['t'] || opts['timeout']}`;
+    }
+    if (apps) {
+      cmd = `${cmd} ${apps.join(' ')}`;
+    }
+
+    const runCmd = runCommand(cmd, projectDir);
 
     return {
       code: runCmd.code,

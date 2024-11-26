@@ -1,5 +1,5 @@
-import { CommandResult, TakeoffCommand } from 'commands';
-import { TakeoffCmdParameters } from 'takeoff';
+import { TakeoffResult, TakeoffCommand } from 'commands';
+import { TakeoffHelpers } from 'takeoff';
 import { ExitCode } from 'task';
 
 import { DEFAULT_BLUEPRINT_NAME } from '../../lib/constants';
@@ -19,7 +19,7 @@ export = ({
   runCommand,
   silent,
   rcFile,
-}: TakeoffCmdParameters): TakeoffCommand => ({
+}: TakeoffHelpers): TakeoffCommand => ({
   args: '<name> [blueprint-name]',
   command: 'new',
   description:
@@ -31,7 +31,7 @@ export = ({
       option: '-b, --blueprint-url',
     },
   ],
-  async handler(): Promise<CommandResult> {
+  async handler(): Promise<TakeoffResult> {
     const [projectName, userBlueprintName] = args;
 
     if (!projectName) {

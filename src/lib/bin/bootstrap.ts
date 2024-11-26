@@ -1,6 +1,6 @@
 import pjson from 'pjson';
 import updateNotifier from 'update-notifier';
-import { SEVEN_DAYS } from './constants';
+import { SEVEN_DAYS } from '../constants';
 
 process.on('unhandledRejection', err => {
   /*eslint-disable */

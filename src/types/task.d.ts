@@ -37,11 +37,31 @@ export interface Task {
  * Options to pass to the task runner
  */
 export interface TaskRunnerOptions {
-  task: Task;
+  /**
+   * Message to display on success
+   */
+  success: string;
 
-  resolve: Function;
+  /**
+   * Message to display on fail
+   */
+  fail: string;
 
-  reject: Function;
+  /**
+   * If the output is silent
+   */
+  silent: boolean;
 
+  /**
+   * The task to run
+   */
+  task: {
+    script: string;
+    [k: string]: string;
+  };
+
+  /**
+   * The directory to run the command in
+   */
   cwd: string;
 }

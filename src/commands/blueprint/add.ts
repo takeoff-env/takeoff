@@ -1,12 +1,9 @@
-import { CommandResult, TakeoffCommand } from 'commands';
-import { TakeoffCmdParameters } from 'takeoff';
-import { ExitCode } from 'task';
+import { TakeoffResult, TakeoffCommand, TakeoffHandler } from 'commands';
+import { ExitCode, TaskRunnerOptions } from 'task';
+import { TakeoffHelpers } from 'helpers';
+import { TakeoffCommandDecorator } from '../../decorators/command';
 
-/**
- * Command for pulling an workspace
- */
-
-export = ({ args, opts, pathExists, printMessage, rcFile, runCommand }: TakeoffCmdParameters): TakeoffCommand => ({
+@TakeoffCommandDecorator({
   args: '<name>',
   command: 'add',
   description:
@@ -18,7 +15,17 @@ export = ({ args, opts, pathExists, printMessage, rcFile, runCommand }: TakeoffC
       option: '-b, --blueprint',
     },
   ],
-  handler(): CommandResult {
+})
+class Command implements TakeoffHandler {
+  async handler({
+    args,
+    opts,
+    pathExists,
+    printMessage,
+    rcFile,
+    silent,
+    execCommand,
+  }: TakeoffHelpers): Promise<TakeoffResult> {
     const [blueprint]: string[] = args.length > 0 ? args : [];
     const url = opts['b'] || opts['blueprint'];
 
@@ -26,21 +33,25 @@ export = ({ args, opts, pathExists, printMessage, rcFile, runCommand }: TakeoffC
       return { code: ExitCode.Error, fail: 'You must pass a blueprint name and path to clone' };
     }
 
-    printMessage(`Adding Blueprint ${blueprint}`);
-
-    const cwd = `${rcFile.rcRoot}/blueprints`;
-
-    if (pathExists(`${cwd}/${blueprint}`)) {
+    const blueprintDir = `${rcFile.rcRoot}/blueprints`;
+    if (pathExists(`${blueprintDir}/${blueprint}`)) {
       return { code: ExitCode.Error, fail: `The blueprint ${blueprint} already exists exist` };
     }
 
-    const runCmd = runCommand(`git clone ${url} ${blueprint} --depth 1`, cwd);
+    printMessage(`Adding Blueprint ${blueprint}`);
 
-    return {
-      code: runCmd.code,
-      extra: runCmd.code === 0 ? runCmd.stdout : runCmd.stderr,
+    const cmdOptions: TaskRunnerOptions = {
+      cwd: blueprintDir,
       fail: `Error adding ${blueprint}`,
+      silent,
       success: `Successfully added blueprint ${blueprint}`,
+      task: {
+        script: `git clone ${url} ${blueprint} --depth 1`,
+      },
     };
-  },
-});
+
+    return await execCommand(cmdOptions);
+  }
+}
+
+export = Command;
